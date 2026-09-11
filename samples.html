@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Régie — примеры страниц системы</title>
+<meta name="description" content="Как выглядит Régie изнутри: бриф клиента, тайминг дня, бюджет и подрядчики, чек-листы, CRM — на примере демо-мероприятия.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f3ec;
+    --surface:#ffffff;
+    --surface-2:#f0ece2;
+    --text:#20241f;
+    --muted:#69695f;
+    --accent:#2f4a3c;
+    --accent-soft:#e4ece6;
+    --brass:#a98a4e;
+    --border:#e2ddd0;
+    --good:#3f7a4e;
+    --good-soft:#e6f0e7;
+    --warn:#a9761f;
+    --warn-soft:#f5ecd8;
+    --idle:#8c8a7f;
+    --idle-soft:#eeece5;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:'Karla',system-ui,sans-serif;line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:'Bodoni Moda',Georgia,serif;}
+  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+  a{color:inherit;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+  img{max-width:100%;}
+
+  header{padding:30px 0;border-bottom:1px solid var(--border);}
+  .brand{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
+  .brand-name{font-family:'Bodoni Moda',serif;font-size:22px;letter-spacing:.14em;}
+  .back-link{font-size:13.5px;color:var(--accent);text-decoration:none;font-weight:600;display:inline-flex;align-items:center;gap:6px;}
+  .back-link:hover{text-decoration:underline;}
+
+  .hero{padding:72px 0 56px;text-align:center;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+    border:1px solid var(--border);border-radius:999px;padding:8px 18px;margin-bottom:28px;background:var(--surface);
+  }
+  h1{font-size:clamp(30px,4.6vw,46px);font-weight:500;line-height:1.16;text-wrap:balance;max-width:19ch;margin:0 auto 22px;}
+  h1 em{font-style:italic;color:var(--accent);}
+  .offer{max-width:60ch;margin:0 auto;color:var(--muted);font-size:clamp(15.5px,1.6vw,17.5px);text-wrap:balance;}
+
+  .demo-note{
+    max-width:640px;margin:32px auto 0;background:var(--surface);border:1px solid var(--border);
+    border-radius:8px;padding:14px 20px;font-size:13.5px;color:var(--muted);
+  }
+  .demo-note b{color:var(--accent);}
+
+  section.block{padding:64px 0;border-top:1px solid var(--border);}
+  .block-head{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:34px;}
+  .block-head h2{font-size:clamp(22px,2.8vw,30px);font-weight:500;text-wrap:balance;max-width:40ch;}
+  .block-desc{color:var(--muted);font-size:14.5px;max-width:56ch;margin-top:10px;}
+  .tariff-tag{
+    flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    border:1px solid var(--brass);color:var(--brass);border-radius:999px;padding:6px 14px;white-space:nowrap;
+  }
+
+  /* mock window chrome */
+  .mock{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;box-shadow:0 20px 50px -34px rgba(32,36,31,.35);}
+  .mock-head{display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid var(--border);background:var(--surface-2);}
+  .mock-icon{width:22px;height:22px;border-radius:5px;background:var(--accent);color:#fbfaf6;display:flex;align-items:center;justify-content:center;font-size:12px;font-family:'Bodoni Moda',serif;flex-shrink:0;}
+  .mock-title{font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0;}
+  .mock-crumb{font-size:12px;color:var(--muted);margin-left:auto;font-family:'IBM Plex Mono',monospace;white-space:nowrap;flex-shrink:0;padding-left:10px;}
+  .mock-body{padding:8px 20px;}
+
+  /* property list (brief) */
+  .prop-row{display:flex;gap:20px;padding:13px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+  .prop-row:last-child{border-bottom:none;}
+  .prop-label{width:170px;flex-shrink:0;font-size:13px;color:var(--muted);display:flex;align-items:center;gap:8px;}
+  .prop-label .dot{width:6px;height:6px;border-radius:50%;background:var(--brass);flex-shrink:0;}
+  .prop-value{font-size:14.5px;font-weight:500;}
+  .prop-value.muted{color:var(--muted);font-weight:400;font-style:italic;}
+
+  /* table (budget, CRM) */
+  .mock-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .mock-table{width:100%;min-width:520px;border-collapse:collapse;font-size:14px;}
+  .mock-table th{
+    text-align:left;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+    color:var(--muted);padding:10px 12px;border-bottom:1px solid var(--border);
+  }
+  .mock-table td{padding:12px;border-bottom:1px solid var(--border);vertical-align:middle;white-space:nowrap;}
+  .mock-table tr:last-child td{border-bottom:none;}
+  .mock-table tr.total td{font-weight:700;background:var(--surface-2);border-top:1px solid var(--border);}
+  .scroll-hint{display:none;text-align:center;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.04em;color:var(--muted);padding:9px 0 0;}
+  .status-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;}
+  .status-pill::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;}
+  .status-pill.good{background:var(--good-soft);color:var(--good);}
+  .status-pill.warn{background:var(--warn-soft);color:var(--warn);}
+  .status-pill.idle{background:var(--idle-soft);color:var(--idle);}
+
+  /* timeline (run-of-show) */
+  .timeline{padding:6px 0;}
+  .t-item{display:flex;gap:18px;padding:11px 0;border-bottom:1px solid var(--border);}
+  .t-item:last-child{border-bottom:none;}
+  .t-time{width:64px;flex-shrink:0;font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--accent);font-weight:600;}
+  .t-text{font-size:14px;}
+  .t-text .t-sub{display:block;color:var(--muted);font-size:12.5px;margin-top:2px;}
+
+  /* checklist */
+  .check-groups{display:grid;grid-template-columns:repeat(2,1fr);gap:0;}
+  .check-group{padding:18px 20px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);}
+  .check-group:nth-child(2n){border-right:none;}
+  .check-group:nth-last-child(-n+2){border-bottom:none;}
+  .check-group h4{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--brass);margin-bottom:12px;}
+  .check-item{display:flex;align-items:center;gap:10px;font-size:13.5px;padding:5px 0;}
+  .check-box{width:15px;height:15px;border-radius:4px;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:10px;}
+  .check-item.done .check-box{background:var(--accent);border-color:var(--accent);color:#fbfaf6;}
+  .check-item.done .check-text{color:var(--muted);text-decoration:line-through;text-decoration-color:var(--border);}
+
+  /* duplicate illustration */
+  .dup-row{display:flex;align-items:center;gap:22px;flex-wrap:wrap;justify-content:center;padding:36px 20px;}
+  .dup-card{width:220px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:18px;}
+  .dup-card h5{font-family:'Bodoni Moda',serif;font-size:15px;font-weight:500;margin-bottom:10px;}
+  .dup-card .dup-line{height:8px;border-radius:3px;background:var(--border);margin-bottom:7px;}
+  .dup-card .dup-line.short{width:60%;}
+  .dup-arrow{font-family:'IBM Plex Mono',monospace;color:var(--brass);font-size:13px;display:flex;flex-direction:column;align-items:center;gap:4px;}
+  .dup-btn{background:var(--accent);color:#fbfaf6;font-size:11px;padding:5px 10px;border-radius:4px;font-weight:600;}
+  .dup-card.new{border-style:dashed;background:var(--surface);}
+  .dup-card.new .dup-line{background:var(--accent-soft);}
+
+  footer.cta{border-top:1px solid var(--border);padding:64px 0;text-align:center;}
+  footer.cta h2{font-size:clamp(22px,3vw,30px);font-weight:500;margin-bottom:16px;text-wrap:balance;}
+  footer.cta p{color:var(--muted);margin-bottom:26px;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:15px 30px;border-radius:2px;font-weight:600;font-size:14.5px;text-decoration:none;transition:transform .15s,box-shadow .15s,background .15s;}
+  .btn-primary{background:var(--accent);color:#fbfaf6;}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 14px 32px -16px rgba(47,74,60,.5);}
+  footer.base{border-top:1px solid var(--border);padding:30px 0;text-align:center;color:var(--muted);font-size:13px;}
+
+  @media(max-width:720px){
+    .check-groups{grid-template-columns:1fr;}
+    .check-group{border-right:none;}
+    .check-group:nth-last-child(-n+2){border-bottom:1px solid var(--border);}
+    .check-group:last-child{border-bottom:none;}
+    .prop-row{flex-direction:column;gap:4px;}
+    .prop-label{width:auto;}
+    .scroll-hint{display:block;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap brand">
+    <div class="brand-name">RÉGIE</div>
+    <a class="back-link" href="index.html">← На главную</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Что именно внутри системы</span>
+    <h1>Не просто «шаблон Notion» — <em>шесть рабочих страниц</em>, которые уже заполнены логикой</h1>
+    <p class="offer">Ниже — реальная структура Régie на примере демо-мероприятия «Свадьба Аружан &amp; Ануара». Так выглядит любая карточка после того, как вы её дублируете и заполняете своими данными.</p>
+    <div class="demo-note"><b>Важно:</b> все имена, суммы и подрядчики на этой странице — демо-данные для примера, не реальные записи.</div>
+  </div>
+</section>
+
+<section class="block" id="brief">
+  <div class="wrap">
+    <div class="block-head">
+      <div>
+        <h2>1. Бриф клиента</h2>
+        <p class="block-desc">Одна страница вместо созвона по памяти: всё, что клиент сказал на встрече, зафиксировано в полях — ничего не теряется между вами и подрядчиками.</p>
+      </div>
+      <span class="tariff-tag">Basic и выше</span>
+    </div>
+    <div class="mock">
+      <div class="mock-head">
+        <div class="mock-icon">Р</div>
+        <div class="mock-title">Свадьба Аружан &amp; Ануара</div>
+        <div class="mock-crumb">Мероприятия / Бриф</div>
+      </div>
+      <div class="mock-body">
+        <div class="prop-row"><div class="prop-label"><span class="dot"></span>Дата</div><div class="prop-value mono">14 июня 2026</div></div>
+        <div class="prop-row"><div class="prop-label"><span class="dot"></span>Тип мероприятия</div><div class="prop-value">Свадьба</div></div>
+        <div class="prop-row"><div class="prop-label"><span class="dot"></span>Гостей</div><div class="prop-value mono">120 человек</div></div>
+        <div class="prop-row"><div class="prop-label"><span class="dot"></span>Бюджет</div><div class="prop-value mono">4 500 000 ₸</div></div>
+        <div class="prop-row"><div class="prop-label"><span class="dot"></span>Площадка</div><div class="prop-value">Paradise Hall, Алматы</div></div>
+        <div class="prop-row"><div class="prop-label"><span class="dot"></span>Стиль</div><div class="prop-value">Минимализм, зелень + золото</div></div>
+        <div class="prop-row"><div class="prop-label"><span class="dot"></span>Контакт клиента</div><div class="prop-value mono">+7 707 xxx xx xx</div></div>
+        <div class="prop-row"><div class="prop-label"><span class="dot"></span>Особые пожелания</div><div class="prop-value">Вегетарианское меню на 15 гостей, живая музыка на церемонии, без салюта</div></div>
+        <div class="prop-row"><div class="prop-label"><span class="dot"></span>Статус</div><div class="prop-value"><span class="status-pill warn">В работе</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="timing">
+  <div class="wrap">
+    <div class="block-head">
+      <div>
+        <h2>2. Тайминг дня (run-of-show)</h2>
+        <p class="block-desc">Поминутный план дня, который вы отправляете каждому подрядчику отдельно — здесь он один на всех, с автоматическим порядком по времени.</p>
+      </div>
+      <span class="tariff-tag">Basic и выше</span>
+    </div>
+    <div class="mock">
+      <div class="mock-head">
+        <div class="mock-icon">Р</div>
+        <div class="mock-title">Тайминг — 14 июня</div>
+        <div class="mock-crumb">11 пунктов</div>
+      </div>
+      <div class="mock-body">
+        <div class="timeline">
+          <div class="t-item"><div class="t-time">09:00</div><div class="t-text">Заезд декораторов<span class="t-sub">Начало оформления зала, доступ от администратора площадки</span></div></div>
+          <div class="t-item"><div class="t-time">11:30</div><div class="t-text">Саунд-чек<span class="t-sub">DJ Rustam + живой музыкант на церемонии</span></div></div>
+          <div class="t-item"><div class="t-time">13:00</div><div class="t-text">Визаж и укладка невесты<span class="t-sub">Отель Ritz, номер 412</span></div></div>
+          <div class="t-item"><div class="t-time">15:00</div><div class="t-text">Рассадка гостей начинается</div></div>
+          <div class="t-item"><div class="t-time">16:00</div><div class="t-text">Церемония бракосочетания</div></div>
+          <div class="t-item"><div class="t-time">16:30</div><div class="t-text">Фотосессия молодожёнов<span class="t-sub">Aitbek Photo, локация — терраса</span></div></div>
+          <div class="t-item"><div class="t-time">17:30</div><div class="t-text">Начало банкета</div></div>
+          <div class="t-item"><div class="t-time">19:00</div><div class="t-text">Первый танец</div></div>
+          <div class="t-item"><div class="t-time">23:00</div><div class="t-text">Завершение, разбор декора</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="checklist">
+  <div class="wrap">
+    <div class="block-head">
+      <div>
+        <h2>3. Чек-листы подготовки</h2>
+        <p class="block-desc">Разбиты по срокам до мероприятия — открываете нужный этап и не держите в голове, что уже сделано.</p>
+      </div>
+      <span class="tariff-tag">Basic и выше</span>
+    </div>
+    <div class="mock">
+      <div class="mock-head">
+        <div class="mock-icon">Р</div>
+        <div class="mock-title">Чек-лист подготовки</div>
+        <div class="mock-crumb">7 из 12 выполнено</div>
+      </div>
+      <div class="check-groups">
+        <div class="check-group">
+          <h4>За 3 месяца</h4>
+          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Забронировать площадку</div></div>
+          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Договор с кейтерингом</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-text">Утвердить финальное меню</div></div>
+        </div>
+        <div class="check-group">
+          <h4>За 1 месяц</h4>
+          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Финальный список гостей</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-text">Второй платёж подрядчикам</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-text">Примерка образа</div></div>
+        </div>
+        <div class="check-group">
+          <h4>За неделю</h4>
+          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Подтвердить тайминг со всеми</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-text">Собрать реквизит и декор</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-text">Распечатать план рассадки</div></div>
+        </div>
+        <div class="check-group">
+          <h4>День мероприятия</h4>
+          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Приёмка декора в 09:00</div></div>
+          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Контроль тайминга по часам</div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-text">Расчёт с подрядчиками</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="budget">
+  <div class="wrap">
+    <div class="block-head">
+      <div>
+        <h2>4. Бюджет и подрядчики</h2>
+        <p class="block-desc">Кто сколько стоит, что уже оплачено и сколько осталось от бюджета клиента — видно на одном экране без сверки чеков в мессенджере.</p>
+      </div>
+      <span class="tariff-tag">Standard и выше</span>
+    </div>
+    <div class="mock">
+      <div class="mock-head">
+        <div class="mock-icon">Р</div>
+        <div class="mock-title">Бюджет мероприятия</div>
+        <div class="mock-crumb">6 подрядчиков</div>
+      </div>
+      <div class="mock-body" style="padding:0;overflow-x:auto;">
+        <table class="mock-table">
+          <thead>
+            <tr><th>Подрядчик</th><th>Услуга</th><th>Сумма</th><th>Статус</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Paradise Hall</td><td>Аренда площадки</td><td class="mono">1 200 000 ₸</td><td><span class="status-pill good">Оплачено</span></td></tr>
+            <tr><td>Dastarkhan Catering</td><td>Кейтеринг, 120 чел.</td><td class="mono">950 000 ₸</td><td><span class="status-pill warn">Предоплата 50%</span></td></tr>
+            <tr><td>Aitbek Photo</td><td>Фото + видео</td><td class="mono">380 000 ₸</td><td><span class="status-pill good">Забронировано</span></td></tr>
+            <tr><td>Gulnaz Flowers</td><td>Флористика и декор</td><td class="mono">320 000 ₸</td><td><span class="status-pill warn">Ожидает предоплаты</span></td></tr>
+            <tr><td>DJ Rustam</td><td>Музыка и звук</td><td class="mono">180 000 ₸</td><td><span class="status-pill good">Оплачено</span></td></tr>
+            <tr><td>Ведущая Динара</td><td>Ведение церемонии</td><td class="mono">200 000 ₸</td><td><span class="status-pill idle">Не оплачено</span></td></tr>
+            <tr class="total"><td colspan="2">Итого потрачено / бюджет</td><td class="mono">3 230 000 ₸ из 4 500 000 ₸</td><td class="mono" style="color:var(--good);">остаток 1 270 000 ₸</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scroll-hint">← смахните таблицу, чтобы увидеть статус →</div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="crm">
+  <div class="wrap">
+    <div class="block-head">
+      <div>
+        <h2>5. CRM клиентов</h2>
+        <p class="block-desc">Когда мероприятий несколько параллельно — сводная база всех клиентов и сделок вместо памяти и заметок в телефоне.</p>
+      </div>
+      <span class="tariff-tag">Pro</span>
+    </div>
+    <div class="mock">
+      <div class="mock-head">
+        <div class="mock-icon">Р</div>
+        <div class="mock-title">Клиенты Régie</div>
+        <div class="mock-crumb">3 активных сделки</div>
+      </div>
+      <div class="mock-body" style="padding:0;overflow-x:auto;">
+        <table class="mock-table">
+          <thead>
+            <tr><th>Клиент</th><th>Мероприятие</th><th>Статус</th><th>Сумма контракта</th><th>Следующий контакт</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Аружан &amp; Ануар</td><td>Свадьба, 14.06.2026</td><td><span class="status-pill warn">В работе</span></td><td class="mono">4 500 000 ₸</td><td class="mono">20 мая</td></tr>
+            <tr><td>TechCorp KZ</td><td>Корпоратив, 28.03.2026</td><td><span class="status-pill good">Завершено</span></td><td class="mono">1 800 000 ₸</td><td>—</td></tr>
+            <tr><td>Айгерим Б.</td><td>День рождения, 05.09.2026</td><td><span class="status-pill idle">Переговоры</span></td><td class="mono">~ 900 000 ₸</td><td class="mono">смета до 12.08</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="scroll-hint">← смахните таблицу, чтобы увидеть все колонки →</div>
+    </div>
+  </div>
+</section>
+
+<section class="block" id="duplicate">
+  <div class="wrap">
+    <div class="block-head">
+      <div>
+        <h2>6. Дублирование в один клик</h2>
+        <p class="block-desc">Новое мероприятие — не новый файл с нуля. Копируете карточку целиком: структура остаётся, поля с данными — пустые.</p>
+      </div>
+      <span class="tariff-tag">Все тарифы</span>
+    </div>
+    <div class="mock">
+      <div class="mock-head">
+        <div class="mock-icon">Р</div>
+        <div class="mock-title">Duplicate</div>
+        <div class="mock-crumb">события / шаблон</div>
+      </div>
+      <div class="dup-row">
+        <div class="dup-card">
+          <h5>Свадьба Аружан &amp; Ануара</h5>
+          <div class="dup-line"></div>
+          <div class="dup-line"></div>
+          <div class="dup-line short"></div>
+        </div>
+        <div class="dup-arrow">
+          <span class="dup-btn">Duplicate</span>
+          →
+        </div>
+        <div class="dup-card new">
+          <h5>Новое мероприятие</h5>
+          <div class="dup-line"></div>
+          <div class="dup-line"></div>
+          <div class="dup-line short"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="cta">
+  <div class="wrap">
+    <h2>Та же структура — под ваше мероприятие</h2>
+    <p>Все шесть страниц выше вы получаете пустыми и готовыми к заполнению — с вашими подрядчиками, суммами и датами.</p>
+    <a class="btn btn-primary" href="index.html#pricing">Смотреть тарифы</a>
+  </div>
+</footer>
+
+<footer class="base">
+  <div class="wrap">Régie © 2026 · <a href="index.html">На главную</a></div>
+</footer>
+
+</body>
+</html>

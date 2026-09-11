@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Régie — Notion-система для организаторов мероприятий</title>
+<meta name="description" content="Готовая Notion-система для ивент-агентств: бриф, бюджет, тайминг и подрядчики в одной базе. Дублируется в один клик.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f7f3ec;
+    --surface:#ffffff;
+    --surface-2:#f0ece2;
+    --text:#20241f;
+    --muted:#69695f;
+    --accent:#2f4a3c;
+    --accent-soft:#e4ece6;
+    --brass:#a98a4e;
+    --border:#e2ddd0;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg);color:var(--text);
+    font-family:'Karla',system-ui,sans-serif;line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.serif{font-family:'Bodoni Moda',Georgia,serif;}
+  .mono{font-family:'IBM Plex Mono',ui-monospace,monospace;font-variant-numeric:tabular-nums;}
+  a{color:inherit;}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px;}
+
+  header{padding:30px 0;border-bottom:1px solid var(--border);}
+  .brand{display:flex;align-items:center;justify-content:space-between;}
+  .brand-name{font-family:'Bodoni Moda',serif;font-size:22px;letter-spacing:.14em;}
+  .brand-tag{font-size:12px;color:var(--muted);letter-spacing:.04em;}
+
+  .hero{padding:100px 0 76px;text-align:center;}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:10px;font-family:'IBM Plex Mono',monospace;
+    font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);
+    border:1px solid var(--border);border-radius:999px;padding:8px 18px;margin-bottom:30px;background:var(--surface);
+  }
+  h1{font-size:clamp(34px,5.6vw,56px);font-weight:500;line-height:1.14;text-wrap:balance;max-width:17ch;margin:0 auto 26px;}
+  h1 em{font-style:italic;color:var(--accent);}
+  .offer{max-width:58ch;margin:0 auto 42px;color:var(--muted);font-size:clamp(16px,1.7vw,18px);text-wrap:balance;}
+  .cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:15px 30px;border-radius:2px;font-weight:600;font-size:14.5px;text-decoration:none;transition:transform .15s,box-shadow .15s,background .15s;}
+  .btn-primary{background:var(--accent);color:#fbfaf6;}
+  .btn-primary:hover{transform:translateY(-1px);box-shadow:0 14px 32px -16px rgba(47,74,60,.5);}
+  .btn-ghost{border:1px solid var(--accent);color:var(--accent);}
+  .btn-ghost:hover{background:var(--accent-soft);}
+
+  .divider{width:44px;height:1px;background:var(--brass);margin:60px auto 0;}
+
+  section{padding:84px 0;}
+  .section-head{max-width:54ch;margin:0 auto 54px;text-align:center;}
+  .section-head .eyebrow{margin-bottom:16px;}
+  .section-head h2{font-size:clamp(26px,3.4vw,36px);font-weight:500;text-wrap:balance;}
+
+  .benefits{border-top:1px solid var(--border);}
+  .b-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:6px;overflow:hidden;}
+  .b-card{background:var(--surface);padding:34px 26px;}
+  .b-num{font-family:'IBM Plex Mono',monospace;font-size:13px;color:var(--brass);margin-bottom:20px;}
+  .b-card h3{font-size:18.5px;font-weight:500;margin-bottom:10px;line-height:1.3;}
+  .b-card p{color:var(--muted);font-size:14px;}
+
+  .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .price-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:34px 28px;display:flex;flex-direction:column;}
+  .price-card.featured{background:var(--accent);color:#fbfaf6;border-color:var(--accent);transform:translateY(-8px);box-shadow:0 26px 60px -30px rgba(47,74,60,.5);}
+  .price-card.featured .price-alt,.price-card.featured .price-desc,.price-card.featured .price-tag{color:#d9e3dc;}
+  .price-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);margin-bottom:8px;}
+  .price-name{font-family:'Bodoni Moda',serif;font-size:23px;font-weight:500;margin-bottom:16px;}
+  .price-amount{font-size:31px;font-weight:700;}
+  .price-alt{color:var(--muted);font-size:13.5px;margin-bottom:20px;}
+  .price-desc{color:var(--muted);font-size:14px;margin-bottom:26px;flex-grow:1;}
+  .price-card .btn{justify-content:center;width:100%;}
+  .price-card.featured .btn-primary{background:#fbfaf6;color:var(--accent);}
+  .price-card.featured .btn-primary:hover{box-shadow:none;}
+
+  footer{border-top:1px solid var(--border);padding:40px 0;text-align:center;color:var(--muted);font-size:13.5px;}
+  footer a{color:var(--accent);text-decoration:none;font-weight:600;}
+
+  @media(max-width:860px){
+    .b-grid{grid-template-columns:1fr 1fr;}
+    .pricing-grid{grid-template-columns:1fr;}
+    .price-card.featured{transform:none;}
+  }
+  @media(max-width:520px){ .b-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap brand">
+    <div class="brand-name">RÉGIE</div>
+    <div class="brand-tag">Notion для ивент-агентств</div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <span class="eyebrow">Notion-система для организаторов мероприятий</span>
+    <h1>Один Notion, который ведёт мероприятие <em>от брифа до последнего платежа</em></h1>
+    <p class="offer">Régie — готовая система для ивент-агентств и фрилансеров: бриф клиента, бюджет, тайминг дня и трекер подрядчиков в одной базе. Дублируйте на новое мероприятие одним кликом — вместо новой связки таблиц каждый раз.</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="#pricing">Получить доступ к системе</a>
+      <a class="btn btn-ghost" href="samples.html">Примеры страниц →</a>
+    </div>
+    <div class="divider"></div>
+  </div>
+</section>
+
+<section class="benefits" id="benefits">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Что решает Régie</span>
+      <h2>Меньше таблиц. Больше мероприятий.</h2>
+    </div>
+    <div class="b-grid">
+      <div class="b-card">
+        <div class="b-num mono">01</div>
+        <h3>10+ часов экономии</h3>
+        <p>На каждом мероприятии — не собираете структуру заново в новом файле.</p>
+      </div>
+      <div class="b-card">
+        <div class="b-num mono">02</div>
+        <h3>Всё в одной базе</h3>
+        <p>Бриф, бюджет, run-of-show и подрядчики — вместо пяти разрозненных документов.</p>
+      </div>
+      <div class="b-card">
+        <div class="b-num mono">03</div>
+        <h3>Копия в один клик</h3>
+        <p>Шаблон мероприятия дублируется со всей структурой под новый проект.</p>
+      </div>
+      <div class="b-card">
+        <div class="b-num mono">04</div>
+        <h3>Без плагинов</h3>
+        <p>Работает в бесплатной версии Notion — не нужны платные интеграции.</p>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:44px;">
+      <a class="btn btn-ghost" href="samples.html">Посмотреть, как это выглядит внутри →</a>
+    </div>
+  </div>
+</section>
+
+<section class="pricing" id="pricing">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="eyebrow">Тарифы</span>
+      <h2>От первого мероприятия до агентства</h2>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-tag">Basic</div>
+        <div class="price-name">Тайминг</div>
+        <div class="price-amount mono">12 990 ₸</div>
+        <div class="price-alt mono">≈ $26</div>
+        <p class="price-desc">Тайминг дня (run-of-show) и чек-листы подготовки к мероприятию.</p>
+        <a class="btn btn-ghost" href="#contact">Выбрать Basic</a>
+      </div>
+      <div class="price-card featured">
+        <div class="price-tag">Standard</div>
+        <div class="price-name">Бюджет и подрядчики</div>
+        <div class="price-amount mono">19 990 ₸</div>
+        <div class="price-alt mono">≈ $40</div>
+        <p class="price-desc">Всё из Basic плюс трекер бюджета и база подрядчиков с историей платежей.</p>
+        <a class="btn btn-primary" href="#contact">Выбрать Standard</a>
+      </div>
+      <div class="price-card">
+        <div class="price-tag">Pro</div>
+        <div class="price-name">Агентство</div>
+        <div class="price-amount mono">29 990 ₸</div>
+        <div class="price-alt mono">≈ $60</div>
+        <p class="price-desc">Всё из Standard плюс CRM клиентов и аналитика по завершённым мероприятиям.</p>
+        <a class="btn btn-ghost" href="#contact">Выбрать Pro</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    Получить доступ к системе — <a href="mailto:hello@regie-notion.com">hello@regie-notion.com</a> · Régie © 2026
+  </div>
+</footer>
+
+</body>
+</html>
