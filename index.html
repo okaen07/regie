@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Régie — Notion-система для организаторов мероприятий</title>
 <meta name="description" content="Готовая Notion-система для ивент-агентств: бриф, бюджет, тайминг и подрядчики в одной базе. Дублируется в один клик.">
+<script>try{var __t=localStorage.getItem('regie_theme'); if(__t && __t!=='editorial') document.documentElement.setAttribute('data-theme', __t);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
@@ -16,12 +17,22 @@
     --text:#20241f;
     --muted:#69695f;
     --accent:#2f4a3c;
+    --accent-fill:#2f4a3c;
     --accent-soft:#e4ece6;
     --brass:#a98a4e;
     --border:#e2ddd0;
   }
+  :root[data-theme="noir"]{
+    --bg:#151713; --surface:#1c1f1a; --surface-2:#242820; --text:#eeece2; --muted:#a3a195;
+    --accent:#8fb79c; --accent-fill:#3f7a5c; --accent-soft:#223228; --brass:#d1ac6e; --border:#32352c;
+  }
+  :root[data-theme="blush"]{
+    --bg:#fbf1ee; --surface:#ffffff; --surface-2:#f6e7e2; --text:#2b211f; --muted:#8a7571;
+    --accent:#9c4b43; --accent-fill:#9c4b43; --accent-soft:#f3dcd7; --brass:#b98a4e; --border:#eddcd6;
+  }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
+  body,.btn,.price-card,header{transition:background-color .25s,border-color .25s,color .25s;}
   body{
     background:var(--bg);color:var(--text);
     font-family:'Karla',system-ui,sans-serif;line-height:1.65;
@@ -48,7 +59,7 @@
   .offer{max-width:58ch;margin:0 auto 42px;color:var(--muted);font-size:clamp(16px,1.7vw,18px);text-wrap:balance;}
   .cta-row{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;}
   .btn{display:inline-flex;align-items:center;gap:8px;padding:15px 30px;border-radius:2px;font-weight:600;font-size:14.5px;text-decoration:none;transition:transform .15s,box-shadow .15s,background .15s;}
-  .btn-primary{background:var(--accent);color:#fbfaf6;}
+  .btn-primary{background:var(--accent-fill);color:#fbfaf6;}
   .btn-primary:hover{transform:translateY(-1px);box-shadow:0 14px 32px -16px rgba(47,74,60,.5);}
   .btn-ghost{border:1px solid var(--accent);color:var(--accent);}
   .btn-ghost:hover{background:var(--accent-soft);}
@@ -69,7 +80,7 @@
 
   .pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
   .price-card{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:34px 28px;display:flex;flex-direction:column;}
-  .price-card.featured{background:var(--accent);color:#fbfaf6;border-color:var(--accent);transform:translateY(-8px);box-shadow:0 26px 60px -30px rgba(47,74,60,.5);}
+  .price-card.featured{background:var(--accent-fill);color:#fbfaf6;border-color:var(--accent-fill);transform:translateY(-8px);box-shadow:0 26px 60px -30px rgba(47,74,60,.5);}
   .price-card.featured .price-alt,.price-card.featured .price-desc,.price-card.featured .price-tag{color:#d9e3dc;}
   .price-tag{font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--brass);margin-bottom:8px;}
   .price-name{font-family:'Bodoni Moda',serif;font-size:23px;font-weight:500;margin-bottom:16px;}
@@ -77,16 +88,52 @@
   .price-alt{color:var(--muted);font-size:13.5px;margin-bottom:20px;}
   .price-desc{color:var(--muted);font-size:14px;margin-bottom:26px;flex-grow:1;}
   .price-card .btn{justify-content:center;width:100%;}
-  .price-card.featured .btn-primary{background:#fbfaf6;color:var(--accent);}
+  .price-card.featured .btn-primary{background:#fbfaf6;color:var(--accent-fill);}
   .price-card.featured .btn-primary:hover{box-shadow:none;}
 
   footer{border-top:1px solid var(--border);padding:40px 0;text-align:center;color:var(--muted);font-size:13.5px;}
   footer a{color:var(--accent);text-decoration:none;font-weight:600;}
 
+  /* floating theme switcher */
+  .theme-switch{position:fixed;bottom:18px;right:18px;z-index:50;display:flex;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px;box-shadow:0 14px 34px -16px rgba(0,0,0,.4);}
+  .theme-dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--border);cursor:pointer;padding:0;transition:transform .15s,border-color .15s;}
+  .theme-dot:hover{transform:scale(1.12);}
+  .theme-dot[data-theme-swatch="editorial"]{background:#f7f3ec;}
+  .theme-dot[data-theme-swatch="noir"]{background:#1c1f1a;}
+  .theme-dot[data-theme-swatch="blush"]{background:#fbf1ee;}
+  .theme-dot.active{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft);}
+
+  /* gentle entrance as sections scroll into view */
+  .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.in-view{opacity:1;transform:translateY(0);}
+  @media(prefers-reduced-motion:reduce){ .reveal{opacity:1;transform:none;transition:none;} }
+
+  /* ---------- story: scroll-driven "how it works" ---------- */
+  .story{padding:0;border-top:1px solid var(--border);}
+  .story-wrap{display:grid;grid-template-columns:1fr 1.15fr;gap:64px;align-items:start;padding:84px 24px;}
+  .story-visual{position:sticky;top:60px;height:66vh;max-height:540px;align-self:start;}
+  .story-visual-inner{position:relative;width:100%;height:100%;border-radius:16px;overflow:hidden;box-shadow:0 40px 90px -40px rgba(32,36,31,.45);}
+  .story-panel{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:flex-end;padding:40px;opacity:0;transition:opacity .6s ease;color:#fbfaf6;}
+  .story-panel.active{opacity:1;}
+  .story-panel-icon{width:46px;height:46px;margin-bottom:22px;}
+  .story-panel-icon svg{width:100%;height:100%;}
+  .story-num{font-family:'IBM Plex Mono',monospace;font-size:12px;letter-spacing:.14em;opacity:.75;margin-bottom:10px;display:block;}
+  .story-panel-label{font-family:'Bodoni Moda',serif;font-size:28px;font-weight:500;}
+  .story-steps{display:flex;flex-direction:column;}
+  .story-step{min-height:62vh;display:flex;flex-direction:column;justify-content:center;opacity:.32;transition:opacity .35s ease;}
+  .story-step.active{opacity:1;}
+  .story-step:last-child{min-height:auto;padding-bottom:20px;}
+  .story-step .eyebrow{margin-bottom:18px;}
+  .story-step h3{font-size:clamp(22px,2.6vw,30px);font-weight:500;margin-bottom:14px;text-wrap:balance;max-width:26ch;}
+  .story-step p{color:var(--muted);font-size:15px;max-width:42ch;}
+
   @media(max-width:860px){
     .b-grid{grid-template-columns:1fr 1fr;}
     .pricing-grid{grid-template-columns:1fr;}
     .price-card.featured{transform:none;}
+    .story-wrap{grid-template-columns:1fr;gap:28px;padding:56px 24px;}
+    .story-visual{position:static;height:300px;max-height:none;}
+    .story-step{min-height:auto;opacity:1;padding:28px 0;}
   }
   @media(max-width:520px){ .b-grid{grid-template-columns:1fr;} }
 </style>
@@ -113,7 +160,66 @@
   </div>
 </section>
 
-<section class="benefits" id="benefits">
+<section class="story" id="story">
+  <div class="wrap story-wrap">
+    <div class="story-visual">
+      <div class="story-visual-inner" id="storyVisual">
+        <div class="story-panel active" data-step="0" style="background:var(--accent);">
+          <div class="story-panel-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="10" y="6" width="28" height="36" rx="2"/><line x1="16" y1="16" x2="32" y2="16"/><line x1="16" y1="24" x2="32" y2="24"/><line x1="16" y1="32" x2="26" y2="32"/></svg>
+          </div>
+          <span class="story-num mono">01</span>
+          <div class="story-panel-label">Бриф</div>
+        </div>
+        <div class="story-panel" data-step="1" style="background:var(--brass);">
+          <div class="story-panel-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="24" cy="24" r="18"/><line x1="24" y1="24" x2="24" y2="13"/><line x1="24" y1="24" x2="32" y2="28"/></svg>
+          </div>
+          <span class="story-num mono">02</span>
+          <div class="story-panel-label">Тайминг</div>
+        </div>
+        <div class="story-panel" data-step="2" style="background:#3b5f6b;">
+          <div class="story-panel-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 13l3 3 5-6"/><line x1="22" y1="13" x2="39" y2="13"/><path d="M9 24l3 3 5-6"/><line x1="22" y1="24" x2="39" y2="24"/><path d="M9 35l3 3 5-6"/><line x1="22" y1="35" x2="39" y2="35"/></svg>
+          </div>
+          <span class="story-num mono">03</span>
+          <div class="story-panel-label">Чек-лист</div>
+        </div>
+        <div class="story-panel" data-step="3" style="background:#5c3d45;">
+          <div class="story-panel-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="14" width="36" height="24" rx="3"/><path d="M6 20h36"/><circle cx="32" cy="29" r="3"/></svg>
+          </div>
+          <span class="story-num mono">04</span>
+          <div class="story-panel-label">Бюджет</div>
+        </div>
+      </div>
+    </div>
+    <div class="story-steps" id="storySteps">
+      <div class="story-step active" data-step="0">
+        <span class="eyebrow">01 · Бриф</span>
+        <h3>Всё, что сказал клиент — в полях, а не в голове</h3>
+        <p>Название, дата, гости, бюджет, пожелания по декору — организатор заполняет один раз на встрече, и это никогда не теряется между мессенджерами.</p>
+      </div>
+      <div class="story-step" data-step="1">
+        <span class="eyebrow">02 · Тайминг</span>
+        <h3>Один план дня — вместо пересылки в директ</h3>
+        <p>Run-of-show с точным временем для каждого подрядчика: декораторы, фотограф, ведущий видят одно и то же расписание.</p>
+      </div>
+      <div class="story-step" data-step="2">
+        <span class="eyebrow">03 · Чек-лист</span>
+        <h3>Задачи по периодам — от месяца до дня мероприятия</h3>
+        <p>Ничего не забывается само по себе: за месяц, за неделю, в день Х — каждая задача на своём месте, с контактами и суммой, если нужно.</p>
+      </div>
+      <div class="story-step" data-step="3">
+        <span class="eyebrow">04 · Бюджет</span>
+        <h3>Видно, кто сколько стоит и сколько уже оплачено</h3>
+        <p>Сумма, предоплата, остаток — по каждой услуге. Общий план/факт по бюджету мероприятия считается сам.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="benefits reveal" id="benefits">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Что решает Régie</span>
@@ -147,7 +253,7 @@
   </div>
 </section>
 
-<section class="pricing" id="pricing">
+<section class="pricing reveal" id="pricing">
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Тарифы</span>
@@ -187,6 +293,59 @@
     Получить доступ к системе — <a href="mailto:hello@regie-notion.com">hello@regie-notion.com</a> · Régie © 2026
   </div>
 </footer>
+
+<div class="theme-switch" id="themeSwitch" title="Цветовая тема">
+  <button class="theme-dot" data-theme-swatch="editorial" data-theme-target="editorial" onclick="setTheme('editorial')" title="Редакционная"></button>
+  <button class="theme-dot" data-theme-swatch="noir" data-theme-target="noir" onclick="setTheme('noir')" title="Тёмная"></button>
+  <button class="theme-dot" data-theme-swatch="blush" data-theme-target="blush" onclick="setTheme('blush')" title="Тёплая"></button>
+</div>
+
+<script>
+function setTheme(t){
+  try{ localStorage.setItem('regie_theme', t); }catch(e){}
+  applyTheme(t);
+}
+function applyTheme(t){
+  if(t && t!=='editorial') document.documentElement.setAttribute('data-theme', t);
+  else document.documentElement.removeAttribute('data-theme');
+  document.querySelectorAll('.theme-dot').forEach(d=>{
+    d.classList.toggle('active', d.getAttribute('data-theme-target')===(t||'editorial'));
+  });
+}
+let savedTheme = 'editorial';
+try{ savedTheme = localStorage.getItem('regie_theme') || 'editorial'; }catch(e){}
+applyTheme(savedTheme);
+
+/* gentle fade-up for benefits/pricing as they scroll into view */
+try{
+  const revealObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, {threshold:0.1});
+  document.querySelectorAll('.reveal').forEach(el=>revealObserver.observe(el));
+}catch(e){}
+
+/* scroll-driven "how it works": whichever step is nearest the viewport centre
+   drives both its own highlight and the matching sticky visual panel */
+try{
+  const steps = Array.from(document.querySelectorAll('.story-step'));
+  const panels = Array.from(document.querySelectorAll('.story-panel'));
+  const setActiveStep = (stepIndex)=>{
+    steps.forEach(s=>s.classList.toggle('active', s.getAttribute('data-step')===String(stepIndex)));
+    panels.forEach(p=>p.classList.toggle('active', p.getAttribute('data-step')===String(stepIndex)));
+  };
+  const storyObserver = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting) setActiveStep(entry.target.getAttribute('data-step'));
+    });
+  }, {threshold:0, rootMargin:'-45% 0px -45% 0px'});
+  steps.forEach(s=>storyObserver.observe(s));
+}catch(e){}
+</script>
 
 </body>
 </html>
