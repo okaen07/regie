@@ -39,33 +39,6 @@
     --good:#6fae7e; --good-soft:#1f3326; --warn:#d1a24a; --warn-soft:#3a2f18;
     --idle:#a3a195; --idle-soft:#2b2a24; --bad:#d17a7a; --bad-soft:#3a2020;
   }
-  :root[data-theme="blush"]{
-    --bg:#fbf1ee; --surface:#ffffff; --surface-2:#f6e7e2; --text:#2b211f; --muted:#8a7571;
-    --accent:#9c4b43; --accent-fill:#9c4b43; --accent-soft:#f3dcd7; --brass:#b98a4e; --border:#eddcd6;
-  }
-  /* Light palettes: off-white surfaces (never pure #fff) and softened text,
-     so contrast stays readable (AA+) without the glare of black-on-white. */
-  :root[data-theme="sepia"]{
-    --bg:#f3ead6; --surface:#faf4e4; --surface-2:#ebdfc4; --text:#3a2e1d; --muted:#72624a;
-    --accent:#6b4f2a; --accent-fill:#6b4f2a; --accent-soft:#e8d9bb; --brass:#94742f; --border:#ddcfae;
-    --good:#4f6b2e; --good-soft:#e3e6c8; --warn:#9a6a14; --warn-soft:#f1e2bf; --idle:#8a7d68; --idle-soft:#ebe2cd;
-    --bad:#9a3f2c; --bad-soft:#f2dccf; --flash:#f0d9a0; --auto-row:#f6ecd4;
-  }
-  :root[data-theme="sage"]{
-    --bg:#edf1ea; --surface:#f8faf5; --surface-2:#e2e9dd; --text:#1f2a22; --muted:#5a685c;
-    --accent:#3b6a50; --accent-fill:#3b6a50; --accent-soft:#d9e7dc; --brass:#8a7d3e; --border:#d3ddcf;
-    --flash:#e8e2a8; --auto-row:#eef3e6;
-  }
-  :root[data-theme="mist"]{
-    --bg:#edf0f3; --surface:#f8f9fb; --surface-2:#e2e7ed; --text:#1e2833; --muted:#586574;
-    --accent:#33577a; --accent-fill:#33577a; --accent-soft:#dae4ee; --brass:#93763f; --border:#d4dbe3;
-    --good:#2f6f55; --good-soft:#dcece4; --flash:#f1e2a6; --auto-row:#eef2f6;
-  }
-  :root[data-theme="lavender"]{
-    --bg:#f2eff5; --surface:#faf9fc; --surface-2:#e8e3ee; --text:#29232f; --muted:#675f74;
-    --accent:#5b4884; --accent-fill:#5b4884; --accent-soft:#e4ddef; --brass:#9a7a47; --border:#ddd6e6;
-    --flash:#efdfa6; --auto-row:#f2eef6;
-  }
   /* Dark palettes: no pure black, text dimmed to ~#e0 so it doesn't "glow". */
   :root[data-theme="dusk"]{
     --bg:#181d24; --surface:#1f262e; --surface-2:#273039; --text:#dfe4ea; --muted:#97a3b0;
@@ -906,10 +879,10 @@
   .table-count b{color:var(--text);}
 
   /* ---- timing dial: numbered program, rich hover card, focus mode ---- */
-  .clock-seg{fill:none;stroke-width:6px;stroke-linecap:butt;opacity:.55;cursor:pointer;transition:opacity .15s,stroke-width .15s;}
-  .clock-seg:hover,.clock-seg.highlight{opacity:1;stroke-width:9px;}
-  .clock-seg.is-past{opacity:.18;}
-  .clock-seg.is-now{opacity:.95;stroke-width:8px;}
+  .clock-seg{fill:none;stroke-width:15px;stroke-linecap:butt;opacity:.42;cursor:pointer;transition:opacity .15s;}
+  .clock-seg:hover,.clock-seg.highlight{opacity:.7;}
+  .clock-seg.is-past{opacity:.16;}
+  .clock-seg.is-now{opacity:.62;}
   .clock-pt{cursor:grab;}
   .clock-pt.dragging{cursor:grabbing;}
   .clock-pt-badge{fill:var(--c);stroke:var(--surface);stroke-width:1.6px;transition:r .15s;}
@@ -921,6 +894,101 @@
   .clock-pt.is-now .clock-pt-badge{r:8.2px;stroke:var(--text);stroke-width:1.4px;}
   @media(prefers-reduced-motion:no-preference){ .clock-pt.is-now .clock-pt-badge{animation:clockPtPulse 1.8s ease-in-out infinite;} }
   @keyframes clockPtPulse{0%,100%{stroke-width:1.4px;}50%{stroke-width:3px;}}
+
+  /* header: tariff and Админ/Превью switches kept quiet so they don't pull the eye from the work */
+  header .tariff-flat-btn,header .mode-btn{height:26px;padding:0 12px;font-size:11.5px;font-weight:600;}
+  header .tariff-switch-flat,header .mode-switch{padding:2px;gap:2px;background:transparent;}
+  header .tariff-group-label{font-size:9.5px;letter-spacing:.1em;opacity:.8;}
+  header .tariff-switch-wrap{gap:12px;}
+  header .header-controls{gap:12px;}
+  header .tariff-group{gap:3px;}
+  header .header-btn{height:28px;padding:0 14px;font-size:12px;}
+  .back-admin-btn{border:none;background:none;font:600 11.5px/1 'Karla',system-ui,sans-serif;color:var(--muted);cursor:pointer;padding:6px 8px;}
+  .back-admin-btn:hover{color:var(--text);text-decoration:underline;}
+  footer.base .footer-author{margin-top:6px;font-size:12px;}
+  footer.base .footer-author b{font-weight:600;color:var(--text);}
+  footer.base a{color:var(--accent);font-weight:600;text-decoration:none;}
+
+  /* bigger dial with 5-minute marks; shift guides only show on hover */
+  .clock-card-body{grid-template-columns:minmax(220px,300px) minmax(380px,600px) minmax(240px,300px);}
+  .timing-clock-svg{width:min(600px,100%);}
+  .clock-tick.half{stroke:var(--muted);stroke-width:1px;opacity:.7;}
+  .clock-tick.micro{stroke:var(--border);stroke-width:.6px;opacity:.9;}
+  .clock-shift-guide{opacity:0;transition:opacity .15s;}
+  .clock-shift.highlight .clock-shift-guide,.clock-shift.dragging .clock-shift-guide{opacity:.85;}
+  .clock-shift.is-outer .clock-shift-track{display:none;}
+  .clock-shift.is-outer .clock-shift-arc{stroke-width:3.5px;}
+  @media(max-width:1100px){ .clock-card-body{grid-template-columns:minmax(220px,300px) minmax(320px,560px);} }
+  @media(max-width:760px){ .clock-card-body{grid-template-columns:minmax(0,1fr);} .timing-clock-svg{width:min(100%,460px);} }
+  /* full screen: a long list must not push the dial below the fold */
+  body.clock-focus .clock-card-body{align-items:start;}
+  body.clock-focus .timing-clock-svg{position:sticky;top:64px;}
+  body.clock-focus .clock-side{position:sticky;top:64px;}
+
+  /* menu: one tidy line per position — name (+ how it's counted) · qty · price · [serving] · sum */
+  .menu-cat{--mi-cols:minmax(0,1fr) 128px 96px 132px 26px;}
+  .menu-cat.has-serve{--mi-cols:minmax(0,1fr) 128px 96px 84px 132px 26px;}
+  .menu-cat h4 .mi-count{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);font-weight:500;margin-left:4px;}
+  .mi-head{display:grid;grid-template-columns:var(--mi-cols);gap:10px;padding:0 10px 6px;font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;}
+  .mi-head span:nth-last-child(2){text-align:right;}
+  .menu-items .mi-row{display:grid;grid-template-columns:var(--mi-cols);gap:10px;align-items:center;padding:9px 10px;border:none;border-top:1px solid var(--border);border-radius:0;background:none;margin:0;}
+  .menu-items .mi-row:first-child{border-top:none;}
+  .menu-items .mi-row.flash-highlight{background:var(--flash);transition:background-color 1.4s ease;}
+  .mi-main{display:flex;flex-direction:column;gap:3px;min-width:0;}
+  .mi-row .mi-name{border:1px solid transparent;background:transparent;font-size:14px;font-weight:600;padding:4px 6px;margin-left:-6px;height:auto;}
+  .mi-row .mi-name:hover{border-color:var(--border);}
+  .mi-row .mi-name:focus{background:var(--surface);border-color:var(--accent);}
+  .mi-row .mi-mode{width:auto;align-self:flex-start;height:24px;padding:0 22px 0 6px;font-size:11.5px;color:var(--muted);border:1px solid var(--border);border-radius:999px;background-color:var(--surface-2);}
+  .mi-qty{display:grid;grid-template-columns:1fr 54px;gap:4px;}
+  .mi-row input[type="number"],.mi-row input[type="time"],.mi-qty input{height:32px;padding:4px 7px;font-size:13px;min-width:0;width:100%;}
+  .mi-price input{text-align:right;}
+  .mi-serve input{font-family:'IBM Plex Mono',monospace;font-size:12px;padding:4px 4px;}
+  .mi-serve input:not(:placeholder-shown):valid{border-color:var(--brass);}
+  .mi-sum{display:flex;flex-direction:column;align-items:flex-end;gap:4px;text-align:right;min-width:0;}
+  .mi-sum .mi-total{display:flex;flex-direction:column;align-items:flex-end;font-size:11px;line-height:1.35;color:var(--muted);}
+  .mi-sum .mi-total .mi-cost{order:-1;font-size:13.5px;font-weight:700;color:var(--text);}
+  .mi-sum .mi-total .mi-per{font-size:10.5px;}
+  .mi-sum .mi-budget-btn{font-size:11px;padding:3px 8px;}
+  .menu-items .mi-row .row-del{justify-self:end;}
+  .menu-items .mi-new{background:var(--surface-2);border-radius:10px;border-top:none;margin-top:8px;}
+  .menu-items .mi-new .mi-name{font-weight:500;border-color:var(--border);background:var(--surface);margin-left:0;}
+  .menu-items .mi-new .mi-add-btn{grid-column:-3 / -1;height:32px;padding:0 10px;font-size:12.5px;white-space:nowrap;}
+  .mi-cat-total{padding:8px 10px 0;}
+  @media(max-width:760px){
+    .menu-cat,.menu-cat.has-serve{--mi-cols:1fr 1fr;}
+    .mi-head{display:none;}
+    .mi-main{grid-column:1 / -1;}
+    .mi-sum{grid-column:1 / 2;align-items:flex-start;text-align:left;}
+    .mi-sum .mi-total{align-items:flex-start;}
+    .menu-items .mi-new .mi-add-btn{grid-column:1 / -1;}
+  }
+
+  /* budget: «Подрядчики и услуги» / «Заведение», each with its own subtotal */
+  .budget-table tr.budget-group-head td{padding:16px 12px 8px;font-family:'Bodoni Moda',Georgia,serif;font-size:15px;font-weight:500;color:var(--text);background:var(--surface);border-bottom:1px solid var(--border);}
+  .budget-table tr.budget-group-head:not(:first-child) td{border-top:10px solid var(--surface-2);}
+  .budget-table tr.budget-group-empty td{color:var(--muted);font-size:12.5px;padding:10px 12px;}
+  .budget-table tr.budget-group-add td{padding:6px 12px;}
+  .budget-table tr.budget-group-add .add-row-btn{margin:0;padding:7px;}
+  .budget-table tr.budget-group-total td{background:var(--surface-2);font-weight:600;font-size:12.5px;padding:9px 12px;}
+  .budget-table tr.budget-group-total td.bg-note{font-weight:400;color:var(--muted);font-size:11px;}
+  .row-actions .row-move{border:1px solid var(--border);background:var(--surface);color:var(--muted);border-radius:6px;width:26px;height:26px;cursor:pointer;font-size:13px;line-height:1;}
+  .row-actions .row-move:hover{color:var(--accent);border-color:var(--accent);}
+
+  /* timing: dishes with a serving time from the menu */
+  .clock-pt.is-serve .clock-pt-badge{stroke:var(--surface);stroke-dasharray:2 1.6;stroke-width:2px;}
+  .clock-event-list-item.is-serve{grid-template-columns:20px 44px minmax(0,1fr) 40px;}
+  .cel-serve-title{border:none;background:none;text-align:left;padding:4px 6px;font:500 12.5px/1.3 'Karla',system-ui,sans-serif;color:var(--text);cursor:pointer;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .cel-serve-title:hover{text-decoration:underline dotted;}
+  .cel-serve-tag{font-size:10px;color:var(--brass);border:1px solid currentColor;border-radius:999px;padding:1px 6px;justify-self:end;opacity:.85;}
+
+  /* centre: RÉGIE with the G inside the hands' cap ring, «by Yorin» beneath */
+  .clock-wordmark{pointer-events:none;}
+  .clock-wordmark text{font-family:'Bodoni Moda',Georgia,serif;fill:var(--text);dominant-baseline:central;paint-order:stroke;stroke:var(--surface);stroke-width:3.2px;stroke-linejoin:round;}
+  .clock-wordmark .cw-side{font-size:14px;font-weight:500;opacity:.88;}
+  .clock-wordmark .cw-g{font-size:18px;font-weight:600;fill:var(--accent);}
+  .clock-wordmark .cw-by{font-size:7.5px;font-style:italic;font-weight:400;fill:var(--muted);letter-spacing:.06em;}
+  .clock-pivot-ring{fill:none;stroke:var(--accent);stroke-width:1.3px;}
+  .timing-clock-svg.zoomed .clock-pivot-ring{stroke:var(--bad);}
 
   .clock-tooltip{z-index:95;max-width:290px;min-width:200px;padding:10px 12px;border-radius:10px;font-size:12px;box-shadow:0 14px 30px -14px rgba(0,0,0,.5);}
   .clock-tooltip.below{transform:translate(-50%,0);}
@@ -1065,11 +1133,11 @@
         <button class="mode-btn" id="btnPreview" onclick="setMode('preview')">Превью</button>
       </div>
 
-      <button class="header-btn" onclick="setMode('preview'); requestAnimationFrame(()=>window.print());">PDF</button>
     </div>
 
     <div class="tool-row preview-only">
-      <button class="header-btn" onclick="window.print()">PDF</button>
+      <button class="back-admin-btn" onclick="setMode('admin')" title="Вернуться к редактированию">Админ</button>
+      <button class="header-btn" onclick="window.print()" title="Сохранить как PDF или распечатать">Скачать PDF</button>
     </div>
   </div>
   <div class="category-tabs admin-only full-bleed">
@@ -1376,7 +1444,6 @@
         <div class="scroll-hint">← смахните таблицу, чтобы увидеть статус →</div>
       </div>
       <div class="mock-body" style="padding-top:0;">
-        <button class="add-row-btn admin-only" onclick="addBudgetRow()">+ Добавить услугу</button>
         <div class="budget-summary">
           <div class="item">Бюджет клиента<b class="mono" id="sumBudget">0 ₸</b></div>
           <div class="item">Потрачено<b class="mono" id="sumSpent">0 ₸</b></div>
@@ -1485,6 +1552,7 @@
 
 <footer class="base">
   <div class="wrap">Régie — внутренний инструмент подготовки мероприятий · <a href="index.html">На сайт</a></div>
+  <div class="wrap footer-author">© 2026 Régie · автор проекта — <b>Yorin</b> · <a href="mailto:yerlanorin@gmail.com">yerlanorin@gmail.com</a></div>
 </footer>
 
 <div class="modal-backdrop print-hide" id="catalogBackdrop" hidden onclick="if(event.target===this) closeCatalog()">
@@ -1835,6 +1903,7 @@ function setTariff(t){
   scheduleSave();
   applyTariffUI();
   applyCategoryUI();
+  renderBudget(); // the venue group and its money only count in Pro
 }
 
 function applyTariffUI(){
@@ -2057,24 +2126,64 @@ function removeTimeline(rid){
 }
 
 function renderTimelinePreview(){
-  const rows = state.timeline.slice()
+  const rows = timingItems().slice()
     .filter(r=>r.title)
     .sort((a,b)=> (a.time||'').localeCompare(b.time||''));
   document.getElementById('pv-t-count').textContent = rows.length + ' ' + pluralize(rows.length,'пункт','пункта','пунктов');
   document.getElementById('timelinePreview').innerHTML = rows.map(r=>`
     <div class="t-item">
       <div class="t-time mono">${escapeHtml(r.time||'')}${r.endTime?'–'+escapeHtml(r.endTime):''}</div>
-      <div class="t-text">${escapeHtml(r.title)}${r.sub?`<span class="t-sub">${escapeHtml(r.sub)}</span>`:''}${(()=>{const d=menuItemsForEvent(r.title);return d.length?`<span class="t-sub">Из меню: ${d.map(it=>escapeHtml(it.name)).join(' · ')}</span>`:'';})()}</div>
+      <div class="t-text">${escapeHtml(r.title)}${r.sub?`<span class="t-sub">${escapeHtml(r.sub)}</span>`:''}${r.serve ? '' : (()=>{const d=menuItemsForEvent(r.title, r.time);return d.length?`<span class="t-sub">Подача: ${d.map(it=>escapeHtml(it.name)).join(' · ')}</span>`:'';})()}</div>
     </div>
   `).join('') || '<div class="prop-value muted">Пока нет пунктов тайминга.</div>';
+}
+
+/* ---------- serving times: menu → timing ----------
+   A dish with «Подача» set shows up in the run-of-show on its own. If a timing
+   item already sits at that minute (e.g. «Первое горячее 18:30»), the dish is
+   attached to it; otherwise the dishes served together become one virtual
+   item «Подача: …». Virtual items live only here — their time is stored on the
+   dishes, so moving one on the dial moves the dishes' serving time. */
+function servedDishes(){
+  return ((state && state.venue && state.venue.menu) || []).filter(it=>(it.name||'').trim() && it.category!=='equipment' && clockTimeToMinutes(it.serveTime)!=null);
+}
+function menuServeItems(){
+  const taken = new Set((state.timeline||[]).filter(r=>r.time && !(r.endTime && r.endTime!==r.time)).map(r=>r.time));
+  const byTime = {};
+  servedDishes().forEach(it=>{ if(!taken.has(it.serveTime)) (byTime[it.serveTime] = byTime[it.serveTime] || []).push(it); });
+  return Object.keys(byTime).map(t=>({id:'serve-'+t.replace(':',''), time:t, endTime:'', title:'Подача: '+byTime[t].map(it=>it.name).join(', '), sub:'', serve:true, dishIds:byTime[t].map(it=>it.id)}));
+}
+function timingItems(){ return (state.timeline||[]).concat(menuServeItems()); }
+function timingItem(rid){ return timingItems().find(x=>x.id===rid); }
+function setServeTime(dishIds, time){
+  (state.venue.menu||[]).forEach(it=>{ if(dishIds.includes(it.id)) it.serveTime = time; });
+}
+/* Click on a «Подача» item: open the menu at that dish's row. */
+function gotoServeDish(rid){
+  const r = timingItem(rid);
+  if(!r || !r.dishIds) return;
+  if(typeof toggleClockFocus==='function') toggleClockFocus(false);
+  setCategory('venue');
+  setTimeout(()=>{
+    const row = document.querySelector('.mi-row[data-item-id="'+r.dishIds[0]+'"]');
+    if(!row) return;
+    row.scrollIntoView({behavior:'smooth', block:'center'});
+    row.classList.add('flash-highlight');
+    setTimeout(()=>row.classList.remove('flash-highlight'), 1600);
+    const t = row.querySelector('.mi-serve input');
+    if(t) t.focus({preventScroll:true});
+  }, 60);
 }
 
 /* ---------- run-of-show clock ---------- */
 const CLOCK_VB = 320;
 const CLOCK_CX = 160, CLOCK_CY = 160;
-const CLOCK_R_FACE = 148, CLOCK_R_TICK_OUT = 139, CLOCK_R_TICK_QUARTER_IN = 133, CLOCK_R_TICK_MINOR_IN = 131, CLOCK_R_TICK_MAJOR_IN = 123;
-const CLOCK_R_NUM = 107, CLOCK_R_EVENT = 100, CLOCK_R_DRAG = 139;
-let clockDrag = null; // {startMin} while a create-drag is in progress
+// outside in: hour scale (139…123) · program band (114, crowded badges step out to 130)
+// · numbers (96) · shifts (72 and in) · the single hour hand (≤ 80), short of every event
+const CLOCK_R_FACE = 156, CLOCK_R_TICK_OUT = 139, CLOCK_R_TICK_QUARTER_IN = 133, CLOCK_R_TICK_MINOR_IN = 131, CLOCK_R_TICK_MAJOR_IN = 123;
+const CLOCK_R_NUM = 96, CLOCK_R_EVENT = 114, CLOCK_R_DRAG = 124;
+let clockDrag = null; // {startMin, tapId} while a create-drag is in progress
+let clockSegTap = null; // set when the drag starts on a program stretch — a tap there opens that item
 
 function clockPolarPoint(r, angleDeg){
   const rad = angleDeg*Math.PI/180;
@@ -2180,10 +2289,12 @@ function buildClockFace(){
       ticks += `<line class="clock-tick${major?' major':''}" x1="${outer.x}" y1="${outer.y}" x2="${inner.x}" y2="${inner.y}"/>`;
       const np = clockPolarPoint(CLOCK_R_NUM, angle);
       ticks += `<text class="clock-number${major?'':' odd'}" x="${np.x}" y="${np.y}">${String(h).padStart(2,'0')}</text>`;
-      for(let q=1; q<4; q++){
-        const qa = clockMinutesToAngle(h*60 + q*15);
-        const qo = clockPolarPoint(CLOCK_R_TICK_OUT, qa), qi = clockPolarPoint(CLOCK_R_TICK_QUARTER_IN, qa);
-        ticks += `<line class="clock-tick minor" x1="${qo.x}" y1="${qo.y}" x2="${qi.x}" y2="${qi.y}"/>`;
+      for(let m=5; m<60; m+=5){
+        const qa = clockMinutesToAngle(h*60 + m);
+        const half = m===30, quarter = m%15===0;
+        const qo = clockPolarPoint(CLOCK_R_TICK_OUT, qa);
+        const qi = clockPolarPoint(half ? CLOCK_R_TICK_MINOR_IN : (quarter ? CLOCK_R_TICK_QUARTER_IN : CLOCK_R_TICK_OUT-3), qa);
+        ticks += `<line class="clock-tick ${half ? 'half' : (quarter ? 'minor' : 'micro')}" x1="${qo.x}" y1="${qo.y}" x2="${qi.x}" y2="${qi.y}"/>`;
       }
     }
   } else {
@@ -2210,22 +2321,39 @@ function buildClockFace(){
     <circle class="clock-face-ring-inner" cx="${CLOCK_CX}" cy="${CLOCK_CY}" r="${CLOCK_R_TICK_MAJOR_IN-8}"/>
     <path id="clockElapsed" class="clock-elapsed"></path>
     <g id="clockTicks">${ticks}</g>
-    <line id="clockHourHand" class="clock-hand hour" x1="${CLOCK_CX}" y1="${CLOCK_CY+14}" x2="${CLOCK_CX}" y2="${CLOCK_CY-96}"/>
-    <line id="clockMinuteHand" class="clock-hand minute" x1="${CLOCK_CX}" y1="${CLOCK_CY+18}" x2="${CLOCK_CX}" y2="${CLOCK_CY-118}"/>
-    <line id="clockSecondHand" class="clock-hand second" x1="${CLOCK_CX}" y1="${CLOCK_CY+22}" x2="${CLOCK_CX}" y2="${CLOCK_CY-128}"/>
-    <circle class="clock-pivot-ring" cx="${CLOCK_CX}" cy="${CLOCK_CY}" r="7"/>
-    <circle class="clock-pivot" cx="${CLOCK_CX}" cy="${CLOCK_CY}" r="3.5"/>
+    <line id="clockHourHand" class="clock-hand hour" x1="${CLOCK_CX}" y1="${CLOCK_CY-CLOCK_R_CAP-2}" x2="${CLOCK_CX}" y2="${CLOCK_CY-80}"/>
+    <g class="clock-wordmark" id="clockWordmark" aria-label="Régie by Yorin">
+      <text class="cw-side" id="cwLeft" x="${CLOCK_CX}" y="${CLOCK_CY}" text-anchor="end">RÉ</text>
+      <text class="cw-g" id="cwG" x="${CLOCK_CX}" y="${CLOCK_CY}" text-anchor="middle">G</text>
+      <text class="cw-side" id="cwRight" x="${CLOCK_CX}" y="${CLOCK_CY}" text-anchor="start">IE</text>
+      <text class="cw-by" x="${CLOCK_CX}" y="${CLOCK_CY+22}" text-anchor="middle">by Yorin</text>
+    </g>
+    <circle class="clock-pivot-ring" cx="${CLOCK_CX}" cy="${CLOCK_CY}" r="${CLOCK_R_CAP}"/>
+    <circle class="clock-drag-ring" id="clockDragRing" cx="${CLOCK_CX}" cy="${CLOCK_CY}" r="${CLOCK_R_DRAG}"/>
     <g id="clockShifts"></g>
     <g id="clockEvents"></g>
     <path id="clockDragPreview" class="clock-drag-preview"></path>
-    <circle class="clock-drag-ring" id="clockDragRing" cx="${CLOCK_CX}" cy="${CLOCK_CY}" r="${CLOCK_R_DRAG}"/>
   `;
+  layoutClockWordmark();
   svg.classList.toggle('zoomed', V.zoom);
   wireClockDrag(document.getElementById('clockDragRing'));
   const zb = document.getElementById('clockZoomBtns');
   if(zb) zb.querySelectorAll('button').forEach(b=>b.classList.toggle('active', (b.dataset.zoom==='1')===(!state || !state.ui || state.ui.clockZoom!==false)));
   tickClock(true);
 }
+/* «RÉGIE» with the G sitting exactly on the dial's centre: the two halves are
+   anchored to the G's measured edges, so it stays centred whatever the font. */
+const CLOCK_R_CAP = 12.5;
+function layoutClockWordmark(){
+  const g = document.getElementById('cwG');
+  if(!g || !g.getComputedTextLength) return;
+  const half = (g.getComputedTextLength() || 11)/2 + 2.2;
+  const l = document.getElementById('cwLeft'), r = document.getElementById('cwRight');
+  if(l) l.setAttribute('x', CLOCK_CX - half);
+  if(r) r.setAttribute('x', CLOCK_CX + half);
+}
+if(document.fonts && document.fonts.ready) document.fonts.ready.then(layoutClockWordmark);
+
 function toggleClockZoom(on){
   if(!state.ui) state.ui = {};
   state.ui.clockZoom = !!on;
@@ -2263,7 +2391,7 @@ function tickClock(force){
    shows how much of the planned day has gone by — readable without any text. */
 function updateClockTimeStates(cur){
   if(!state) return;
-  const items = (state.timeline||[]).map(r=>({r, s:clockTimeToMinutes(r.time)})).filter(x=>x.s!=null)
+  const items = timingItems().map(r=>({r, s:clockTimeToMinutes(r.time)})).filter(x=>x.s!=null)
     .sort((a,b)=>(a.r.time||'').localeCompare(b.r.time||''));
   let currentId = null;
   items.forEach((x,i)=>{
@@ -2303,15 +2431,16 @@ function updateClockTimeStates(cur){
 /* Cycled per event so the dial doesn't read as one undifferentiated blob —
    mixes theme-aware vars with a couple of fixed accent hues for variety. */
 const CLOCK_EVENT_COLORS = ['var(--accent)','var(--brass)','var(--good)','var(--warn)','var(--bad)','#4a6fa5','#8e5b9e'];
-const CLOCK_R_SEQ = 100, CLOCK_R_SEQ_IN = 86, CLOCK_BADGE_R = 6.4;
+// the program ring sits outside the hour numbers; a badge crowding its neighbour steps out onto the tick band
+const CLOCK_R_SEQ = 114, CLOCK_R_SEQ_ALT = 130, CLOCK_BADGE_R = 6.4;
 let clockColorById = {}, clockNumById = {}, clockProgram = [];
 
-function clockBadgeGeom(m, inner){
+function clockBadgeGeom(m, alt){
   const a = clockMinutesToAngle(m);
   return {
-    c: clockPolarPoint(inner ? CLOCK_R_SEQ_IN : CLOCK_R_SEQ, a),
+    c: clockPolarPoint(alt ? CLOCK_R_SEQ_ALT : CLOCK_R_SEQ, a),
     s1: clockPolarPoint(CLOCK_R_SEQ, a),
-    s2: clockPolarPoint(CLOCK_R_SEQ_IN + CLOCK_BADGE_R, a)
+    s2: clockPolarPoint(CLOCK_R_SEQ_ALT + Math.sign(CLOCK_R_SEQ - CLOCK_R_SEQ_ALT)*CLOCK_BADGE_R, a)
   };
 }
 function placeClockBadge(grp, m){
@@ -2329,7 +2458,7 @@ function renderClockEvents(){
   const rg = document.getElementById('clockShifts');
   const list = document.getElementById('clockEventList');
   if(!g) return;
-  const sorted = state.timeline.slice().sort((a,b)=>(a.time||'').localeCompare(b.time||''));
+  const sorted = timingItems().slice().sort((a,b)=>(a.time||'').localeCompare(b.time||''));
 
   // One colour per timed item, shared by the list, the dial, the tooltip and the «now» card.
   const colorById = {};
@@ -2352,13 +2481,17 @@ function renderClockEvents(){
   clockNumById = {};
   points.forEach((x,i)=>{ clockNumById[x.r.id] = i+1; });
 
-  const lanes = [];
+  const used = {};
+  const fits = (rad, span) => (used[rad] || []).every(o=>!spansOverlap(o, span));
   ranges.forEach(x=>{
     const span = [x.s, x.s + rangeDuration(x.s, x.e)];
-    let lane = lanes.findIndex(L=>L.every(o=>!spansOverlap(o, span)));
-    if(lane<0){ lane = Math.min(lanes.length, CLOCK_RANGE_LANES-1); if(!lanes[lane]) lanes[lane] = []; }
-    lanes[lane].push(span);
-    x.lane = lane;
+    // own band first, then the other outer band, and only then inside the numbers
+    const isShort = (span[1]-span[0]) <= CLOCK_SHORT_SHIFT;
+    const outer = isShort ? CLOCK_R_SHORT_LANES.concat(CLOCK_R_LONG_LANES) : CLOCK_R_LONG_LANES.concat(CLOCK_R_SHORT_LANES);
+    const inner = [0,1,2,3,4,5].map(i=>CLOCK_R_RANGE0 - i*CLOCK_R_RANGE_STEP);
+    const rad = outer.concat(inner).find(r=>fits(r, span)) || inner[inner.length-1];
+    (used[rad] = used[rad] || []).push(span);
+    x.rad = rad;
   });
 
   // ring stretches first, badges on top; badges too close to the previous one drop to an inner row
@@ -2372,7 +2505,7 @@ function renderClockEvents(){
     const inner = lastA!=null && !lastInner && Math.abs(a - lastA) < 8;
     lastA = a; lastInner = inner;
     const G = clockBadgeGeom(x.s, inner);
-    badges += `<g class="clock-pt" data-id="${x.r.id}" data-inner="${inner?1:0}" style="--c:${c}">
+    badges += `<g class="clock-pt${x.r.serve?' is-serve':''}" data-id="${x.r.id}" data-inner="${inner?1:0}" style="--c:${c}">
       ${inner ? `<line class="clock-pt-stem" x1="${G.s1.x}" y1="${G.s1.y}" x2="${G.s2.x}" y2="${G.s2.y}"/>` : ''}
       <circle class="clock-pt-badge" cx="${G.c.x}" cy="${G.c.y}" r="${CLOCK_BADGE_R}"/>
       <text class="clock-pt-num" x="${G.c.x}" y="${G.c.y}">${i+1}</text>
@@ -2381,10 +2514,9 @@ function renderClockEvents(){
   g.innerHTML = segs + badges;
 
   if(rg){
-    rg.innerHTML = ranges.map(({r, lane})=>{
+    rg.innerHTML = ranges.map(({r, rad})=>{
       const c = colorById[r.id];
-      const rad = CLOCK_R_RANGE0 - lane*CLOCK_R_RANGE_STEP;
-      return `<g class="clock-shift" data-id="${r.id}" data-r="${rad}">
+      return `<g class="clock-shift${rad > CLOCK_R_NUM ? ' is-outer' : ''}" data-id="${r.id}" data-r="${rad}">
         <circle class="clock-shift-track" cx="${CLOCK_CX}" cy="${CLOCK_CY}" r="${rad}"/>
         <line class="clock-shift-guide" data-part="gs" style="stroke:${c}"/>
         <line class="clock-shift-guide" data-part="ge" style="stroke:${c}"/>
@@ -2411,6 +2543,13 @@ function renderClockEvents(){
     const row = (r, mark) => {
       const color = colorById[r.id] || 'var(--border)';
       const time = r.time ? r.time + (r.endTime ? '–'+r.endTime : '') : '—';
+      if(r.serve) return `
+      <div class="clock-event-list-item is-serve" data-id="${r.id}" style="--sw:${color}">
+        <button type="button" class="cel-num" onclick="gotoServeDish('${r.id}')" title="Открыть в меню">${mark}</button>
+        <button type="button" class="cel-when mono" onclick="gotoServeDish('${r.id}')" title="Время подачи меняется в меню или перетаскиванием на часах">${time}</button>
+        <button type="button" class="cel-serve-title" onclick="gotoServeDish('${r.id}')" title="Открыть в меню">${escapeHtml(r.title)}</button>
+        <span class="cel-serve-tag" title="Из меню">меню</span>
+      </div>`;
       return `
       <div class="clock-event-list-item${r.endTime?' is-range':''}" data-id="${r.id}" style="--sw:${color}">
         <button type="button" class="cel-num" onclick="openClockEditForm('${r.id}')" title="Время и детали">${mark}</button>
@@ -2418,7 +2557,7 @@ function renderClockEvents(){
         <input type="text" class="cel-title" data-id="${r.id}" data-key="title" placeholder="Событие или подрядчик" value="${escAttr(r.title)}">
         <button class="cel-del" data-id="${r.id}" title="Удалить">×</button>
         ${r.sub ? `<div class="cel-sub">${escapeHtml(r.sub)}</div>` : ''}
-        <div class="cel-menu" data-menu-for="${r.id}">${menuLineHtml(r.title)}</div>
+        <div class="cel-menu" data-menu-for="${r.id}">${menuLineHtml(r.title, r.time)}</div>
       </div>`;
     };
     const untimed = sorted.filter(r=>clockTimeToMinutes(r.time)==null);
@@ -2437,7 +2576,14 @@ function renderClockEvents(){
     seg.addEventListener('pointerenter', e=>{ if(!pointDrag){ showClockTooltip(e, rid); setClockHighlight(rid, true); } });
     seg.addEventListener('pointermove', e=>{ if(!pointDrag) showClockTooltip(e, rid); });
     seg.addEventListener('pointerleave', ()=>{ if(!pointDrag){ hideClockTooltip(); setClockHighlight(rid, false); } });
-    seg.addEventListener('click', ()=>{ hideClockTooltip(); openClockEditForm(rid); });
+    seg.addEventListener('pointerdown', e=>{
+      const ring = document.getElementById('clockDragRing');
+      if(!ring) return;
+      e.preventDefault();
+      hideClockTooltip();
+      clockSegTap = rid;
+      ring.dispatchEvent(new PointerEvent('pointerdown', {clientX:e.clientX, clientY:e.clientY, pointerId:e.pointerId, pointerType:e.pointerType, isPrimary:true, bubbles:true}));
+    });
   });
   if(list){
     list.querySelectorAll('.clock-event-list-item').forEach(item=>{
@@ -2470,7 +2616,7 @@ function wirePointDrag(grp){
   grp.addEventListener('pointerleave', ()=>{ if(!pointDrag){ hideClockTooltip(); setClockHighlight(rid, false); } });
   grp.addEventListener('pointerdown', e=>{
     e.preventDefault(); e.stopPropagation();
-    pointDrag = {rid, m0:clockPointerMinutes(e), moved:false};
+    pointDrag = {rid, m0:clockPointerMinutes(e), moved:false, r:timingItem(rid)};
     grp.setPointerCapture(e.pointerId);
     grp.classList.add('dragging');
   });
@@ -2479,7 +2625,7 @@ function wirePointDrag(grp){
     const m = clockPointerMinutes(e);
     if(m!==pointDrag.m0) pointDrag.moved = true;
     if(!pointDrag.moved) return;
-    const r = state.timeline.find(x=>x.id===rid);
+    const r = pointDrag.r;
     if(!r) return;
     r.time = clockMinutesToTime(m);
     placeClockBadge(grp, m);
@@ -2489,12 +2635,15 @@ function wirePointDrag(grp){
   const finish = e=>{
     if(!pointDrag || pointDrag.rid!==rid) return;
     if(e.type==='pointerup') update(e);
-    const moved = pointDrag.moved;
+    const moved = pointDrag.moved, r = pointDrag.r;
     pointDrag = null;
     grp.classList.remove('dragging');
     hideClockTooltip();
     setClockHighlight(rid, false);
-    if(moved){ scheduleSave(); renderClockEvents(); }
+    if(moved){
+      if(r && r.serve){ setServeTime(r.dishIds, r.time); renderVenueAdmin(); renderVenuePreview(); }
+      scheduleSave(); renderClockEvents(); renderTimelinePreview();
+    }
     else openClockEditForm(rid);
   };
   grp.addEventListener('pointerup', finish);
@@ -2503,6 +2652,10 @@ function wirePointDrag(grp){
 
 /* ---------- ranges (items with an end time) ---------- */
 const CLOCK_R_RANGE0 = 72, CLOCK_R_RANGE_STEP = 9, CLOCK_RANGE_LANES = 6;
+// up to 2 h counts as short (a toast, a performer's set); longer ones (a photographer's day) go to the rim
+const CLOCK_SHORT_SHIFT = 120;
+const CLOCK_R_SHORT_LANES = [131, 125.5, 136.5];
+const CLOCK_R_LONG_LANES = [145, 151];
 function rangeDuration(s, e){ let d = e - s; if(d<=0) d += 1440; return d; }
 function spansOverlap(a, b){
   // spans may run past 1440 (over midnight) — compare against b shifted by a day both ways
@@ -2515,7 +2668,7 @@ function fmtDuration(min){
 function eventLabel(r){
   const s = clockTimeToMinutes(r.time), e = r.endTime ? clockTimeToMinutes(r.endTime) : null;
   let txt = (r.time||'') + (e!=null && e!==s ? '–'+r.endTime+' ('+fmtDuration(rangeDuration(s,e))+')' : '') + ' · ' + (r.title||'Без названия');
-  const dishes = menuItemsForEvent(r.title);
+  const dishes = menuItemsForEvent(r.title, r.time);
   if(dishes.length) txt += ' · ' + dishes.map(d=>d.name).join(', ');
   return txt;
 }
@@ -2543,7 +2696,7 @@ function applyRangeGeom(grp, r){
   [['gs',G.gs],['ge',G.ge]].forEach(([p,pts])=>{ const el = q(p); if(el){ el.setAttribute('x1',pts[0].x); el.setAttribute('y1',pts[0].y); el.setAttribute('x2',pts[1].x); el.setAttribute('y2',pts[1].y); } });
   const hit = q('hit'); if(hit) hit.setAttribute('data-label', eventLabel(r));
   // short ranges: the two time labels would sit on top of each other — the tooltip has them
-  const short = rangeDuration(clockTimeToMinutes(r.time), clockTimeToMinutes(r.endTime)) < 75;
+  const short = rangeDuration(clockTimeToMinutes(r.time), clockTimeToMinutes(r.endTime)) < 75 || +grp.dataset.r > CLOCK_R_NUM;
   ['ts','te'].forEach(p=>{ const el = q(p); if(el) el.style.display = short ? 'none' : ''; });
 }
 
@@ -2629,11 +2782,18 @@ const MENU_EVENT_RULES = [
   {re:/алкогол|бар\b|коктейл|шампанск|водк|коньяк/i, cat:'alcohol'}
 ];
 function menuWords(s){ return (s||'').toLowerCase().split(/[^0-9a-zа-яё]+/i).filter(w=>w.length>=4); }
-function menuItemsForEvent(title){
+function menuItemsForEvent(title, time){
   // food & drink only — rented equipment («Шатёр банкетный») is not something a guest «chooses»
-  const menu = ((state && state.venue && state.venue.menu) || []).filter(it=>(it.name||'').trim() && it.category!=='equipment');
+  const all = ((state && state.venue && state.venue.menu) || []).filter(it=>(it.name||'').trim() && it.category!=='equipment');
+  // dishes with their own «Подача» belong to that minute only
+  const atTime = time ? all.filter(it=>it.serveTime===time) : [];
+  const menu = all.filter(it=>!it.serveTime);
   const t = (title||'').toLowerCase().trim();
-  if(!t || !menu.length) return [];
+  if(!t || !menu.length) return atTime;
+  const guessed = menuItemsGuess(t, menu);
+  return atTime.concat(guessed.filter(it=>!atTime.includes(it)));
+}
+function menuItemsGuess(t, menu){
   // 1) a dish named directly in the title
   const tw = menuWords(t);
   const named = menu.filter(it=>{
@@ -2655,15 +2815,15 @@ function menuItemsForEvent(title){
   });
   return out;
 }
-function menuLineHtml(title){
-  const items = menuItemsForEvent(title);
+function menuLineHtml(title, time){
+  const items = menuItemsForEvent(title, time);
   if(!items.length) return '';
-  return '<span class="cel-menu-k">Из меню:</span> ' + items.map(it=>escapeHtml(it.name)).join(' · ');
+  return '<span class="cel-menu-k">Подача:</span> ' + items.map(it=>escapeHtml(it.name)).join(' · ');
 }
 function refreshEventMenu(rid){
   const r = state.timeline.find(x=>x.id===rid);
   const box = document.querySelector('.cel-menu[data-menu-for="'+rid+'"]');
-  if(r && box) box.innerHTML = menuLineHtml(r.title);
+  if(r && box) box.innerHTML = menuLineHtml(r.title, r.time);
   const arc = document.querySelector('.clock-event-arc[data-id="'+rid+'"]');
   if(r && arc) arc.setAttribute('data-label', eventLabel(r));
   const hit = document.querySelector('.clock-shift[data-id="'+rid+'"] [data-part="hit"]');
@@ -2676,7 +2836,7 @@ function renderClockNow(now){
   if(!card || !state) return;
   const cur = now.getHours()*60 + now.getMinutes();
   // «Now / next» follows the numbered program; ranges (a photographer's shift) are listed as «on duty»
-  const all = (state.timeline||[]).map(r=>({r, m:clockTimeToMinutes(r.time), e:r.endTime ? clockTimeToMinutes(r.endTime) : null}))
+  const all = timingItems().map(r=>({r, m:clockTimeToMinutes(r.time), e:r.endTime ? clockTimeToMinutes(r.endTime) : null}))
     .filter(x=>x.m!=null).sort((a,b)=>(a.r.time||'').localeCompare(b.r.time||''));
   all.forEach(x=>{ x.color = clockColorById[x.r.id] || 'var(--border)'; x.num = clockNumById[x.r.id]; });
   const items = all.filter(x=>x.e==null || x.e===x.m);
@@ -2687,7 +2847,7 @@ function renderClockNow(now){
   const next = items[ci+1] || null;
   const after = items[ci+2] || null;
   const title = x => (x.num ? '<span class="cn-num">'+x.num+'</span>' : '') + escapeHtml(x.r.title||'Без названия');
-  const dishes = x => (x.r.sub ? '<div class="cn-sub">'+escapeHtml(x.r.sub)+'</div>' : '') + (()=>{ const d = menuItemsForEvent(x.r.title); return d.length ? '<div class="cn-menu">'+d.map(it=>escapeHtml(it.name)).join(' · ')+'</div>' : ''; })();
+  const dishes = x => (x.r.sub ? '<div class="cn-sub">'+escapeHtml(x.r.sub)+'</div>' : '') + (x.r.serve ? '' : (()=>{ const d = menuItemsForEvent(x.r.title, x.r.time); return d.length ? '<div class="cn-menu">'+d.map(it=>escapeHtml(it.name)).join(' · ')+'</div>' : ''; })());
   let html = '';
   if(!all.length){
     html = '<div class="cn-empty">Добавьте пункты тайминга — здесь появится текущее и следующее событие.</div>';
@@ -2730,12 +2890,12 @@ function setClockHighlight(rid, on){
 /* Hover card: when it runs, what it's for, what's on the menu, where the day
    stands relative to it, and which moments come right before and after. */
 function clockTipHtml(rid){
-  const r = state.timeline.find(x=>x.id===rid);
+  const r = timingItem(rid);
   if(!r) return '';
   const s = clockTimeToMinutes(r.time);
   const n = new Date(), cur = n.getHours()*60 + n.getMinutes();
   const idx = clockProgram.indexOf(rid);
-  const at = i => state.timeline.find(x=>x.id===clockProgram[i]);
+  const at = i => timingItem(clockProgram[i]);
   let e = r.endTime ? clockTimeToMinutes(r.endTime) : null;
   if(e===s) e = null;
   const isRange = e!=null;
@@ -2749,12 +2909,13 @@ function clockTipHtml(rid){
     else if(e==null && cur===s) status = '<b class="tip-live">Сейчас</b>';
     else status = 'Прошло';
   }
-  const dishes = menuItemsForEvent(r.title);
+  const dishes = r.serve ? [] : menuItemsForEvent(r.title, r.time);
   const nb = (i, k) => { const x = at(i); return x ? `<div class="tip-nb"><span>${k}</span> ${i+1}. ${escapeHtml(x.title||'Без названия')} <span class="mono">${x.time}</span></div>` : ''; };
   let html = `<div class="tip-head mono" style="--c:${clockColorById[rid]||'var(--border)'}">${head}</div>
     <div class="tip-title">${escapeHtml(r.title||'Без названия')}</div>`;
   if(r.sub) html += `<div class="tip-sub">${escapeHtml(r.sub)}</div>`;
-  if(dishes.length) html += `<div class="tip-sub"><span class="tip-k">Из меню:</span> ${dishes.map(d=>escapeHtml(d.name)).join(' · ')}</div>`;
+  if(r.serve) html += `<div class="tip-sub"><span class="tip-k">Из меню</span> · время подачи меняется в меню или перетаскиванием</div>`;
+  if(dishes.length) html += `<div class="tip-sub"><span class="tip-k">Подача:</span> ${dishes.map(d=>escapeHtml(d.name)).join(' · ')}</div>`;
   if(status) html += `<div class="tip-status">${status}</div>`;
   if(idx>=0) html += nb(idx-1, 'До:') + nb(idx+1, 'Далее:');
   else if(isRange){
@@ -2828,8 +2989,9 @@ function wireClockDrag(ring){
   ring.addEventListener('pointerdown', (evt)=>{
     const pt = toSvgPoint(evt);
     const startMin = clockAngleToMinutes(angleOf(pt));
-    clockDrag = {startMin};
-    ring.setPointerCapture(evt.pointerId);
+    clockDrag = {startMin, tapId:clockSegTap};
+    clockSegTap = null;
+    try{ ring.setPointerCapture(evt.pointerId); }catch(e){}
   });
   ring.addEventListener('pointermove', (evt)=>{
     if(!clockDrag) return;
@@ -2842,11 +3004,11 @@ function wireClockDrag(ring){
     if(!clockDrag) return;
     const pt = toSvgPoint(evt);
     const endMin = clockAngleToMinutes(angleOf(pt));
-    const startMin = clockDrag.startMin;
+    const clockDrag0 = clockDrag, startMin = clockDrag.startMin;
     clockDrag = null;
     const preview = document.getElementById('clockDragPreview');
     if(preview) preview.setAttribute('d','');
-    if(endMin===startMin) return; // a tap, not a drag — ignore
+    if(endMin===startMin){ if(clockDrag0.tapId) openClockEditForm(clockDrag0.tapId); return; } // a tap, not a drag
     openClockCreateForm(startMin, endMin);
   });
 }
@@ -2871,6 +3033,7 @@ function openClockCreateForDefault(){
   setTimeout(()=>document.getElementById('clockEventTitle').focus(), 30);
 }
 function openClockEditForm(rid){
+  if(String(rid).startsWith('serve-')){ gotoServeDish(rid); return; }
   const r = state.timeline.find(x=>x.id===rid);
   if(!r) return;
   clockEditId = rid;
@@ -3324,6 +3487,37 @@ function addSelectedFromCatalog(){
 }
 
 /* ---------- budget ---------- */
+/* Two groups, matching the two sides of the tariff switch:
+   «Подрядчики и услуги» — photographer, florist, host… (Standard and up);
+   «Заведение» — menu, equipment, hall rent (Pro only). Rows that came from the
+   menu start in «Заведение»; any row can be moved with ⇄. Outside Pro the
+   venue group is hidden and left out of every total, so the numbers on screen
+   always add up to what's shown. */
+const BUDGET_GROUPS = [
+  {key:'vendors', label:'Подрядчики и услуги', add:'+ Подрядчик или услуга'},
+  {key:'venue',   label:'Заведение · меню и оборудование', add:'+ Расход заведения'}
+];
+function budgetGroup(r){ return r.group || (r.menuItemId ? 'venue' : 'vendors'); }
+function venueGroupOn(){ return (state.brief.tariff || 'standard')==='pro'; }
+function activeBudgetRows(){ return state.budget.filter(r=>budgetGroup(r)!=='venue' || venueGroupOn()); }
+function budgetGroupTotals(key){
+  const rows = state.budget.filter(r=>budgetGroup(r)===key);
+  const t = rows.reduce((o,r)=>({amount:o.amount+(parseInt(r.amount,10)||0), paid:o.paid+budgetRowPaid(r), owed:o.owed+budgetRowOwed(r)}), {amount:0, paid:0, owed:0});
+  if(key==='vendors') getChecklistBudgetRows().forEach(r=>{
+    const a = parseInt(r.amount,10)||0;
+    t.amount += a;
+    if(r.done) t.paid += a; else t.owed += Math.max(a-(parseInt(r.prepaid,10)||0),0);
+  });
+  return t;
+}
+function moveBudgetRow(rid){
+  const r = state.budget.find(x=>x.id===rid);
+  if(!r) return;
+  r.group = budgetGroup(r)==='venue' ? 'vendors' : 'venue';
+  scheduleSave();
+  renderBudget();
+}
+
 function renderBudget(){
   const tbody = document.getElementById('budgetRows');
   const autoRows = getChecklistBudgetRows();
@@ -3340,7 +3534,7 @@ function renderBudget(){
     </tr>
   `).join('');
 
-  const manualHtml = state.budget.map(r=>`
+  const rowHtml = r=>`
     <tr data-id="${r.id}">
       <td class="admin-only"><input id="bf-service-${r.id}" type="text" maxlength="35" value="${escAttr(r.service)}" oninput="updateBudgetField('${r.id}','service',this.value)"></td>
       <td class="preview-only">${escapeHtml(r.service)}</td>
@@ -3363,13 +3557,32 @@ function renderBudget(){
       <td class="del-cell admin-only">
         <div class="row-actions">
           <button class="row-apply" onclick="applyBudgetRow('${r.id}')" title="Сохранить и перейти к новой услуге">Применить</button>
+          <button class="row-move" data-tariff-exact="pro" onclick="moveBudgetRow('${r.id}')" title="${budgetGroup(r)==='venue' ? 'Перенести в «Подрядчики и услуги»' : 'Перенести в «Заведение»'}">⇄</button>
           <button class="row-del" onclick="removeBudgetRow('${r.id}')" title="Удалить">×</button>
         </div>
       </td>
     </tr>
-  `).join('');
+  `;
 
-  tbody.innerHTML = autoHtml + manualHtml + `
+  const groupHtml = g => {
+    const rows = state.budget.filter(r=>budgetGroup(r)===g.key);
+    const t = budgetGroupTotals(g.key);
+    const proOnly = g.key==='venue' ? ' data-tariff-exact="pro"' : '';
+    const body = (g.key==='vendors' ? autoHtml : '') + rows.map(rowHtml).join('');
+    return `
+    <tr class="budget-group-head"${proOnly}><td colspan="7">${escapeHtml(g.label)}</td></tr>
+    ${body || `<tr class="budget-group-empty"${proOnly}><td colspan="7">${g.key==='venue' ? 'Нажмите «Применить всё в бюджет» в меню или добавьте расход вручную.' : 'Пока нет услуг.'}</td></tr>`}
+    <tr class="budget-group-add admin-only"${proOnly}><td colspan="7"><button class="add-row-btn" onclick="applyBudgetRow(null,'${g.key}')">${g.add}</button></td></tr>
+    <tr class="budget-group-total"${proOnly}>
+      <td colspan="2">Итого · ${escapeHtml(g.label.split(' · ')[0].toLowerCase())}</td>
+      <td class="mono" id="bg-amount-${g.key}">${fmtMoney(t.amount)}</td>
+      <td class="mono" id="bg-paid-${g.key}">${fmtMoney(t.paid)}</td>
+      <td class="mono" id="bg-owed-${g.key}">${fmtMoney(t.owed)}</td>
+      <td colspan="2" class="bg-note">оплачено · к оплате</td>
+    </tr>`;
+  };
+
+  tbody.innerHTML = BUDGET_GROUPS.map(groupHtml).join('') + `
     <tr class="total total-planned">
       <td colspan="2">Плановые затраты <span class="src-tag">чек-лист · задачи без галочки, плюс неоплаченные остатки по услугам</span></td>
       <td class="mono" id="budgetTotalPlanned" colspan="5">${fmtMoney(totalPlanned())}</td>
@@ -3380,7 +3593,7 @@ function renderBudget(){
       <td class="mono" id="budgetTotalRest" style="color:${remaining()>=0?'var(--good)':'var(--bad)'};" colspan="3">${remaining()>=0?'остаток '+fmtMoney(remaining()):'превышение '+fmtMoney(Math.abs(remaining()))}</td>
     </tr>
   `;
-  const totalRows = autoRows.length + state.budget.length;
+  const totalRows = autoRows.length + activeBudgetRows().length;
   document.getElementById('pv-b-count').textContent = totalRows + ' ' + pluralize(totalRows,'услуга','услуги','услуг');
   recalcBudgetTotals();
 }
@@ -3417,6 +3630,10 @@ function recalcBudgetTotals(){
   const rest = remaining();
   if(spentCell) spentCell.textContent = fmtMoney(totalSpent())+' из '+fmtMoney(state.brief.budget);
   if(plannedCell) plannedCell.textContent = fmtMoney(totalPlanned());
+  BUDGET_GROUPS.forEach(g=>{
+    const t = budgetGroupTotals(g.key);
+    [['amount',t.amount],['paid',t.paid],['owed',t.owed]].forEach(([k,v])=>{ const el = document.getElementById('bg-'+k+'-'+g.key); if(el) el.textContent = fmtMoney(v); });
+  });
   if(restCell){
     restCell.textContent = rest>=0?('остаток '+fmtMoney(rest)):('превышение '+fmtMoney(Math.abs(rest)));
     restCell.style.color = rest>=0 ? 'var(--good)' : 'var(--bad)';
@@ -3485,11 +3702,11 @@ function budgetRowOwed(r){
 }
 
 function totalSpent(){
-  const manual = state.budget.reduce((sum,r)=> sum + budgetRowPaid(r), 0);
+  const manual = activeBudgetRows().reduce((sum,r)=> sum + budgetRowPaid(r), 0);
   return manual + checklistSpentCost();
 }
 function totalPlanned(){
-  const manualOwed = state.budget.reduce((sum,r)=> sum + budgetRowOwed(r), 0);
+  const manualOwed = activeBudgetRows().reduce((sum,r)=> sum + budgetRowOwed(r), 0);
   return manualOwed + checklistPlannedCost();
 }
 function remaining(){
@@ -3513,8 +3730,8 @@ function renderBudgetRowRemaining(rid){
   if(row && cell) cell.textContent = fmtMoney(budgetRowOwed(row));
 }
 
-function addBudgetRow(){
-  state.budget.push({id:id(), vendor:'', service:'', amount:'0', prepaid:'', status:'idle'});
+function addBudgetRow(group){
+  state.budget.push({id:id(), vendor:'', service:'', amount:'0', prepaid:'', status:'idle', group:group||'vendors'});
   scheduleSave();
   renderBudget();
   return state.budget[state.budget.length-1].id;
@@ -3523,8 +3740,9 @@ function addBudgetRow(){
 /* "Применить": commits the current row (already auto-saved on input) and
    opens a fresh empty row right away, focused on its Услуга field, so several
    services can be entered one after another without reaching for "+ Добавить услугу" each time. */
-function applyBudgetRow(rid){
-  const newId = addBudgetRow();
+function applyBudgetRow(rid, group){
+  const r = rid ? state.budget.find(x=>x.id===rid) : null;
+  const newId = addBudgetRow(group || (r ? budgetGroup(r) : 'vendors'));
   requestAnimationFrame(()=>{
     const inp = document.getElementById('bf-service-'+newId);
     if(inp) inp.focus();
@@ -3918,11 +4136,14 @@ function addMenuItem(catKey){
   const norm = normEl ? normEl.value : '';
   const unit = unitEl ? unitEl.value.trim() : '';
   const price = priceEl ? priceEl.value : '';
+  const serveEl = document.getElementById('mi-serve-'+catKey);
+  const serveTime = serveEl ? serveEl.value : '';
   if(!state.venue.menu) state.venue.menu = [];
-  state.venue.menu.push({id:id(), category:catKey, name, qtyMode, norm, unit, price});
+  state.venue.menu.push({id:id(), category:catKey, name, qtyMode, norm, unit, price, serveTime});
   scheduleSave();
   renderVenueAdmin();
   renderVenuePreview();
+  if(serveTime){ renderClockEvents(); renderTimelinePreview(); }
   // ready for the next one in the same section
   const again = document.getElementById('mi-name-'+catKey);
   if(again) again.focus();
@@ -3933,6 +4154,8 @@ function removeMenuItem(iid){
   scheduleSave();
   renderVenueAdmin();
   renderVenuePreview();
+  renderClockEvents();
+  renderTimelinePreview();
 }
 
 function updateMenuItem(iid, field, val){
@@ -3952,6 +4175,16 @@ function updateMenuItemMode(iid, val){
   renderVenuePreview();
 }
 
+/* One line per position: the name with «на гостя / на стол / фикс.» under it,
+   then quantity, price, (for dishes) serving time, and the computed sum. The
+   new-position form at the bottom of each section has the same shape, so the
+   planner fills it left to right exactly like the rows above it. */
+const MENU_SERVE_CATS = ['dishes','desserts'];
+function onMenuServeTime(iid, val){
+  updateMenuItem(iid, 'serveTime', val);
+  renderClockEvents();
+  renderTimelinePreview();
+}
 function renderVenueAdmin(){
   const wrap = document.getElementById('menuCategories');
   if(!wrap) return;
@@ -3959,47 +4192,49 @@ function renderVenueAdmin(){
   wrap.innerHTML = MENU_CATEGORIES.map(cat=>{
     const items = menu.filter(it=>it.category===cat.key);
     const catTotal = categoryTotalCost(cat.key);
+    const serve = MENU_SERVE_CATS.includes(cat.key);
+    const modeSelect = (mode, attrs) => `<select class="mi-mode" ${attrs}>${QTY_MODES.map(m=>`<option value="${m.key}"${mode===m.key?' selected':''}>${escapeHtml(m.label)}</option>`).join('')}</select>`;
     return `
-      <div class="menu-cat">
-        <h4>${escapeHtml(cat.label)}</h4>
+      <div class="menu-cat${serve?' has-serve':''}">
+        <h4>${escapeHtml(cat.label)}${items.length ? ` <span class="mi-count">${items.length}</span>` : ''}</h4>
+        <div class="mi-head" aria-hidden="true"><span>Название</span><span>Количество</span><span>Цена за ед.</span>${serve?'<span>Подача</span>':''}<span>Сумма</span><span></span></div>
         <div class="menu-items">
           ${items.map(it=>{
             const mode = it.qtyMode || 'guest';
             return `
             <div class="mi-row" data-item-id="${it.id}">
-              <div class="mi-name-line">
-                <input type="text" value="${escAttr(it.name)}" placeholder="Название" oninput="updateMenuItem('${it.id}','name',this.value); updateMenuBudgetBtn(state.venue.menu.find(x=>x.id==='${it.id}'));">
-                <button class="mi-budget-btn" id="mi-bud-${it.id}" onclick="applyMenuItemToBudget('${it.id}')">${menuBudgetBtnLabel(it)}</button>
-                <button class="row-del" onclick="removeMenuItem('${it.id}')" title="Удалить">×</button>
+              <div class="mi-main">
+                <input type="text" class="mi-name" value="${escAttr(it.name)}" placeholder="Название" aria-label="Название" oninput="updateMenuItem('${it.id}','name',this.value); updateMenuBudgetBtn(state.venue.menu.find(x=>x.id==='${it.id}'));">
+                ${modeSelect(mode, `aria-label="Как считать" onchange="updateMenuItemMode('${it.id}', this.value)"`)}
               </div>
-              <div class="mi-calc-line">
-                <select onchange="updateMenuItemMode('${it.id}', this.value)">
-                  ${QTY_MODES.map(m=>`<option value="${m.key}"${mode===m.key?' selected':''}>${escapeHtml(m.label)}</option>`).join('')}
-                </select>
-                <input type="number" min="0" step="0.1" value="${escAttr(it.norm)}" placeholder="${normPlaceholder(mode)}" oninput="updateMenuItem('${it.id}','norm',this.value); recalcVenueSummary();">
-                <input type="text" value="${escAttr(it.unit)}" placeholder="ед." oninput="updateMenuItem('${it.id}','unit',this.value)">
-                <input type="number" min="0" step="100" value="${escAttr(it.price)}" placeholder="Цена/ед., ₸" oninput="updateMenuItem('${it.id}','price',this.value); recalcVenueSummary();">
+              <div class="mi-qty">
+                <input type="number" min="0" step="0.1" value="${escAttr(it.norm)}" placeholder="${normPlaceholder(mode)}" aria-label="${normPlaceholder(mode)}" oninput="updateMenuItem('${it.id}','norm',this.value); recalcVenueSummary();">
+                <input type="text" value="${escAttr(it.unit)}" placeholder="ед." aria-label="Единица" oninput="updateMenuItem('${it.id}','unit',this.value); recalcVenueSummary();">
+              </div>
+              <div class="mi-price"><input type="number" min="0" step="100" value="${escAttr(it.price)}" placeholder="₸" aria-label="Цена за единицу, ₸" oninput="updateMenuItem('${it.id}','price',this.value); recalcVenueSummary();"></div>
+              ${serve ? `<div class="mi-serve"><input type="time" value="${escAttr(it.serveTime||'')}" aria-label="Время подачи" title="Время подачи — появится в тайминге" onchange="onMenuServeTime('${it.id}', this.value)"></div>` : ''}
+              <div class="mi-sum">
                 <span class="mi-total mono" id="mi-total-${it.id}">${menuItemTotalHtml(it)}</span>
+                <button class="mi-budget-btn" id="mi-bud-${it.id}" onclick="applyMenuItemToBudget('${it.id}')">${menuBudgetBtnLabel(it)}</button>
               </div>
+              <button class="row-del" onclick="removeMenuItem('${it.id}')" title="Удалить">×</button>
             </div>
           `;}).join('')}
-          <div class="mi-add" onkeydown="if(event.key==='Enter'){event.preventDefault(); addMenuItem('${cat.key}');}">
-            <div class="mi-add-label">Новая позиция — ${escapeHtml(cat.label.toLowerCase())}</div>
-            <div class="mi-name-line">
-              <input type="text" id="mi-name-${cat.key}" placeholder="Название">
+          <div class="mi-row mi-new" onkeydown="if(event.key==='Enter'){event.preventDefault(); addMenuItem('${cat.key}');}">
+            <div class="mi-main">
+              <input type="text" class="mi-name" id="mi-name-${cat.key}" placeholder="Новая позиция — ${escAttr(cat.label.toLowerCase())}" aria-label="Название новой позиции">
+              ${modeSelect('guest', `id="mi-mode-${cat.key}" aria-label="Как считать"`)}
             </div>
-            <div class="mi-calc-line">
-              <select id="mi-mode-${cat.key}">
-                ${QTY_MODES.map(m=>`<option value="${m.key}">${escapeHtml(m.label)}</option>`).join('')}
-              </select>
-              <input type="number" id="mi-norm-${cat.key}" min="0" step="0.1" placeholder="Норма">
-              <input type="text" id="mi-unit-${cat.key}" placeholder="ед.">
-              <input type="number" id="mi-price-${cat.key}" min="0" step="100" placeholder="Цена/ед., ₸">
-              <button type="button" class="mi-add-btn" onclick="addMenuItem('${cat.key}')">+ Добавить</button>
+            <div class="mi-qty">
+              <input type="number" id="mi-norm-${cat.key}" min="0" step="0.1" placeholder="Норма" aria-label="Норма или количество">
+              <input type="text" id="mi-unit-${cat.key}" placeholder="ед." aria-label="Единица">
             </div>
+            <div class="mi-price"><input type="number" id="mi-price-${cat.key}" min="0" step="100" placeholder="₸" aria-label="Цена за единицу, ₸"></div>
+            ${serve ? `<div class="mi-serve"><input type="time" id="mi-serve-${cat.key}" aria-label="Время подачи" title="Время подачи — появится в тайминге"></div>` : ''}
+            <button type="button" class="mi-add-btn" onclick="addMenuItem('${cat.key}')">+ Добавить</button>
           </div>
         </div>
-        ${items.length ? `<div class="mi-cat-total">Итого по категории: <b>${fmtMoney(catTotal)}</b></div>` : ''}
+        ${items.length ? `<div class="mi-cat-total">Итого: <b>${fmtMoney(catTotal)}</b></div>` : ''}
       </div>
     `;
   }).join('');
@@ -4512,11 +4747,6 @@ function renderAll(){
 const THEMES = [
   {id:'auto',      name:'Как в системе', group:'auto',  sw:['#f7f3ec','#181d24','#2f4a3c']},
   {id:'editorial', name:'Сливочная',     group:'light', sw:['#f7f3ec','#ffffff','#2f4a3c']},
-  {id:'sepia',     name:'Сепия',         group:'light', sw:['#f3ead6','#faf4e4','#6b4f2a']},
-  {id:'sage',      name:'Шалфей',        group:'light', sw:['#edf1ea','#f8faf5','#3b6a50']},
-  {id:'mist',      name:'Туман',         group:'light', sw:['#edf0f3','#f8f9fb','#33577a']},
-  {id:'lavender',  name:'Лаванда',       group:'light', sw:['#f2eff5','#faf9fc','#5b4884']},
-  {id:'blush',     name:'Пудровая',      group:'light', sw:['#fbf1ee','#ffffff','#9c4b43']},
   {id:'dusk',      name:'Сумерки',       group:'dark',  sw:['#181d24','#273039','#8db3d8']},
   {id:'ember',     name:'Ночная тёплая', group:'dark',  sw:['#1c1814','#2d2720','#d8a66a']},
   {id:'noir',      name:'Графит',        group:'dark',  sw:['#151713','#242820','#8fb79c']}

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Régie — примеры страниц системы</title>
-<meta name="description" content="Как выглядит Régie изнутри: бриф клиента, тайминг дня, бюджет и подрядчики, чек-листы, CRM — на примере демо-мероприятия.">
+<meta name="description" content="Как выглядит Régie изнутри: бриф клиента, часы мероприятия, чек-лист, бюджет подрядчиков и заведения, меню ресторана — на примере демо-мероприятия.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,600;1,400&family=Karla:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
@@ -132,6 +132,12 @@
   .dup-btn{background:var(--accent);color:#fbfaf6;font-size:11px;padding:5px 10px;border-radius:4px;font-weight:600;}
   .dup-card.new{border-style:dashed;background:var(--surface);}
   .dup-card.new .dup-line{background:var(--accent-soft);}
+  .dup-actions{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border);}
+  .dup-actions > div{padding:16px 20px;font-size:13px;border-right:1px solid var(--border);}
+  .dup-actions > div:last-child{border-right:none;}
+  .dup-actions b{display:block;font-weight:600;margin-bottom:3px;}
+  .dup-actions span{color:var(--muted);}
+  @media(max-width:720px){ .dup-actions{grid-template-columns:1fr;} .dup-actions > div{border-right:none;border-bottom:1px solid var(--border);} .dup-actions > div:last-child{border-bottom:none;} }
 
   footer.cta{border-top:1px solid var(--border);padding:64px 0;text-align:center;}
   footer.cta h2{font-size:clamp(22px,3vw,30px);font-weight:500;margin-bottom:16px;text-wrap:balance;}
@@ -140,6 +146,92 @@
   .btn-primary{background:var(--accent);color:#fbfaf6;}
   .btn-primary:hover{transform:translateY(-1px);box-shadow:0 14px 32px -16px rgba(47,74,60,.5);}
   footer.base{border-top:1px solid var(--border);padding:30px 0;text-align:center;color:var(--muted);font-size:13px;}
+  footer.base .footer-author{margin-top:6px;font-size:12px;}
+  footer.base a{color:var(--accent);font-weight:600;text-decoration:none;}
+
+  /* checklist: three periods */
+  .check-groups.three{grid-template-columns:repeat(3,1fr);}
+  .check-groups.three .check-group{border-bottom:none;}
+  .check-groups.three .check-group:nth-child(2n){border-right:1px solid var(--border);}
+  .check-groups.three .check-group:last-child{border-right:none;}
+  .check-amount{font-size:11.5px;color:var(--brass);margin-left:6px;}
+
+  /* budget / menu tables */
+  .mock-table tr.group-head td{font-family:'Bodoni Moda',Georgia,serif;font-size:15px;padding:16px 12px 8px;}
+  .mock-table tr.group-total td{background:var(--surface-2);font-weight:600;font-size:13px;}
+  .mock-table .muted-cell{color:var(--muted);font-weight:400;font-size:12px;}
+  .src-tag{display:block;font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:var(--muted);font-weight:400;margin-top:2px;}
+  .tariff-mini{font-family:'IBM Plex Mono',monospace;font-size:10px;border:1px solid var(--brass);color:var(--brass);border-radius:999px;padding:1px 7px;margin-left:6px;vertical-align:2px;}
+  .menu-table td.serve{color:var(--brass);font-weight:600;}
+
+  /* demo clock */
+  .demo-clock-body{display:grid;grid-template-columns:minmax(220px,280px) minmax(260px,380px) minmax(200px,250px);gap:28px;justify-content:center;align-items:start;padding:24px 20px 8px;}
+  .demo-clock{width:100%;height:auto;filter:drop-shadow(0 16px 30px rgba(32,36,31,.18));}
+  .dc-face{fill:var(--surface);stroke:var(--border);stroke-width:1.5;}
+  .dc-inner{fill:none;stroke:var(--border);stroke-width:1;opacity:.6;}
+  .dc-night{fill:none;stroke:var(--surface-2);stroke-width:16px;}
+  .dc-tick{stroke:var(--border);stroke-width:1.5;}
+  .dc-tick.major{stroke:var(--muted);stroke-width:2;}
+  .dc-tick.minor{stroke-width:.75;opacity:.55;}
+  .dc-num{font-family:'IBM Plex Mono',monospace;font-size:11px;fill:var(--muted);text-anchor:middle;dominant-baseline:middle;}
+  .dc-num.odd{font-size:8px;opacity:.55;}
+  .dc-range{fill:none;stroke-width:3px;}
+  .dc-cap{fill:var(--surface);stroke-width:1.5px;}
+  .dc-rtime{font-family:'IBM Plex Mono',monospace;font-size:6.4px;text-anchor:middle;dominant-baseline:middle;}
+  .dc-hand{stroke:var(--text);stroke-linecap:round;}
+  .dc-hand.hour{stroke-width:5;}
+  .dc-mark text{font-family:'Bodoni Moda',Georgia,serif;fill:var(--text);dominant-baseline:central;paint-order:stroke;stroke:var(--surface);stroke-width:3.2px;}
+  .dc-mark .cw-side{font-size:14px;font-weight:500;}
+  .dc-mark .cw-g{font-size:18px;font-weight:600;fill:var(--accent);}
+  .dc-mark .cw-by{font-size:7.5px;font-style:italic;fill:var(--muted);}
+  .dc-cap-ring{fill:none;stroke:var(--accent);stroke-width:1.3;}
+  .dc-seg{fill:none;stroke-width:6px;opacity:.55;}
+  .dc-seg.past{opacity:.18;}
+  .dc-stem{stroke-width:1px;opacity:.7;}
+  .dc-badge{fill:var(--c);stroke:var(--surface);stroke-width:1.6px;}
+  .dc-badge.past{fill:var(--surface);stroke:var(--c);stroke-width:1.2px;}
+  .dc-badge.now{stroke:var(--text);stroke-width:1.6px;}
+  .dc-badge.serve{stroke-dasharray:2 1.6;stroke-width:2px;}
+  .dc-bnum{font-family:'Karla',system-ui,sans-serif;font-size:7.2px;font-weight:700;fill:#fff;text-anchor:middle;dominant-baseline:central;}
+  .dc-bnum.past{fill:var(--muted);}
+  .demo-list{display:flex;flex-direction:column;gap:2px;font-size:12.5px;}
+  .dl-item{display:grid;grid-template-columns:20px 42px 1fr;gap:6px;align-items:start;padding:3px 4px;border-radius:6px;}
+  .dl-item.range{grid-template-columns:20px 84px 1fr;}
+  .dl-num{width:20px;height:20px;border-radius:50%;background:var(--c);color:#fff;font-size:10.5px;font-weight:700;line-height:20px;text-align:center;}
+  .dl-item.range .dl-num{height:6px;border-radius:3px;margin-top:7px;}
+  .dl-item.past{opacity:.5;}
+  .dl-item.past .dl-num{background:var(--surface);color:var(--muted);box-shadow:inset 0 0 0 1.5px var(--c);}
+  .dl-item.now{background:var(--accent-soft);font-weight:700;}
+  .dl-item.serve .dl-title{color:var(--brass);}
+  .dl-time{color:var(--muted);font-size:11.5px;line-height:20px;}
+  .dl-title{line-height:20px;}
+  .dl-sub{display:block;font-size:11.5px;color:var(--muted);line-height:1.35;font-weight:400;}
+  .dl-group{font-size:10.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:10px 4px 2px;}
+  .demo-now{display:flex;flex-direction:column;gap:10px;font-size:12.5px;}
+  .dn-block{border:1px solid var(--border);border-left:4px solid var(--c);border-radius:10px;padding:11px 13px;background:var(--bg);}
+  .dn-block.now{background:var(--surface);box-shadow:0 10px 26px -18px rgba(0,0,0,.35);}
+  .dn-label{font-size:11px;color:var(--muted);font-weight:600;}
+  .dn-title{font-size:15px;font-weight:600;line-height:1.3;margin-top:2px;}
+  .dn-num{display:inline-block;min-width:19px;height:19px;border-radius:50%;background:var(--c);color:#fff;font-size:10.5px;line-height:19px;text-align:center;margin-right:6px;vertical-align:2px;}
+  .dn-sub{font-size:12px;color:var(--brass);margin-top:2px;}
+  .dn-meta{font-size:11.5px;color:var(--muted);margin-top:3px;}
+  .dn-bar{height:4px;border-radius:2px;background:var(--surface-2);margin-top:7px;overflow:hidden;}
+  .dn-bar span{display:block;height:100%;background:var(--c);}
+  .dn-then{padding-left:12px;border-left:3px solid var(--c);}
+  .dn-then .dn-label{display:block;}
+  .dn-duty{border-top:1px solid var(--border);padding-top:8px;}
+  .dn-duty div{display:flex;align-items:center;gap:7px;margin-top:3px;}
+  .dn-duty i{width:12px;height:4px;border-radius:2px;}
+  .dn-duty .mono{margin-left:auto;color:var(--muted);font-size:11.5px;}
+  .demo-caption{font-size:12.5px;color:var(--muted);text-align:center;padding:4px 20px 18px;}
+  @media(max-width:980px){ .demo-clock-body{grid-template-columns:minmax(220px,300px) minmax(260px,380px);} .demo-now{grid-column:1 / -1;display:grid;grid-template-columns:1fr 1fr;} }
+  @media(max-width:720px){
+    .demo-clock-body{grid-template-columns:minmax(0,1fr);}
+    .demo-clock{order:-2;max-width:380px;justify-self:center;}
+    .demo-now{order:-1;grid-template-columns:1fr;}
+    .check-groups.three{grid-template-columns:1fr;}
+    .check-groups.three .check-group{border-right:none;border-bottom:1px solid var(--border);}
+  }
 
   @media(max-width:720px){
     .check-groups{grid-template-columns:1fr;}
@@ -164,8 +256,8 @@
 <section class="hero">
   <div class="wrap">
     <span class="eyebrow">Что именно внутри системы</span>
-    <h1>Не просто «шаблон Notion» — <em>шесть рабочих страниц</em>, которые уже заполнены логикой</h1>
-    <p class="offer">Ниже — реальная структура Régie на примере демо-мероприятия «Свадьба Аружан &amp; Ануара». Так выглядит любая карточка после того, как вы её дублируете и заполняете своими данными.</p>
+    <h1>Не просто таблица — <em>шесть рабочих страниц</em>, которые уже заполнены логикой</h1>
+    <p class="offer">Ниже — реальная структура Régie на примере демо-мероприятия «Свадьба Аружан &amp; Ануара». Так выглядит рабочий стол, когда вы заполняете его своими данными.</p>
     <div class="demo-note"><b>Важно:</b> все имена, суммы и подрядчики на этой странице — демо-данные для примера, не реальные записи.</div>
   </div>
 </section>
@@ -204,30 +296,42 @@
   <div class="wrap">
     <div class="block-head">
       <div>
-        <h2>2. Тайминг дня (run-of-show)</h2>
-        <p class="block-desc">Поминутный план дня, который вы отправляете каждому подрядчику отдельно — здесь он один на всех, с автоматическим порядком по времени.</p>
+        <h2>2. Часы мероприятия (run-of-show)</h2>
+        <p class="block-desc">Программа дня пронумерована прямо на циферблате: цветной отрезок кольца тянется до следующего пункта, поэтому сразу видно, что за чем идёт. Справа — «Сейчас / Далее», подача блюд из меню встаёт в программу сама. В день банкета часы открываются на весь экран.</p>
       </div>
       <span class="tariff-tag">Basic и выше</span>
     </div>
     <div class="mock">
       <div class="mock-head">
         <div class="mock-icon">Р</div>
-        <div class="mock-title">Тайминг — 14 июня</div>
-        <div class="mock-crumb">11 пунктов</div>
+        <div class="mock-title">Часы мероприятия — 14 июня</div>
+        <div class="mock-crumb">18:10 · 11 пунктов</div>
       </div>
-      <div class="mock-body">
-        <div class="timeline">
-          <div class="t-item"><div class="t-time">09:00</div><div class="t-text">Заезд декораторов<span class="t-sub">Начало оформления зала, доступ от администратора площадки</span></div></div>
-          <div class="t-item"><div class="t-time">11:30</div><div class="t-text">Саунд-чек<span class="t-sub">DJ Rustam + живой музыкант на церемонии</span></div></div>
-          <div class="t-item"><div class="t-time">13:00</div><div class="t-text">Визаж и укладка невесты<span class="t-sub">Отель Ritz, номер 412</span></div></div>
-          <div class="t-item"><div class="t-time">15:00</div><div class="t-text">Рассадка гостей начинается</div></div>
-          <div class="t-item"><div class="t-time">16:00</div><div class="t-text">Церемония бракосочетания</div></div>
-          <div class="t-item"><div class="t-time">16:30</div><div class="t-text">Фотосессия молодожёнов<span class="t-sub">Aitbek Photo, локация — терраса</span></div></div>
-          <div class="t-item"><div class="t-time">17:30</div><div class="t-text">Начало банкета</div></div>
-          <div class="t-item"><div class="t-time">19:00</div><div class="t-text">Первый танец</div></div>
-          <div class="t-item"><div class="t-time">23:00</div><div class="t-text">Завершение, разбор декора</div></div>
+      <div class="demo-clock-body">
+        <div class="demo-list">
+            <div class="dl-item past" style="--c:#2f4a3c"><span class="dl-num">1</span><span class="dl-time mono">09:00</span><span class="dl-title">Заезд декораторов<span class="dl-sub">Доступ от администратора площадки</span></span></div>
+            <div class="dl-item past" style="--c:#a98a4e"><span class="dl-num">2</span><span class="dl-time mono">11:30</span><span class="dl-title">Саундчек<span class="dl-sub">DJ Rustam + живой музыкант</span></span></div>
+            <div class="dl-item past" style="--c:#3f7a4e"><span class="dl-num">3</span><span class="dl-time mono">13:00</span><span class="dl-title">Визаж и укладка невесты<span class="dl-sub">Отель Ritz, номер 412</span></span></div>
+            <div class="dl-item past" style="--c:#a9761f"><span class="dl-num">4</span><span class="dl-time mono">15:00</span><span class="dl-title">Рассадка гостей начинается</span></div>
+            <div class="dl-item past" style="--c:#a13f3f"><span class="dl-num">5</span><span class="dl-time mono">16:00</span><span class="dl-title">Церемония бракосочетания</span></div>
+            <div class="dl-item past" style="--c:#4a6fa5"><span class="dl-num">6</span><span class="dl-time mono">16:30</span><span class="dl-title">Фотосессия молодожёнов<span class="dl-sub">Aitbek Photo, терраса</span></span></div>
+            <div class="dl-item now" style="--c:#8e5b9e"><span class="dl-num">7</span><span class="dl-time mono">17:30</span><span class="dl-title">Начало банкета<span class="dl-sub">Подача: Салат Цезарь</span></span></div>
+            <div class="dl-item serve" style="--c:#2f4a3c"><span class="dl-num">8</span><span class="dl-time mono">18:30</span><span class="dl-title">Подача: Плов с бараниной<span class="dl-sub">из меню</span></span></div>
+            <div class="dl-item" style="--c:#a98a4e"><span class="dl-num">9</span><span class="dl-time mono">19:00</span><span class="dl-title">Первый танец</span></div>
+            <div class="dl-item" style="--c:#3f7a4e"><span class="dl-num">10</span><span class="dl-time mono">21:00</span><span class="dl-title">Десерт<span class="dl-sub">Подача: Торт на десерт</span></span></div>
+            <div class="dl-item" style="--c:#a9761f"><span class="dl-num">11</span><span class="dl-time mono">23:00</span><span class="dl-title">Завершение, разбор декора</span></div>
+          <div class="dl-group">На протяжении дня</div>
+          <div class="dl-item range" style="--c:#3f7a4e"><span class="dl-num"></span><span class="dl-time mono">12:00–22:00</span><span class="dl-title">Мобилограф</span></div>
+        </div>
+        <svg class="demo-clock" viewBox="0 0 320 320" role="img" aria-label="Часы мероприятия: 11 пунктов программы по кругу, сейчас идёт № 7 «Начало банкета»"><circle class="dc-face" cx="160" cy="160" r="148"/><path class="dc-night" d="M 94.5 46.55 A 131 131 0 0 1 291 160"/><circle class="dc-inner" cx="160" cy="160" r="115"/><line class="dc-tick major" x1="160" y1="21" x2="160" y2="37"/><text class="dc-num" x="160" y="64">00</text><line class="dc-tick minor" x1="169.09" y1="21.3" x2="168.7" y2="27.28"/><line class="dc-tick minor" x1="178.14" y1="22.19" x2="177.36" y2="28.14"/><line class="dc-tick minor" x1="187.12" y1="23.67" x2="185.95" y2="29.56"/><line class="dc-tick" x1="195.98" y1="25.74" x2="193.91" y2="33.46"/><text class="dc-num odd" x="184.85" y="67.27">01</text><line class="dc-tick minor" x1="204.68" y1="28.38" x2="202.75" y2="34.06"/><line class="dc-tick minor" x1="213.19" y1="31.58" x2="210.9" y2="37.12"/><line class="dc-tick minor" x1="221.48" y1="35.33" x2="218.82" y2="40.72"/><line class="dc-tick major" x1="229.5" y1="39.62" x2="221.5" y2="53.48"/><text class="dc-num" x="208" y="76.86">02</text><line class="dc-tick minor" x1="237.22" y1="44.43" x2="233.89" y2="49.41"/><line class="dc-tick minor" x1="244.62" y1="49.72" x2="240.97" y2="54.48"/><line class="dc-tick minor" x1="251.65" y1="55.49" x2="247.69" y2="60.01"/><line class="dc-tick" x1="258.29" y1="61.71" x2="252.63" y2="67.37"/><text class="dc-num odd" x="227.88" y="92.12">03</text><line class="dc-tick minor" x1="264.51" y1="68.35" x2="259.99" y2="72.31"/><line class="dc-tick minor" x1="270.28" y1="75.38" x2="265.52" y2="79.03"/><line class="dc-tick minor" x1="275.57" y1="82.78" x2="270.59" y2="86.11"/><line class="dc-tick major" x1="280.38" y1="90.5" x2="266.52" y2="98.5"/><text class="dc-num" x="243.14" y="112">04</text><line class="dc-tick minor" x1="284.67" y1="98.52" x2="279.28" y2="101.18"/><line class="dc-tick minor" x1="288.42" y1="106.81" x2="282.88" y2="109.1"/><line class="dc-tick minor" x1="291.62" y1="115.32" x2="285.94" y2="117.25"/><line class="dc-tick" x1="294.26" y1="124.02" x2="286.54" y2="126.09"/><text class="dc-num odd" x="252.73" y="135.15">05</text><line class="dc-tick minor" x1="296.33" y1="132.88" x2="290.44" y2="134.05"/><line class="dc-tick minor" x1="297.81" y1="141.86" x2="291.86" y2="142.64"/><line class="dc-tick minor" x1="298.7" y1="150.91" x2="292.72" y2="151.3"/><line class="dc-tick major" x1="299" y1="160" x2="283" y2="160"/><text class="dc-num" x="256" y="160">06</text><line class="dc-tick minor" x1="298.7" y1="169.09" x2="292.72" y2="168.7"/><line class="dc-tick minor" x1="297.81" y1="178.14" x2="291.86" y2="177.36"/><line class="dc-tick minor" x1="296.33" y1="187.12" x2="290.44" y2="185.95"/><line class="dc-tick" x1="294.26" y1="195.98" x2="286.54" y2="193.91"/><text class="dc-num odd" x="252.73" y="184.85">07</text><line class="dc-tick minor" x1="291.62" y1="204.68" x2="285.94" y2="202.75"/><line class="dc-tick minor" x1="288.42" y1="213.19" x2="282.88" y2="210.9"/><line class="dc-tick minor" x1="284.67" y1="221.48" x2="279.28" y2="218.82"/><line class="dc-tick major" x1="280.38" y1="229.5" x2="266.52" y2="221.5"/><text class="dc-num" x="243.14" y="208">08</text><line class="dc-tick minor" x1="275.57" y1="237.22" x2="270.59" y2="233.89"/><line class="dc-tick minor" x1="270.28" y1="244.62" x2="265.52" y2="240.97"/><line class="dc-tick minor" x1="264.51" y1="251.65" x2="259.99" y2="247.69"/><line class="dc-tick" x1="258.29" y1="258.29" x2="252.63" y2="252.63"/><text class="dc-num odd" x="227.88" y="227.88">09</text><line class="dc-tick minor" x1="251.65" y1="264.51" x2="247.69" y2="259.99"/><line class="dc-tick minor" x1="244.62" y1="270.28" x2="240.97" y2="265.52"/><line class="dc-tick minor" x1="237.22" y1="275.57" x2="233.89" y2="270.59"/><line class="dc-tick major" x1="229.5" y1="280.38" x2="221.5" y2="266.52"/><text class="dc-num" x="208" y="243.14">10</text><line class="dc-tick minor" x1="221.48" y1="284.67" x2="218.82" y2="279.28"/><line class="dc-tick minor" x1="213.19" y1="288.42" x2="210.9" y2="282.88"/><line class="dc-tick minor" x1="204.68" y1="291.62" x2="202.75" y2="285.94"/><line class="dc-tick" x1="195.98" y1="294.26" x2="193.91" y2="286.54"/><text class="dc-num odd" x="184.85" y="252.73">11</text><line class="dc-tick minor" x1="187.12" y1="296.33" x2="185.95" y2="290.44"/><line class="dc-tick minor" x1="178.14" y1="297.81" x2="177.36" y2="291.86"/><line class="dc-tick minor" x1="169.09" y1="298.7" x2="168.7" y2="292.72"/><line class="dc-tick major" x1="160" y1="299" x2="160" y2="283"/><text class="dc-num" x="160" y="256">12</text><line class="dc-tick minor" x1="150.91" y1="298.7" x2="151.3" y2="292.72"/><line class="dc-tick minor" x1="141.86" y1="297.81" x2="142.64" y2="291.86"/><line class="dc-tick minor" x1="132.88" y1="296.33" x2="134.05" y2="290.44"/><line class="dc-tick" x1="124.02" y1="294.26" x2="126.09" y2="286.54"/><text class="dc-num odd" x="135.15" y="252.73">13</text><line class="dc-tick minor" x1="115.32" y1="291.62" x2="117.25" y2="285.94"/><line class="dc-tick minor" x1="106.81" y1="288.42" x2="109.1" y2="282.88"/><line class="dc-tick minor" x1="98.52" y1="284.67" x2="101.18" y2="279.28"/><line class="dc-tick major" x1="90.5" y1="280.38" x2="98.5" y2="266.52"/><text class="dc-num" x="112" y="243.14">14</text><line class="dc-tick minor" x1="82.78" y1="275.57" x2="86.11" y2="270.59"/><line class="dc-tick minor" x1="75.38" y1="270.28" x2="79.03" y2="265.52"/><line class="dc-tick minor" x1="68.35" y1="264.51" x2="72.31" y2="259.99"/><line class="dc-tick" x1="61.71" y1="258.29" x2="67.37" y2="252.63"/><text class="dc-num odd" x="92.12" y="227.88">15</text><line class="dc-tick minor" x1="55.49" y1="251.65" x2="60.01" y2="247.69"/><line class="dc-tick minor" x1="49.72" y1="244.62" x2="54.48" y2="240.97"/><line class="dc-tick minor" x1="44.43" y1="237.22" x2="49.41" y2="233.89"/><line class="dc-tick major" x1="39.62" y1="229.5" x2="53.48" y2="221.5"/><text class="dc-num" x="76.86" y="208">16</text><line class="dc-tick minor" x1="35.33" y1="221.48" x2="40.72" y2="218.82"/><line class="dc-tick minor" x1="31.58" y1="213.19" x2="37.12" y2="210.9"/><line class="dc-tick minor" x1="28.38" y1="204.68" x2="34.06" y2="202.75"/><line class="dc-tick" x1="25.74" y1="195.98" x2="33.46" y2="193.91"/><text class="dc-num odd" x="67.27" y="184.85">17</text><line class="dc-tick minor" x1="23.67" y1="187.12" x2="29.56" y2="185.95"/><line class="dc-tick minor" x1="22.19" y1="178.14" x2="28.14" y2="177.36"/><line class="dc-tick minor" x1="21.3" y1="169.09" x2="27.28" y2="168.7"/><line class="dc-tick major" x1="21" y1="160" x2="37" y2="160"/><text class="dc-num" x="64" y="160">18</text><line class="dc-tick minor" x1="21.3" y1="150.91" x2="27.28" y2="151.3"/><line class="dc-tick minor" x1="22.19" y1="141.86" x2="28.14" y2="142.64"/><line class="dc-tick minor" x1="23.67" y1="132.88" x2="29.56" y2="134.05"/><line class="dc-tick" x1="25.74" y1="124.02" x2="33.46" y2="126.09"/><text class="dc-num odd" x="67.27" y="135.15">19</text><line class="dc-tick minor" x1="28.38" y1="115.32" x2="34.06" y2="117.25"/><line class="dc-tick minor" x1="31.58" y1="106.81" x2="37.12" y2="109.1"/><line class="dc-tick minor" x1="35.33" y1="98.52" x2="40.72" y2="101.18"/><line class="dc-tick major" x1="39.62" y1="90.5" x2="53.48" y2="98.5"/><text class="dc-num" x="76.86" y="112">20</text><line class="dc-tick minor" x1="44.43" y1="82.78" x2="49.41" y2="86.11"/><line class="dc-tick minor" x1="49.72" y1="75.38" x2="54.48" y2="79.03"/><line class="dc-tick minor" x1="55.49" y1="68.35" x2="60.01" y2="72.31"/><line class="dc-tick" x1="61.71" y1="61.71" x2="67.37" y2="67.37"/><text class="dc-num odd" x="92.12" y="92.12">21</text><line class="dc-tick minor" x1="68.35" y1="55.49" x2="72.31" y2="60.01"/><line class="dc-tick minor" x1="75.38" y1="49.72" x2="79.03" y2="54.48"/><line class="dc-tick minor" x1="82.78" y1="44.43" x2="86.11" y2="49.41"/><line class="dc-tick major" x1="90.5" y1="39.62" x2="98.5" y2="53.48"/><text class="dc-num" x="112" y="76.86">22</text><line class="dc-tick minor" x1="98.52" y1="35.33" x2="101.18" y2="40.72"/><line class="dc-tick minor" x1="106.81" y1="31.58" x2="109.1" y2="37.12"/><line class="dc-tick minor" x1="115.32" y1="28.38" x2="117.25" y2="34.06"/><line class="dc-tick" x1="124.02" y1="25.74" x2="126.09" y2="33.46"/><text class="dc-num odd" x="135.15" y="67.27">23</text><line class="dc-tick minor" x1="132.88" y1="23.67" x2="134.05" y2="29.56"/><line class="dc-tick minor" x1="141.86" y1="22.19" x2="142.64" y2="28.14"/><line class="dc-tick minor" x1="150.91" y1="21.3" x2="151.3" y2="27.28"/><path class="dc-range" d="M 160 232 A 72 72 0 0 1 124 97.65" style="stroke:#3f7a4e"/><circle class="dc-cap" cx="160" cy="232" r="2.8" style="stroke:#3f7a4e"/><text class="dc-rtime" x="160" y="225.5" style="fill:#3f7a4e">12:00</text><circle class="dc-cap" cx="124" cy="97.65" r="2.8" style="stroke:#3f7a4e"/><text class="dc-rtime" x="127.25" y="103.28" style="fill:#3f7a4e">22:00</text><line class="dc-hand hour" x1="145.51" y1="159.37" x2="80.08" y2="156.51"/><g class="dc-mark"><text class="cw-side" x="151.6" y="160" text-anchor="end">RÉ</text><text class="cw-g" x="160" y="160" text-anchor="middle">G</text><text class="cw-side" x="168.4" y="160" text-anchor="start">IE</text><text class="cw-by" x="160" y="182" text-anchor="middle">by Yorin</text></g><circle class="dc-cap-ring" cx="160" cy="160" r="12.5"/><path class="dc-seg past" d="M 240.61 240.61 A 114 114 0 0 1 176.36 272.82" style="stroke:#2f4a3c"/><path class="dc-seg past" d="M 174.88 273.02 A 114 114 0 0 1 131.94 270.49" style="stroke:#a98a4e"/><path class="dc-seg past" d="M 130.49 270.12 A 114 114 0 0 1 80.45 241.66" style="stroke:#3f7a4e"/><path class="dc-seg past" d="M 79.39 240.61 A 114 114 0 0 1 62.03 218.29" style="stroke:#a9761f"/><path class="dc-seg past" d="M 61.27 217 A 114 114 0 0 1 55.26 205" style="stroke:#a13f3f"/><path class="dc-seg past" d="M 54.68 203.63 A 114 114 0 0 1 47.18 176.36" style="stroke:#4a6fa5"/><path class="dc-seg" d="M 46.98 174.88 A 114 114 0 0 1 46.79 146.6" style="stroke:#8e5b9e"/><path class="dc-seg" d="M 46.98 145.12 A 114 114 0 0 1 49.51 131.94" style="stroke:#2f4a3c"/><path class="dc-seg" d="M 49.88 130.49 A 114 114 0 0 1 78.34 80.45" style="stroke:#a98a4e"/><path class="dc-seg" d="M 79.39 79.39 A 114 114 0 0 1 129.06 50.28" style="stroke:#3f7a4e"/><path class="dc-seg" d="M 130.49 49.88 A 114 114 0 0 1 143.64 47.18" style="stroke:#a9761f"/><circle class="dc-badge past" cx="240.61" cy="240.61" r="6.4" style="--c:#2f4a3c"/><text class="dc-bnum past" x="240.61" y="240.61">1</text><circle class="dc-badge past" cx="174.88" cy="273.02" r="6.4" style="--c:#a98a4e"/><text class="dc-bnum past" x="174.88" y="273.02">2</text><circle class="dc-badge past" cx="130.49" cy="270.12" r="6.4" style="--c:#3f7a4e"/><text class="dc-bnum past" x="130.49" y="270.12">3</text><circle class="dc-badge past" cx="79.39" cy="240.61" r="6.4" style="--c:#a9761f"/><text class="dc-bnum past" x="79.39" y="240.61">4</text><circle class="dc-badge past" cx="61.27" cy="217" r="6.4" style="--c:#a13f3f"/><text class="dc-bnum past" x="61.27" y="217">5</text><line class="dc-stem" x1="54.68" y1="203.63" x2="45.81" y2="207.3" style="stroke:#4a6fa5"/><circle class="dc-badge past" cx="39.9" cy="209.75" r="6.4" style="--c:#4a6fa5"/><text class="dc-bnum past" x="39.9" y="209.75">6</text><circle class="dc-badge now" cx="46.98" cy="174.88" r="8.2" style="--c:#8e5b9e"/><text class="dc-bnum" x="46.98" y="174.88">7</text><circle class="dc-badge serve" cx="46.98" cy="145.12" r="6.4" style="--c:#2f4a3c"/><text class="dc-bnum" x="46.98" y="145.12">8</text><line class="dc-stem" x1="49.88" y1="130.49" x2="40.61" y2="128.01" style="stroke:#a98a4e"/><circle class="dc-badge" cx="34.43" cy="126.35" r="6.4" style="--c:#a98a4e"/><text class="dc-bnum" x="34.43" y="126.35">9</text><circle class="dc-badge" cx="79.39" cy="79.39" r="6.4" style="--c:#3f7a4e"/><text class="dc-bnum" x="79.39" y="79.39">10</text><circle class="dc-badge" cx="130.49" cy="49.88" r="6.4" style="--c:#a9761f"/><text class="dc-bnum" x="130.49" y="49.88">11</text></svg>
+        <div class="demo-now">
+          <div class="dn-block now" style="--c:#8e5b9e"><div class="dn-label">Сейчас</div><div class="dn-title"><span class="dn-num">7</span>Начало банкета</div><div class="dn-sub">Подача: Салат Цезарь</div><div class="dn-meta mono">с 17:30 до 18:30 · осталось 20 мин</div><div class="dn-bar"><span style="width:67%"></span></div></div>
+          <div class="dn-block" style="--c:#2f4a3c"><div class="dn-label">Далее · через 20 мин</div><div class="dn-title"><span class="dn-num">8</span>Подача: Плов с бараниной</div><div class="dn-meta mono">18:30</div></div>
+          <div class="dn-then" style="--c:#a98a4e"><span class="dn-label">Затем · 19:00</span> Первый танец</div>
+          <div class="dn-duty"><span class="dn-label">Сейчас работают</span><div><i style="background:#3f7a4e"></i>Мобилограф <span class="mono">до 22:00</span></div></div>
         </div>
       </div>
+      <p class="demo-caption">При наведении на номер — время, к чему приурочено, что из меню подаётся, что было до и что будет после.</p>
     </div>
   </div>
 </section>
@@ -236,27 +340,25 @@
   <div class="wrap">
     <div class="block-head">
       <div>
-        <h2>3. Чек-листы подготовки</h2>
-        <p class="block-desc">Разбиты по срокам до мероприятия — открываете нужный этап и не держите в голове, что уже сделано.</p>
+        <h2>3. Чек-лист</h2>
+        <p class="block-desc">Три срока — за месяц, за неделю и в день мероприятия. У задачи можно открыть детали: подрядчик, контакт, сумма и предоплата — и сумма сразу попадёт в бюджет.</p>
       </div>
-      <span class="tariff-tag">Basic и выше</span>
+      <span class="tariff-tag">Basic и Standard</span>
     </div>
     <div class="mock">
       <div class="mock-head">
         <div class="mock-icon">Р</div>
-        <div class="mock-title">Чек-лист подготовки</div>
-        <div class="mock-crumb">7 из 12 выполнено</div>
+        <div class="mock-title">Чек-лист</div>
+        <div class="mock-crumb">8 из 13 выполнено</div>
       </div>
-      <div class="check-groups">
-        <div class="check-group">
-          <h4>За 3 месяца</h4>
-          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Забронировать площадку</div></div>
-          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Договор с кейтерингом</div></div>
-          <div class="check-item"><div class="check-box"></div><div class="check-text">Утвердить финальное меню</div></div>
-        </div>
+      <div class="check-groups three">
         <div class="check-group">
           <h4>За 1 месяц</h4>
-          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Финальный список гостей</div></div>
+          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Забронировать площадку</div></div>
+          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Договор с кейтерингом</div></div>
+          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Найти фотографа <span class="check-amount mono">380 000 ₸</span></div></div>
+          <div class="check-item"><div class="check-box"></div><div class="check-text">Утвердить финальное меню</div></div>
+          <div class="check-item done"><div class="check-box">✓</div><div class="check-text">Список гостей</div></div>
           <div class="check-item"><div class="check-box"></div><div class="check-text">Второй платёж подрядчикам</div></div>
           <div class="check-item"><div class="check-box"></div><div class="check-text">Примерка образа</div></div>
         </div>
@@ -281,8 +383,8 @@
   <div class="wrap">
     <div class="block-head">
       <div>
-        <h2>4. Бюджет и подрядчики</h2>
-        <p class="block-desc">Кто сколько стоит, что уже оплачено и сколько осталось от бюджета клиента — видно на одном экране без сверки чеков в мессенджере.</p>
+        <h2>4. Бюджет: подрядчики и заведение</h2>
+        <p class="block-desc">Сумма, предоплата и остаток по каждой услуге. Подрядчики и заведение — две группы со своими итогами; внизу — сколько уже потрачено из бюджета клиента и сколько осталось.</p>
       </div>
       <span class="tariff-tag">Standard и выше</span>
     </div>
@@ -290,21 +392,27 @@
       <div class="mock-head">
         <div class="mock-icon">Р</div>
         <div class="mock-title">Бюджет мероприятия</div>
-        <div class="mock-crumb">6 подрядчиков</div>
+        <div class="mock-crumb">Pro · 2 группы</div>
       </div>
       <div class="mock-body" style="padding:0;overflow-x:auto;">
         <table class="mock-table">
           <thead>
-            <tr><th>Подрядчик</th><th>Услуга</th><th>Сумма</th><th>Статус</th></tr>
+            <tr><th>Услуга</th><th>Имя</th><th>Сумма</th><th>Предоплата</th><th>Остаток</th><th>Статус</th></tr>
           </thead>
           <tbody>
-            <tr><td>Paradise Hall</td><td>Аренда площадки</td><td class="mono">1 200 000 ₸</td><td><span class="status-pill good">Оплачено</span></td></tr>
-            <tr><td>Dastarkhan Catering</td><td>Кейтеринг, 120 чел.</td><td class="mono">950 000 ₸</td><td><span class="status-pill warn">Предоплата 50%</span></td></tr>
-            <tr><td>Aitbek Photo</td><td>Фото + видео</td><td class="mono">380 000 ₸</td><td><span class="status-pill good">Забронировано</span></td></tr>
-            <tr><td>Gulnaz Flowers</td><td>Флористика и декор</td><td class="mono">320 000 ₸</td><td><span class="status-pill warn">Ожидает предоплаты</span></td></tr>
-            <tr><td>DJ Rustam</td><td>Музыка и звук</td><td class="mono">180 000 ₸</td><td><span class="status-pill good">Оплачено</span></td></tr>
-            <tr><td>Ведущая Динара</td><td>Ведение церемонии</td><td class="mono">200 000 ₸</td><td><span class="status-pill idle">Не оплачено</span></td></tr>
-            <tr class="total"><td colspan="2">Итого потрачено / бюджет</td><td class="mono">3 230 000 ₸ из 4 500 000 ₸</td><td class="mono" style="color:var(--good);">остаток 1 270 000 ₸</td></tr>
+            <tr class="group-head"><td colspan="6">Подрядчики и услуги</td></tr>
+            <tr><td>Фото + видео<span class="src-tag">чек-лист · за 1 месяц</span></td><td>Aitbek Photo</td><td class="mono">380 000 ₸</td><td class="mono">—</td><td class="mono">0 ₸</td><td><span class="status-pill good">Оплачено</span></td></tr>
+            <tr><td>Флористика и декор</td><td>Gulnaz Flowers</td><td class="mono">320 000 ₸</td><td class="mono">160 000 ₸</td><td class="mono">160 000 ₸</td><td><span class="status-pill warn">Предоплата</span></td></tr>
+            <tr><td>Музыка и звук</td><td>DJ Rustam</td><td class="mono">180 000 ₸</td><td class="mono">—</td><td class="mono">0 ₸</td><td><span class="status-pill good">Оплачено</span></td></tr>
+            <tr><td>Ведение церемонии</td><td>Ведущая Динара</td><td class="mono">200 000 ₸</td><td class="mono">—</td><td class="mono">200 000 ₸</td><td><span class="status-pill idle">Не оплачено</span></td></tr>
+            <tr class="group-total"><td colspan="2">Итого · подрядчики</td><td class="mono">1 080 000 ₸</td><td class="mono">720 000 ₸</td><td class="mono">360 000 ₸</td><td class="muted-cell">оплачено · к оплате</td></tr>
+            <tr class="group-head"><td colspan="6">Заведение · меню и оборудование <span class="tariff-mini">Pro</span></td></tr>
+            <tr><td>Аренда зала</td><td>Paradise Hall</td><td class="mono">1 200 000 ₸</td><td class="mono">—</td><td class="mono">0 ₸</td><td><span class="status-pill good">Оплачено</span></td></tr>
+            <tr><td>Плов с бараниной · 24 блюда</td><td>Paradise Hall</td><td class="mono">192 000 ₸</td><td class="mono">—</td><td class="mono">192 000 ₸</td><td><span class="status-pill idle">Не оплачено</span></td></tr>
+            <tr><td>Салат Цезарь · 36 порций</td><td>Paradise Hall</td><td class="mono">162 000 ₸</td><td class="mono">—</td><td class="mono">162 000 ₸</td><td><span class="status-pill idle">Не оплачено</span></td></tr>
+            <tr><td>Шатёр банкетный</td><td>Paradise Hall</td><td class="mono">450 000 ₸</td><td class="mono">225 000 ₸</td><td class="mono">225 000 ₸</td><td><span class="status-pill warn">Предоплата</span></td></tr>
+            <tr class="group-total"><td colspan="2">Итого · заведение</td><td class="mono">2 004 000 ₸</td><td class="mono">1 425 000 ₸</td><td class="mono">579 000 ₸</td><td class="muted-cell">оплачено · к оплате</td></tr>
+            <tr class="total"><td colspan="2">Потрачено / бюджет клиента</td><td class="mono" colspan="2">2 145 000 ₸ из 4 500 000 ₸</td><td class="mono" colspan="2" style="color:var(--good);">остаток 1 416 000 ₸ после всех оплат</td></tr>
           </tbody>
         </table>
       </div>
@@ -313,30 +421,33 @@
   </div>
 </section>
 
-<section class="block" id="crm">
+<section class="block" id="menu">
   <div class="wrap">
     <div class="block-head">
       <div>
-        <h2>5. CRM клиентов</h2>
-        <p class="block-desc">Когда мероприятий несколько параллельно — сводная база всех клиентов и сделок вместо памяти и заметок в телефоне.</p>
+        <h2>5. Меню и оборудование заведения</h2>
+        <p class="block-desc">Для ресторана: блюда, напитки, вина и аренда — на гостя, на стол или фиксированным количеством. Количество и сумма считаются по числу гостей и столов из брифа, а время подачи горячего само появляется в тайминге.</p>
       </div>
-      <span class="tariff-tag">Pro</span>
+      <span class="tariff-tag">Pro · для ресторана</span>
     </div>
     <div class="mock">
       <div class="mock-head">
         <div class="mock-icon">Р</div>
-        <div class="mock-title">Клиенты Régie</div>
-        <div class="mock-crumb">3 активных сделки</div>
+        <div class="mock-title">Меню · Зал «Жасмин», Paradise Hall</div>
+        <div class="mock-crumb">120 гостей · 12 столов</div>
       </div>
       <div class="mock-body" style="padding:0;overflow-x:auto;">
-        <table class="mock-table">
+        <table class="mock-table menu-table">
           <thead>
-            <tr><th>Клиент</th><th>Мероприятие</th><th>Статус</th><th>Сумма контракта</th><th>Следующий контакт</th></tr>
+            <tr><th>Блюда</th><th>Количество</th><th>Цена за ед.</th><th>Подача</th><th style="text-align:right;">Сумма</th></tr>
           </thead>
           <tbody>
-            <tr><td>Аружан &amp; Ануар</td><td>Свадьба, 14.06.2026</td><td><span class="status-pill warn">В работе</span></td><td class="mono">4 500 000 ₸</td><td class="mono">20 мая</td></tr>
-            <tr><td>TechCorp KZ</td><td>Корпоратив, 28.03.2026</td><td><span class="status-pill good">Завершено</span></td><td class="mono">1 800 000 ₸</td><td>—</td></tr>
-            <tr><td>Айгерим Б.</td><td>День рождения, 05.09.2026</td><td><span class="status-pill idle">Переговоры</span></td><td class="mono">~ 900 000 ₸</td><td class="mono">смета до 12.08</td></tr>
+            <tr><td><b>Плов с бараниной</b><span class="src-tag">2 на стол</span></td><td class="mono">24 блюда</td><td class="mono">8 000 ₸</td><td class="mono serve">18:30</td><td class="mono" style="text-align:right;"><b>192 000 ₸</b></td></tr>
+            <tr><td><b>Салат Цезарь</b><span class="src-tag">3 на стол</span></td><td class="mono">36 салатов</td><td class="mono">4 500 ₸</td><td class="mono serve">17:30</td><td class="mono" style="text-align:right;"><b>162 000 ₸</b></td></tr>
+            <tr><td><b>Торт на десерт</b><span class="src-tag">1 на гостя</span></td><td class="mono">120 порций</td><td class="mono">3 500 ₸</td><td class="mono serve">21:00</td><td class="mono" style="text-align:right;"><b>420 000 ₸</b></td></tr>
+            <tr><td><b>Шатёр банкетный</b><span class="src-tag">фикс. количество</span></td><td class="mono">1 шт.</td><td class="mono">450 000 ₸</td><td class="mono muted-cell">—</td><td class="mono" style="text-align:right;"><b>450 000 ₸</b></td></tr>
+            <tr><td class="muted-cell" colspan="4">ещё 6 позиций — напитки, вина, алкоголь, стулья Тиффани, звук и свет</td><td class="mono muted-cell" style="text-align:right;">1 168 000 ₸</td></tr>
+            <tr class="total"><td colspan="3">Меню и оборудование · на гостя ≈ 19 900 ₸</td><td></td><td class="mono" style="text-align:right;">2 392 000 ₸</td></tr>
           </tbody>
         </table>
       </div>
@@ -349,16 +460,16 @@
   <div class="wrap">
     <div class="block-head">
       <div>
-        <h2>6. Дублирование в один клик</h2>
-        <p class="block-desc">Новое мероприятие — не новый файл с нуля. Копируете карточку целиком: структура остаётся, поля с данными — пустые.</p>
+        <h2>6. Новое мероприятие, перенос и PDF</h2>
+        <p class="block-desc">Новое мероприятие — не новый файл с нуля: одна кнопка, и рабочий стол чистый, со всей структурой. Готовое мероприятие сохраняется в файл и открывается на другом устройстве, а клиенту уходит аккуратный PDF.</p>
       </div>
       <span class="tariff-tag">Все тарифы</span>
     </div>
     <div class="mock">
       <div class="mock-head">
         <div class="mock-icon">Р</div>
-        <div class="mock-title">Duplicate</div>
-        <div class="mock-crumb">события / шаблон</div>
+        <div class="mock-title">Сохранено локально</div>
+        <div class="mock-crumb">данные — только в вашем браузере</div>
       </div>
       <div class="dup-row">
         <div class="dup-card">
@@ -368,15 +479,20 @@
           <div class="dup-line short"></div>
         </div>
         <div class="dup-arrow">
-          <span class="dup-btn">Duplicate</span>
+          <span class="dup-btn">Новое мероприятие</span>
           →
         </div>
         <div class="dup-card new">
-          <h5>Новое мероприятие</h5>
+          <h5>Корпоратив TechCorp</h5>
           <div class="dup-line"></div>
           <div class="dup-line"></div>
           <div class="dup-line short"></div>
         </div>
+      </div>
+      <div class="dup-actions">
+        <div><b>Экспорт / Импорт</b><span>файл мероприятия — открыть на ноутбуке, планшете или передать коллеге</span></div>
+        <div><b>Скачать PDF</b><span>в режиме «Превью» — то, что видит клиент, без служебных полей</span></div>
+        <div><b>Приватно</b><span>данные клиента не уходят на чужие серверы — они хранятся только у вас</span></div>
       </div>
     </div>
   </div>
@@ -385,13 +501,14 @@
 <footer class="cta">
   <div class="wrap">
     <h2>Та же структура — под ваше мероприятие</h2>
-    <p>Все шесть страниц выше вы получаете пустыми и готовыми к заполнению — с вашими подрядчиками, суммами и датами.</p>
+    <p>Все шесть страниц выше вы получаете пустыми и готовыми к заполнению — с вашими подрядчиками, меню, суммами и датами.</p>
     <a class="btn btn-primary" href="index.html#pricing">Смотреть тарифы</a>
   </div>
 </footer>
 
 <footer class="base">
   <div class="wrap">Régie © 2026 · <a href="index.html">На главную</a></div>
+  <div class="wrap footer-author">автор проекта — Yorin · <a href="mailto:yerlanorin@gmail.com">yerlanorin@gmail.com</a></div>
 </footer>
 
 </body>

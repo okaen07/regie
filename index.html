@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Régie — Notion-система для организаторов мероприятий</title>
-<meta name="description" content="Готовая Notion-система для ивент-агентств: бриф, бюджет, тайминг и подрядчики в одной базе. Дублируется в один клик.">
+<title>Régie — рабочий стол организатора мероприятий</title>
+<meta name="description" content="Рабочий стол для ивент-агентств и ресторанов: бриф, часы мероприятия, чек-лист, бюджет и меню заведения в одном окне браузера.">
 <script>try{var __t=localStorage.getItem('regie_theme'); if(__t && __t!=='editorial') document.documentElement.setAttribute('data-theme', __t);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -25,10 +25,6 @@
   :root[data-theme="noir"]{
     --bg:#151713; --surface:#1c1f1a; --surface-2:#242820; --text:#eeece2; --muted:#a3a195;
     --accent:#8fb79c; --accent-fill:#3f7a5c; --accent-soft:#223228; --brass:#d1ac6e; --border:#32352c;
-  }
-  :root[data-theme="blush"]{
-    --bg:#fbf1ee; --surface:#ffffff; --surface-2:#f6e7e2; --text:#2b211f; --muted:#8a7571;
-    --accent:#9c4b43; --accent-fill:#9c4b43; --accent-soft:#f3dcd7; --brass:#b98a4e; --border:#eddcd6;
   }
   *{box-sizing:border-box;margin:0;padding:0;}
   html{scroll-behavior:smooth;}
@@ -93,6 +89,7 @@
 
   footer{border-top:1px solid var(--border);padding:40px 0;text-align:center;color:var(--muted);font-size:13.5px;}
   footer a{color:var(--accent);text-decoration:none;font-weight:600;}
+  .footer-author{margin-top:6px;font-size:12.5px;letter-spacing:.02em;}
 
   /* floating theme switcher */
   .theme-switch{position:fixed;bottom:18px;right:18px;z-index:50;display:flex;gap:7px;background:var(--surface);border:1px solid var(--border);border-radius:999px;padding:6px;box-shadow:0 14px 34px -16px rgba(0,0,0,.4);}
@@ -100,7 +97,6 @@
   .theme-dot:hover{transform:scale(1.12);}
   .theme-dot[data-theme-swatch="editorial"]{background:#f7f3ec;}
   .theme-dot[data-theme-swatch="noir"]{background:#1c1f1a;}
-  .theme-dot[data-theme-swatch="blush"]{background:#fbf1ee;}
   .theme-dot.active{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent-soft);}
 
   /* gentle entrance as sections scroll into view */
@@ -143,15 +139,15 @@
 <header>
   <div class="wrap brand">
     <div class="brand-name">RÉGIE</div>
-    <div class="brand-tag">Notion для ивент-агентств</div>
+    <div class="brand-tag">Для ивент-агентств и ресторанов</div>
   </div>
 </header>
 
 <section class="hero">
   <div class="wrap">
-    <span class="eyebrow">Notion-система для организаторов мероприятий</span>
-    <h1>Один Notion, который ведёт мероприятие <em>от брифа до последнего платежа</em></h1>
-    <p class="offer">Régie — готовая система для ивент-агентств и фрилансеров: бриф клиента, бюджет, тайминг дня и трекер подрядчиков в одной базе. Дублируйте на новое мероприятие одним кликом — вместо новой связки таблиц каждый раз.</p>
+    <span class="eyebrow">Рабочий стол организатора мероприятий</span>
+    <h1>Один рабочий стол, который ведёт мероприятие <em>от брифа до последнего платежа</em></h1>
+    <p class="offer">Régie — готовая система для ивент-агентств, фрилансеров и ресторанов: бриф клиента, часы мероприятия, чек-лист, бюджет и меню заведения в одном окне браузера. Новое мероприятие — одной кнопкой, вместо новой связки таблиц каждый раз.</p>
     <div class="cta-row">
       <a class="btn btn-primary" href="#pricing">Получить доступ к системе</a>
       <a class="btn btn-ghost" href="samples.html">Примеры страниц →</a>
@@ -192,6 +188,13 @@
           <span class="story-num mono">04</span>
           <div class="story-panel-label">Бюджет</div>
         </div>
+        <div class="story-panel" data-step="4" style="background:#6b4f2a;">
+          <div class="story-panel-icon">
+            <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 30h32"/><path d="M11 30a13 13 0 0 1 26 0"/><line x1="24" y1="14" x2="24" y2="17"/><line x1="6" y1="36" x2="42" y2="36"/></svg>
+          </div>
+          <span class="story-num mono">05</span>
+          <div class="story-panel-label">Меню заведения</div>
+        </div>
       </div>
     </div>
     <div class="story-steps" id="storySteps">
@@ -202,18 +205,23 @@
       </div>
       <div class="story-step" data-step="1">
         <span class="eyebrow">02 · Тайминг</span>
-        <h3>Один план дня — вместо пересылки в директ</h3>
-        <p>Run-of-show с точным временем для каждого подрядчика: декораторы, фотограф, ведущий видят одно и то же расписание.</p>
+        <h3>Часы мероприятия — видно, что за чем идёт</h3>
+        <p>Пункты программы пронумерованы прямо на циферблате. Наведите на номер — время, к чему приурочено, что было до и что дальше. Справа всегда «Сейчас / Далее», время меняется перетаскиванием, а режим «Увеличить» открывает часы на весь экран в день банкета.</p>
       </div>
       <div class="story-step" data-step="2">
         <span class="eyebrow">03 · Чек-лист</span>
-        <h3>Задачи по периодам — от месяца до дня мероприятия</h3>
-        <p>Ничего не забывается само по себе: за месяц, за неделю, в день Х — каждая задача на своём месте, с контактами и суммой, если нужно.</p>
+        <h3>Задачи по периодам — за месяц, за неделю, в день Х</h3>
+        <p>Каждая задача на своём месте, с контактом подрядчика, суммой и предоплатой — сумма сразу попадает в бюджет.</p>
       </div>
       <div class="story-step" data-step="3">
         <span class="eyebrow">04 · Бюджет</span>
-        <h3>Видно, кто сколько стоит и сколько уже оплачено</h3>
-        <p>Сумма, предоплата, остаток — по каждой услуге. Общий план/факт по бюджету мероприятия считается сам.</p>
+        <h3>Подрядчики и заведение — каждый со своим итогом</h3>
+        <p>Сумма, предоплата и остаток по каждой услуге. Расходы на подрядчиков и на заведение считаются отдельно, общий план/факт по бюджету клиента — сам.</p>
+      </div>
+      <div class="story-step" data-step="4">
+        <span class="eyebrow">05 · Меню · Pro</span>
+        <h3>Меню, которое считает порции и знает время подачи</h3>
+        <p>Блюда, напитки, вина и аренда оборудования — на гостя, на стол или фиксированным количеством. Укажите время подачи горячего — и оно само появится в тайминге для ведущего, хозяев вечера и кухни.</p>
       </div>
     </div>
   </div>
@@ -233,18 +241,18 @@
       </div>
       <div class="b-card">
         <div class="b-num mono">02</div>
-        <h3>Всё в одной базе</h3>
-        <p>Бриф, бюджет, run-of-show и подрядчики — вместо пяти разрозненных документов.</p>
+        <h3>Всё в одном окне</h3>
+        <p>Бриф, часы мероприятия, бюджет, подрядчики и меню — вместо пяти разрозненных документов.</p>
       </div>
       <div class="b-card">
         <div class="b-num mono">03</div>
-        <h3>Копия в один клик</h3>
-        <p>Шаблон мероприятия дублируется со всей структурой под новый проект.</p>
+        <h3>Новое мероприятие — одной кнопкой</h3>
+        <p>Чистый рабочий стол за секунду, а готовое мероприятие сохраняется в файл и открывается на любом устройстве.</p>
       </div>
       <div class="b-card">
         <div class="b-num mono">04</div>
-        <h3>Без плагинов</h3>
-        <p>Работает в бесплатной версии Notion — не нужны платные интеграции.</p>
+        <h3>Ничего не нужно устанавливать</h3>
+        <p>Работает в браузере, данные клиента хранятся только у вас, а клиенту уходит аккуратный PDF.</p>
       </div>
     </div>
     <div style="text-align:center;margin-top:44px;">
@@ -257,31 +265,31 @@
   <div class="wrap">
     <div class="section-head">
       <span class="eyebrow">Тарифы</span>
-      <h2>От первого мероприятия до агентства</h2>
+      <h2>Для организатора — и для ресторана</h2>
     </div>
     <div class="pricing-grid">
       <div class="price-card">
-        <div class="price-tag">Basic</div>
-        <div class="price-name">Тайминг</div>
+        <div class="price-tag">Для клиента · Basic</div>
+        <div class="price-name">Тайминг и чек-лист</div>
         <div class="price-amount mono">12 990 ₸</div>
         <div class="price-alt mono">≈ $26</div>
-        <p class="price-desc">Тайминг дня (run-of-show) и чек-листы подготовки к мероприятию.</p>
+        <p class="price-desc">Бриф, список гостей с рассадкой по столам, часы мероприятия с нумерованной программой и чек-лист по периодам.</p>
         <a class="btn btn-ghost" href="#contact">Выбрать Basic</a>
       </div>
       <div class="price-card featured">
-        <div class="price-tag">Standard</div>
+        <div class="price-tag">Для клиента · Standard</div>
         <div class="price-name">Бюджет и подрядчики</div>
         <div class="price-amount mono">19 990 ₸</div>
         <div class="price-alt mono">≈ $40</div>
-        <p class="price-desc">Всё из Basic плюс трекер бюджета и база подрядчиков с историей платежей.</p>
+        <p class="price-desc">Всё из Basic плюс бюджет подрядчиков: сумма, предоплата, остаток и план/факт по бюджету клиента.</p>
         <a class="btn btn-primary" href="#contact">Выбрать Standard</a>
       </div>
       <div class="price-card">
-        <div class="price-tag">Pro</div>
-        <div class="price-name">Агентство</div>
+        <div class="price-tag">Для ресторана · Pro</div>
+        <div class="price-name">All Included</div>
         <div class="price-amount mono">29 990 ₸</div>
         <div class="price-alt mono">≈ $60</div>
-        <p class="price-desc">Всё из Standard плюс CRM клиентов и аналитика по завершённым мероприятиям.</p>
+        <p class="price-desc">Бриф, часы мероприятия и бюджет — плюс меню и оборудование заведения: порции на гостя и на стол, время подачи блюд в тайминге, расходы заведения отдельной группой в бюджете.</p>
         <a class="btn btn-ghost" href="#contact">Выбрать Pro</a>
       </div>
     </div>
@@ -290,14 +298,14 @@
 
 <footer id="contact">
   <div class="wrap">
-    Получить доступ к системе — <a href="mailto:hello@regie-notion.com">hello@regie-notion.com</a> · Régie © 2026
+    Получить доступ к системе — <a href="mailto:yerlanorin@gmail.com">yerlanorin@gmail.com</a>
+    <div class="footer-author">Régie © 2026 · автор проекта — Yorin</div>
   </div>
 </footer>
 
 <div class="theme-switch" id="themeSwitch" title="Цветовая тема">
   <button class="theme-dot" data-theme-swatch="editorial" data-theme-target="editorial" onclick="setTheme('editorial')" title="Редакционная"></button>
   <button class="theme-dot" data-theme-swatch="noir" data-theme-target="noir" onclick="setTheme('noir')" title="Тёмная"></button>
-  <button class="theme-dot" data-theme-swatch="blush" data-theme-target="blush" onclick="setTheme('blush')" title="Тёплая"></button>
 </div>
 
 <script>
