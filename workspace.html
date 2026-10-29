@@ -1146,6 +1146,12 @@
 
   /* ---- save / open, letterhead ---- */
 
+  .brief-grid.org-known .org-field{display:none;}
+  .bf-org-known{display:none;grid-column:1 / -1;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px;padding:12px 0 0;border-top:1px solid var(--border);font-size:13px;}
+  .brief-grid.org-known .bf-org-known{display:flex;}
+  .bf-org-k{font-size:12px;font-weight:600;color:var(--muted);}
+  .bf-org-v{color:var(--text);}
+  .bf-org-edit{border:none;background:none;color:var(--accent);font:600 12.5px/1 'Karla',system-ui,sans-serif;cursor:pointer;text-decoration:underline;padding:4px;}
   .bf-group-head{grid-column:1 / -1;margin-top:8px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--text);}
   .print-brand,.kitchen-doc{display:none;}
   .pb-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;border-bottom:1.5px solid #20241f;padding-bottom:10px;margin-bottom:18px;}
@@ -1536,7 +1542,7 @@
         <div class="mock-icon">Р</div>
         <div class="mock-title">Бриф мероприятия</div>
       </div>
-      <div class="mock-body brief-grid">
+      <div class="mock-body brief-grid" id="briefGrid">
         <div class="bf span-6">
           <label for="f-title">Название мероприятия</label>
           <input id="f-title" type="text" placeholder="напр. Свадьба Аружан и Ануара" oninput="onField('title', this.value); syncHero();">
@@ -1618,20 +1624,25 @@
           <textarea id="f-notes" rows="2" placeholder="напр. Вегетарианское меню на 15 гостей, живая музыка на церемонии" oninput="onField('notes', this.value)"></textarea>
         </div>
 
-        <div class="bf-group-head">Заведение или организатор <span class="bf-note">· печатается вверху каждого PDF</span></div>
-        <div class="bf span-3">
+        <div class="bf-org-known" id="orgKnown">
+          <span class="bf-org-k">Шапка PDF</span>
+          <span class="bf-org-v" id="orgKnownText">—</span>
+          <button type="button" class="bf-org-edit" onclick="editVenueOrg()">Изменить</button>
+        </div>
+        <div class="bf-group-head org-field">Заведение или организатор <span class="bf-note">· печатается вверху каждого PDF</span></div>
+        <div class="bf span-3 org-field">
           <label for="f-orgName">Название</label>
           <input id="f-orgName" type="text" maxlength="60" placeholder="Ресторан Paradise Hall" oninput="onField('orgName', this.value)">
         </div>
-        <div class="bf span-3">
+        <div class="bf span-3 org-field">
           <label for="f-orgAddress">Адрес</label>
           <input id="f-orgAddress" type="text" maxlength="90" placeholder="Алматы, пр. Абая, 10" oninput="onField('orgAddress', this.value)">
         </div>
-        <div class="bf span-3">
+        <div class="bf span-3 org-field">
           <label for="f-orgPhone">Телефон</label>
           <input id="f-orgPhone" type="text" maxlength="40" placeholder="+7 700 000 00 00" oninput="onField('orgPhone', this.value)">
         </div>
-        <div class="bf span-3">
+        <div class="bf span-3 org-field">
           <label for="f-orgSite">Сайт или Instagram</label>
           <input id="f-orgSite" type="text" maxlength="60" placeholder="@paradisehall" oninput="onField('orgSite', this.value)">
         </div>
@@ -2422,6 +2433,70 @@ function applyLang(){
   if(window.RegieI18n) RegieI18n.apply(l);
 }
 
+/* Площадки с данными для шапки PDF. Once a venue's name, address and phone
+   are typed in the brief, they are remembered on this computer under the
+   venue's name: picking that venue again fills the letterhead by itself and
+   folds the four fields into one line. A venue seen for the first time opens
+   the fields to fill. */
+const VENUE_BOOK_KEY = 'regie_venues_v1';
+let orgEditing = false;
+function venueBook(){
+  try{ return JSON.parse(localStorage.getItem(VENUE_BOOK_KEY)) || {}; }catch(e){ return {}; }
+}
+function venueKey(v){ return (v||'').trim().toLowerCase().replace(/\s+/g,' '); }
+function venueEntry(v){
+  const k = venueKey(v);
+  if(!k) return null;
+  const e = venueBook()[k];
+  return e && (e.orgName||'').trim() ? e : null;
+}
+function rememberVenueOrg(){
+  const k = venueKey(state.brief.venue);
+  const b = state.brief;
+  if(!k || !(b.orgName||'').trim()) return;
+  const book = venueBook();
+  book[k] = {venue:(b.venue||'').trim(), orgName:b.orgName||'', orgAddress:b.orgAddress||'', orgPhone:b.orgPhone||'', orgSite:b.orgSite||''};
+  orgFromBook = book[k];
+  try{ localStorage.setItem(VENUE_BOOK_KEY, JSON.stringify(book)); }catch(e){}
+}
+let orgFromBook = null; // the book entry whose data is in the fields right now
+function onVenueChanged(){
+  orgEditing = false;
+  const ORG = ['orgName','orgAddress','orgPhone','orgSite'];
+  const e = venueEntry(state.brief.venue);
+  let fill = null;
+  if(e) fill = e;
+  // a new venue: if the fields still hold another remembered venue's letterhead, empty them for this one
+  else if(orgFromBook && ORG.every(k=>(state.brief[k]||'')===(orgFromBook[k]||''))) fill = {};
+  if(fill){
+    ORG.forEach(k=>{ state.brief[k] = fill[k]||''; });
+    scheduleSave();
+    ORG.forEach(k=>{ const el = document.getElementById('f-'+k); if(el) el.value = state.brief[k]; });
+  }
+  orgFromBook = e || null;
+  updateOrgVisibility();
+}
+function updateOrgVisibility(){
+  const grid = document.getElementById('briefGrid');
+  if(!grid) return;
+  const known = !!venueEntry(state.brief.venue) && !orgEditing;
+  grid.classList.toggle('org-known', known);
+  const txt = document.getElementById('orgKnownText');
+  if(txt){
+    const b = state.brief;
+    txt.innerHTML = '<b>'+escapeHtml(b.orgName||'—')+'</b>' + [b.orgAddress, b.orgPhone, b.orgSite].filter(Boolean).map(x=>' · '+escapeHtml(x)).join('');
+  }
+}
+function editVenueOrg(){
+  orgEditing = true;
+  updateOrgVisibility();
+  const el = document.getElementById('f-orgName');
+  if(el) el.focus();
+}
+function knownVenueNames(){
+  return Object.values(venueBook()).map(e=>e.venue).filter(Boolean);
+}
+
 /* Площадка: a text field with a list of known venues. The browser's own
    <datalist> only offers entries that match what is already typed, so with
    «Paradise Hall» in the field no other venue showed up until it was wiped.
@@ -2430,7 +2505,13 @@ function applyLang(){
 function enhanceCombo(input){
   const dl = input.list;
   if(!dl || input.dataset.combo) return;
-  const options = [...dl.options].map(o=>o.value).filter(Boolean);
+  const baseOptions = [...dl.options].map(o=>o.value).filter(Boolean);
+  // venues remembered with their letterhead come first, then the built-in list
+  const allOptions = ()=>{
+    const seen = new Set(), out = [];
+    knownVenueNames().concat(baseOptions).forEach(o=>{ const k = venueKey(o); if(k && !seen.has(k)){ seen.add(k); out.push(o); } });
+    return out;
+  };
   input.removeAttribute('list');
   input.dataset.combo = '1';
   input.setAttribute('autocomplete', 'off');
@@ -2452,6 +2533,7 @@ function enhanceCombo(input){
 
   const render = (filter)=>{
     const q = (filter||'').trim().toLowerCase();
+    const options = allOptions();
     const items = q ? options.filter(o=>o.toLowerCase().includes(q)) : options;
     active = -1;
     list.innerHTML = items.length
@@ -2525,6 +2607,8 @@ function applyCategoryUI(){
 function onField(key, val){
   state.brief[key] = val;
   scheduleSave();
+  if(key==='venue') onVenueChanged();
+  if(/^org/.test(key)){ orgEditing = true; rememberVenueOrg(); updateOrgVisibility(); } // stays open while being filled
   if(key==='guests'){
     // seats defaults to the guest count until the planner edits it directly (seatsAuto flips to false then)
     if(state.venue && state.venue.seatsAuto!==false){
@@ -5961,6 +6045,8 @@ function openSeatingView(){
 
 function renderAll(){
   fillBriefForm();
+  orgFromBook = venueEntry(state.brief.venue);
+  updateOrgVisibility();
   fillVenueForm();
   syncHero();
   applyTariffUI();
