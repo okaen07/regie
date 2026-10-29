@@ -630,6 +630,7 @@
   [data-mode="admin"] .block-head:not(:has(.block-head-right > :not(.tariff-tag))){display:none;}
   [data-mode="admin"] section.block{padding-top:28px;}
   .io-note{text-align:center;font-size:12px;color:var(--muted);margin:10px auto 0;max-width:62ch;}
+  .data-tools-section .io-note{max-width:min(118ch,100%);text-wrap:balance;}
 
   /* ---- compact guest list ---- */
   .mock-table.guests-table th{padding:8px 6px 6px;}
@@ -1366,6 +1367,8 @@
     .brand-row .category-tab{height:30px;padding:0 14px;}
     .brand-row .category-tab.coin-btn{width:30px;height:30px;flex-basis:30px;}
   }
+  /* «Лист мероприятий» at the foot of the checklist card, centred */
+  .catalog-open-row{display:flex;justify-content:center;padding:14px 16px 16px;border-top:1px solid var(--border);}
 </style>
 </head>
 <body data-mode="admin">
@@ -1822,7 +1825,6 @@
         <p class="block-desc">Открывайте нужный период — вместо того чтобы держать в голове, что уже сделано.</p>
       </div>
       <div class="block-head-right">
-        <button class="icon-btn admin-only" onclick="openCatalog()">Лист мероприятий</button>
         <span class="tariff-tag">Basic и выше</span>      </div>
     </div>
 
@@ -1835,6 +1837,9 @@
       </div>
       <div class="mock-body pad-0">
         <div class="check-groups" id="checklistGroups"></div>
+        <div class="catalog-open-row admin-only">
+          <button class="icon-btn" onclick="openCatalog()">Лист мероприятий</button>
+        </div>
       </div>
     </div>
     </div>
