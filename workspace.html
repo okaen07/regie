@@ -1339,6 +1339,33 @@
   .cs-pal-name{font-size:12.5px;font-weight:600;color:var(--text);}
   @media(max-width:760px){ .clock-style-panel{left:12px;right:12px;width:auto;top:100px;} }
   @media print{ .clock-style-btn,.clock-style-panel{display:none !important;} }
+
+  /* compact header: wordmark · sections · tariffs on one line, the section
+     buttons the same size as the tariff ones (26 px pills in a thin frame) */
+  header{padding:12px 0;}
+  .brand-row{align-items:flex-end;flex-wrap:wrap;gap:10px 18px;}
+  .brand-block{max-width:230px;}
+  .brand-sub{font-size:10.5px;line-height:1.3;}
+  .brand-row .category-tabs{flex:1 1 auto;display:flex;justify-content:center;border:none;background:none;padding:0;min-width:0;}
+  .brand-row .category-tabs-inner{display:flex;align-items:center;gap:8px;padding:0;}
+  .brand-row .cat-spacer{display:none;}
+  .brand-row .cat-lang{padding:0;}
+  .brand-row .cat-lang .lang-name{display:none;}
+  .brand-row .lang-coin{width:28px;height:28px;}
+  .brand-row .cat-main{display:inline-flex;flex-wrap:nowrap;align-items:center;gap:2px;padding:2px;border:1px solid var(--border);border-radius:999px;}
+  .brand-row .category-tab{height:26px;padding:0 12px;font-size:11.5px;font-weight:600;border:none;background:transparent;display:inline-flex;align-items:center;}
+  .brand-row .category-tab:hover{background:var(--surface-2);color:var(--text);}
+  .brand-row .category-tab.active{background:var(--accent-fill);color:#fbfaf6;}
+  .brand-row .category-tab.coin-btn{width:26px;height:26px;flex:0 0 26px;padding:0;}
+  .brand-row .category-tab.coin-btn:hover{background:none;}
+  .new-event-coin{width:34px;height:34px;flex-basis:34px;}
+  @media(max-width:760px){
+    .brand-row{align-items:flex-start;}
+    .brand-row .category-tabs{order:3;width:100%;flex-basis:100%;justify-content:flex-start;overflow-x:auto;scrollbar-width:none;}
+    .brand-row .category-tabs::-webkit-scrollbar{display:none;}
+    .brand-row .category-tab{height:30px;padding:0 14px;}
+    .brand-row .category-tab.coin-btn{width:30px;height:30px;flex-basis:30px;}
+  }
 </style>
 </head>
 <body data-mode="admin">
@@ -1348,6 +1375,77 @@
     <div class="brand-block">
       <div class="brand-name">RÉGIE</div>
       <div class="brand-sub">Рабочий стол мероприятия · только в этом браузере</div>
+    </div>
+
+    <div class="category-tabs admin-only">
+      <div class="category-tabs-inner" role="tablist" aria-label="Раздел">
+        <div class="lang-coin-wrap cat-lang" data-i18n-skip>
+          <svg class="lang-coin" viewBox="0 0 48 48" role="group" aria-label="Язык интерфейса">
+            <defs>
+              <clipPath id="langRu"><path d="M24 24 L24 2 A22 22 0 0 1 43.05 35 Z"/></clipPath>
+              <clipPath id="langKz"><path d="M24 24 L43.05 35 A22 22 0 0 1 4.95 35 Z"/></clipPath>
+              <clipPath id="langEn"><path d="M24 24 L4.95 35 A22 22 0 0 1 24 2 Z"/></clipPath>
+            </defs>
+            <!-- Русский: белый, синий, красный -->
+            <g class="lang-sector" data-lang="ru" clip-path="url(#langRu)" tabindex="0" role="button" aria-label="Русский" onclick="setLang('ru')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('ru')}">
+              <title>Русский</title>
+              <rect x="0" y="0" width="48" height="13" fill="#ffffff"/>
+              <rect x="0" y="13" width="48" height="11" fill="#0039A6"/>
+              <rect x="0" y="24" width="48" height="24" fill="#D52B1E"/>
+            </g>
+            <!-- Қазақша: небесно-голубой, золотое солнце -->
+            <g class="lang-sector" data-lang="kk" clip-path="url(#langKz)" tabindex="0" role="button" aria-label="Қазақша" onclick="setLang('kk')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('kk')}">
+              <title>Қазақша</title>
+              <rect x="0" y="0" width="48" height="48" fill="#00AFCA"/>
+              <circle cx="24" cy="36" r="5.6" fill="none" stroke="#FEC50C" stroke-width="1.6" stroke-dasharray="1.4 1.3"/>
+              <circle cx="24" cy="36" r="3.4" fill="#FEC50C"/>
+              <path d="M7.5 33 v8 M9 33 v8" stroke="#FEC50C" stroke-width=".8"/>
+            </g>
+            <!-- English: Union Jack -->
+            <g class="lang-sector" data-lang="en" clip-path="url(#langEn)" tabindex="0" role="button" aria-label="English" onclick="setLang('en')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('en')}">
+              <title>English</title>
+              <rect x="0" y="0" width="48" height="48" fill="#012169"/>
+              <path d="M0 2 L26 36 M26 2 L0 36" stroke="#ffffff" stroke-width="5"/>
+              <path d="M0 2 L26 36 M26 2 L0 36" stroke="#C8102E" stroke-width="1.7"/>
+              <path d="M13 0 V48 M0 19 H30" stroke="#ffffff" stroke-width="7"/>
+              <path d="M13 0 V48 M0 19 H30" stroke="#C8102E" stroke-width="4"/>
+            </g>
+            <path class="lang-seams" d="M24 24 L24 2 M24 24 L43.05 35 M24 24 L4.95 35" />
+            <circle class="lang-rim" cx="24" cy="24" r="22"/>
+          </svg>
+          <span class="lang-name" id="langName">Русский</span>
+        </div>
+        <div class="cat-main">
+          <button class="category-tab" data-cat="brief" onclick="setCategory('brief')">Бриф</button>
+          <button class="category-tab" data-cat="checklist" data-max-tier="standard" onclick="setCategory('checklist')">Чек-лист</button>
+          <button class="category-tab coin-btn" data-cat="timing" onclick="setCategory('timing')" title="Тайминг" aria-label="Тайминг">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <defs><path id="coinRingTiming" d="M24 24 m-16 0 a16 16 0 1 1 32 0 a16 16 0 1 1 -32 0"/></defs>
+              <circle class="coin-edge" cx="24" cy="24" r="22.5"/>
+              <circle class="coin-inner" cx="24" cy="24" r="10.5"/>
+              <text class="coin-ring-text"><textPath href="#coinRingTiming" textLength="98" lengthAdjust="spacing">TIMING · TIMING · TIMING ·</textPath></text>
+              <g class="coin-clock">
+                <path class="coin-clock-ticks" d="M24 15.2v1.8M32.8 24h-1.8M24 32.8v-1.8M15.2 24h1.8"/>
+                <line class="coin-clock-hand" id="coinHourHand" x1="24" y1="24" x2="24" y2="19.2"/>
+                <line class="coin-clock-hand min" id="coinMinuteHand" x1="24" y1="24" x2="24" y2="16.8"/>
+                <circle class="coin-clock-pin" cx="24" cy="24" r="1.1"/>
+              </g>
+            </svg>
+          </button>
+          <button class="category-tab" data-cat="guests" data-max-tier="standard" onclick="setCategory('guests')">Список</button>
+          <button class="category-tab" data-cat="venue" data-min-tier="pro" onclick="setCategory('venue')">Меню</button>
+          <button class="category-tab cat-budget coin-btn" data-cat="budget" data-min-tier="standard" onclick="setCategory('budget')" title="Бюджет" aria-label="Бюджет">
+            <svg viewBox="0 0 48 48" aria-hidden="true">
+              <defs><path id="coinRingBudget" d="M24 24 m-16 0 a16 16 0 1 1 32 0 a16 16 0 1 1 -32 0"/></defs>
+              <circle class="coin-edge" cx="24" cy="24" r="22.5"/>
+              <circle class="coin-inner" cx="24" cy="24" r="10.5"/>
+              <text class="coin-ring-text"><textPath href="#coinRingBudget" textLength="98" lengthAdjust="spacing">BUDGET · KZT · BUDGET · KZT ·</textPath></text>
+              <text class="coin-sign" x="24" y="24.5" text-anchor="middle" dominant-baseline="central">₸</text>
+            </svg>
+          </button>
+        </div>
+        <span class="cat-spacer" aria-hidden="true"></span>
+      </div>
     </div>
 
     <div class="header-controls admin-only">
@@ -1430,76 +1528,6 @@
       <button class="back-admin-btn" onclick="setMode('admin')" title="Вернуться к редактированию">Админ</button>
       <button class="back-admin-btn" data-min-tier="pro" onclick="printKitchenOrder()" title="Документ для кухни и зала — без имён гостей">Заказ на кухню</button>
       <button class="header-btn" onclick="window.print()" title="Сохранить как PDF или распечатать">Скачать PDF</button>
-    </div>
-  </div>
-  <div class="category-tabs admin-only full-bleed">
-    <div class="category-tabs-inner" role="tablist" aria-label="Раздел">
-      <div class="lang-coin-wrap cat-lang" data-i18n-skip>
-        <svg class="lang-coin" viewBox="0 0 48 48" role="group" aria-label="Язык интерфейса">
-          <defs>
-            <clipPath id="langRu"><path d="M24 24 L24 2 A22 22 0 0 1 43.05 35 Z"/></clipPath>
-            <clipPath id="langKz"><path d="M24 24 L43.05 35 A22 22 0 0 1 4.95 35 Z"/></clipPath>
-            <clipPath id="langEn"><path d="M24 24 L4.95 35 A22 22 0 0 1 24 2 Z"/></clipPath>
-          </defs>
-          <!-- Русский: белый, синий, красный -->
-          <g class="lang-sector" data-lang="ru" clip-path="url(#langRu)" tabindex="0" role="button" aria-label="Русский" onclick="setLang('ru')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('ru')}">
-            <title>Русский</title>
-            <rect x="0" y="0" width="48" height="13" fill="#ffffff"/>
-            <rect x="0" y="13" width="48" height="11" fill="#0039A6"/>
-            <rect x="0" y="24" width="48" height="24" fill="#D52B1E"/>
-          </g>
-          <!-- Қазақша: небесно-голубой, золотое солнце -->
-          <g class="lang-sector" data-lang="kk" clip-path="url(#langKz)" tabindex="0" role="button" aria-label="Қазақша" onclick="setLang('kk')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('kk')}">
-            <title>Қазақша</title>
-            <rect x="0" y="0" width="48" height="48" fill="#00AFCA"/>
-            <circle cx="24" cy="36" r="5.6" fill="none" stroke="#FEC50C" stroke-width="1.6" stroke-dasharray="1.4 1.3"/>
-            <circle cx="24" cy="36" r="3.4" fill="#FEC50C"/>
-            <path d="M7.5 33 v8 M9 33 v8" stroke="#FEC50C" stroke-width=".8"/>
-          </g>
-          <!-- English: Union Jack -->
-          <g class="lang-sector" data-lang="en" clip-path="url(#langEn)" tabindex="0" role="button" aria-label="English" onclick="setLang('en')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('en')}">
-            <title>English</title>
-            <rect x="0" y="0" width="48" height="48" fill="#012169"/>
-            <path d="M0 2 L26 36 M26 2 L0 36" stroke="#ffffff" stroke-width="5"/>
-            <path d="M0 2 L26 36 M26 2 L0 36" stroke="#C8102E" stroke-width="1.7"/>
-            <path d="M13 0 V48 M0 19 H30" stroke="#ffffff" stroke-width="7"/>
-            <path d="M13 0 V48 M0 19 H30" stroke="#C8102E" stroke-width="4"/>
-          </g>
-          <path class="lang-seams" d="M24 24 L24 2 M24 24 L43.05 35 M24 24 L4.95 35" />
-          <circle class="lang-rim" cx="24" cy="24" r="22"/>
-        </svg>
-        <span class="lang-name" id="langName">Русский</span>
-      </div>
-      <div class="cat-main">
-        <button class="category-tab" data-cat="brief" onclick="setCategory('brief')">Бриф</button>
-        <button class="category-tab" data-cat="checklist" data-max-tier="standard" onclick="setCategory('checklist')">Чек-лист</button>
-        <button class="category-tab coin-btn" data-cat="timing" onclick="setCategory('timing')" title="Тайминг" aria-label="Тайминг">
-          <svg viewBox="0 0 48 48" aria-hidden="true">
-            <defs><path id="coinRingTiming" d="M24 24 m-16 0 a16 16 0 1 1 32 0 a16 16 0 1 1 -32 0"/></defs>
-            <circle class="coin-edge" cx="24" cy="24" r="22.5"/>
-            <circle class="coin-inner" cx="24" cy="24" r="10.5"/>
-            <text class="coin-ring-text"><textPath href="#coinRingTiming" textLength="98" lengthAdjust="spacing">TIMING · TIMING · TIMING ·</textPath></text>
-            <g class="coin-clock">
-              <path class="coin-clock-ticks" d="M24 15.2v1.8M32.8 24h-1.8M24 32.8v-1.8M15.2 24h1.8"/>
-              <line class="coin-clock-hand" id="coinHourHand" x1="24" y1="24" x2="24" y2="19.2"/>
-              <line class="coin-clock-hand min" id="coinMinuteHand" x1="24" y1="24" x2="24" y2="16.8"/>
-              <circle class="coin-clock-pin" cx="24" cy="24" r="1.1"/>
-            </g>
-          </svg>
-        </button>
-        <button class="category-tab" data-cat="guests" data-max-tier="standard" onclick="setCategory('guests')">Список</button>
-        <button class="category-tab" data-cat="venue" data-min-tier="pro" onclick="setCategory('venue')">Меню</button>
-        <button class="category-tab cat-budget coin-btn" data-cat="budget" data-min-tier="standard" onclick="setCategory('budget')" title="Бюджет" aria-label="Бюджет">
-          <svg viewBox="0 0 48 48" aria-hidden="true">
-            <defs><path id="coinRingBudget" d="M24 24 m-16 0 a16 16 0 1 1 32 0 a16 16 0 1 1 -32 0"/></defs>
-            <circle class="coin-edge" cx="24" cy="24" r="22.5"/>
-            <circle class="coin-inner" cx="24" cy="24" r="10.5"/>
-            <text class="coin-ring-text"><textPath href="#coinRingBudget" textLength="98" lengthAdjust="spacing">BUDGET · KZT · BUDGET · KZT ·</textPath></text>
-            <text class="coin-sign" x="24" y="24.5" text-anchor="middle" dominant-baseline="central">₸</text>
-          </svg>
-        </button>
-      </div>
-      <span class="cat-spacer" aria-hidden="true"></span>
     </div>
   </div>
 </header>
