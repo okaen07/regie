@@ -1142,6 +1142,58 @@
     [data-mode="preview"] .budget-table tr.budget-group-head,[data-mode="preview"] .budget-table tr.budget-group-empty{display:block;}
     [data-mode="preview"] .budget-table tr.budget-group-head > td,[data-mode="preview"] .budget-table tr.budget-group-empty > td{display:block;}
   }
+
+  /* ---- save / open, letterhead ---- */
+  .brand-box{max-width:640px;margin:16px auto 0;border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:0 16px;}
+  .brand-box summary{cursor:pointer;padding:12px 0;font-size:13px;color:var(--muted);list-style-position:inside;}
+  .brand-box summary b{color:var(--text);font-weight:600;}
+  .brand-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;padding:4px 0 6px;}
+  .brand-fields label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);}
+  .brand-box .io-note{margin:6px 0 14px;text-align:left;}
+  @media(max-width:760px){ .brand-fields{grid-template-columns:1fr;} }
+
+  .print-brand,.kitchen-doc{display:none;}
+  .pb-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;border-bottom:1.5px solid #20241f;padding-bottom:10px;margin-bottom:18px;}
+  .pb-name{font-family:'Bodoni Moda',Georgia,serif;font-size:24px;line-height:1.15;color:#20241f;}
+  .pb-line{font-size:11px;color:#555;margin-top:3px;}
+  .pb-doc{font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;margin-top:8px;color:#20241f;}
+  .pb-right{text-align:right;flex-shrink:0;}
+  .pb-regie{font-family:'Bodoni Moda',Georgia,serif;font-size:12px;letter-spacing:.18em;color:#20241f;}
+  .pb-made{font-size:10px;color:#777;margin-top:2px;}
+
+  .kitchen-doc{color:#20241f;font-family:'Karla',system-ui,sans-serif;font-size:12px;}
+  .kitchen-doc h3{font-family:'Bodoni Moda',Georgia,serif;font-weight:500;font-size:15px;margin:18px 0 6px;}
+  .kd-meta{display:grid;grid-template-columns:repeat(5,1fr);gap:0;border:1px solid #ccc;border-radius:6px;}
+  .kd-meta-cell{padding:7px 9px;border-right:1px solid #ddd;}
+  .kd-meta-cell:last-child{border-right:none;}
+  .kd-meta-cell span{display:block;font-size:10px;color:#777;}
+  .kd-meta-cell b{font-size:12.5px;}
+  .kd-table{width:100%;border-collapse:collapse;}
+  .kd-table th{text-align:left;font-size:10px;font-weight:600;color:#777;border-bottom:1px solid #999;padding:4px 6px;}
+  .kd-table td{padding:4px 6px;border-bottom:1px solid #e3e3e3;vertical-align:top;}
+  .kd-table .num{text-align:right;white-space:nowrap;}
+  .kd-table .mono{font-family:'IBM Plex Mono',monospace;}
+  .kd-table tr.kd-cat td{font-weight:600;background:#f3f1ec;padding-top:6px;}
+  .kd-table tr.kd-sub td{font-size:11px;color:#555;border-bottom:1px solid #bbb;}
+  .kd-basis{color:#777;font-size:11px;white-space:nowrap;}
+  .kd-serve{font-size:10px;color:#8a6d2f;border:1px solid #d8c8a4;border-radius:99px;padding:0 5px;margin-left:4px;white-space:nowrap;}
+  .kd-totals{margin:8px 0 0 auto;width:min(320px,100%);}
+  .kd-totals div{display:flex;justify-content:space-between;padding:3px 6px;}
+  .kd-totals .kd-grand{border-top:1.5px solid #20241f;font-size:14px;margin-top:3px;padding-top:6px;}
+  .kd-totals .kd-per{color:#777;font-size:11px;}
+  .kd-notes{margin:0;padding-left:18px;}
+  .kd-notes li{margin:2px 0;}
+  .kd-empty{color:#777;}
+  .kd-sign{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:34px;font-size:11px;color:#555;}
+  .kd-sign span{display:block;border-bottom:1px solid #20241f;height:26px;margin-bottom:4px;}
+
+  @media print{
+    .print-brand:not(:empty){display:block;padding:0 0 4px;}
+    body.print-kitchen > *:not(#kitchenDoc){display:none !important;}
+    body.print-kitchen .kitchen-doc{display:block;}
+    .kd-table tr,.kd-notes li{break-inside:avoid;}
+    h3{break-after:avoid;}
+  }
 </style>
 </head>
 <body data-mode="admin">
@@ -1231,6 +1283,7 @@
 
     <div class="tool-row preview-only">
       <button class="back-admin-btn" onclick="setMode('admin')" title="Вернуться к редактированию">Админ</button>
+      <button class="back-admin-btn" data-min-tier="pro" onclick="printKitchenOrder()" title="Документ для кухни и зала — без имён гостей">Заказ на кухню</button>
       <button class="header-btn" onclick="window.print()" title="Сохранить как PDF или распечатать">Скачать PDF</button>
     </div>
   </div>
@@ -1282,6 +1335,8 @@
     <a href="#venue" data-sec="venue">Меню</a>
   </div>
 </nav>
+
+<div class="print-brand" id="printBrand" aria-hidden="true"></div>
 
 <div class="issues-bar admin-only" id="issuesBar" role="status" aria-live="polite" hidden></div>
 
@@ -1649,6 +1704,7 @@
         </div>
 
         <div class="menu-io-row">
+          <button class="icon-btn primary" type="button" onclick="printKitchenOrder()" title="Документ для кухни и зала: количество, подача, итоги — без имён гостей">Заказ на кухню (PDF)</button>
           <button class="icon-btn" type="button" onclick="downloadMenuCsv()">Скачать меню CSV</button>
           <button class="icon-btn" type="button" onclick="document.getElementById('importMenuFile').click()">Импорт меню CSV</button>
           <input type="file" id="importMenuFile" accept=".csv,text/csv" style="display:none" onchange="importMenuCsv(event)">
@@ -1672,12 +1728,25 @@
 <section class="wrap data-tools-section admin-only">
   <div class="tool-row" style="justify-content:center;">
     <span class="save-note" id="saveNote">Сохранено локально</span>
-    <button class="icon-btn" onclick="exportJSON()">Экспорт JSON</button>
-    <button class="icon-btn" onclick="document.getElementById('importFile').click()">Импорт JSON</button>
-    <input type="file" id="importFile" accept="application/json" style="display:none" onchange="importJSON(event)">
+    <button class="icon-btn primary" onclick="saveEventFile()" title="Файл с датой и названием — выберите папку Google Диска, и копия уйдёт в облако">Сохранить мероприятие</button>
+    <button class="icon-btn" onclick="document.getElementById('importFile').click()" title="Загрузить сохранённый файл мероприятия">Открыть мероприятие</button>
+    <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importJSON(event)">
   </div>
-  <p class="io-note admin-only">Данные хранятся только в этом браузере. Чтобы открыть мероприятие на другом устройстве, сделайте «Экспорт JSON» здесь и «Импорт JSON» там.</p>
+  <p class="io-note admin-only">«Сохранить мероприятие» создаёт файл вида <b>2026-06-14 Свадьба….json</b>. Сохраняйте его в папку Google Диска на компьютере — копия сама уйдёт в облако, а открыть её можно с любого устройства через «Открыть мероприятие».</p>
+
+  <details class="brand-box" id="brandBox">
+    <summary>Шапка документов (PDF): <b id="brandSummary">не заполнена</b></summary>
+    <div class="brand-fields">
+      <label>Название заведения или компании<input type="text" id="brand-name" maxlength="60" placeholder="Ресторан Paradise Hall" oninput="onBrandField('name', this.value)"></label>
+      <label>Адрес<input type="text" id="brand-address" maxlength="90" placeholder="Алматы, пр. Абая, 10" oninput="onBrandField('address', this.value)"></label>
+      <label>Телефон<input type="text" id="brand-phone" maxlength="40" placeholder="+7 700 000 00 00" oninput="onBrandField('phone', this.value)"></label>
+      <label>Сайт или Instagram<input type="text" id="brand-site" maxlength="60" placeholder="@paradisehall" oninput="onBrandField('site', this.value)"></label>
+    </div>
+    <p class="io-note">Хранится на этом компьютере и не попадает в файл мероприятия. Печатается вверху каждого PDF — и превью, и заказа на кухню.</p>
+  </details>
 </section>
+
+<div class="kitchen-doc" id="kitchenDoc" aria-hidden="true"></div>
 
 <footer class="base">
   <div class="wrap">Régie — внутренний инструмент подготовки мероприятий · <a href="index.html">На сайт</a></div>
@@ -4664,15 +4733,165 @@ function importMenuCsv(evt){
 }
 
 /* ---------- export / import / reset ---------- */
-function exportJSON(){
-  const nameSlug = (state.brief.title||'meropriyatie').toLowerCase()
-    .replace(/[^a-zа-яё0-9]+/gi,'-').replace(/^-+|-+$/g,'') || 'meropriyatie';
-  const blob = new Blob([JSON.stringify(state,null,2)], {type:'application/json'});
-  const url = URL.createObjectURL(blob);
+/* «Сохранить мероприятие»: a file named by date and title, so a folder of
+   them sorts by date. Chrome/Edge let the planner pick the folder (and
+   remember it) — point it at the Google Drive folder and every save is
+   backed up to the cloud; other browsers download it to «Загрузки». */
+function eventFileName(){
+  const b = state.brief||{};
+  const base = [b.date||'', (b.title||b.type||'Мероприятие').trim()].filter(Boolean).join(' ');
+  return (base.replace(/[\\/:*?"<>|]+/g,' ').replace(/\s+/g,' ').trim() || 'Мероприятие') + '.json';
+}
+async function saveEventFile(){
+  saveState();
+  const text = JSON.stringify(state, null, 2);
+  const name = eventFileName();
+  const note = document.getElementById('saveNote');
+  if(window.showSaveFilePicker){
+    try{
+      const handle = await window.showSaveFilePicker({id:'regie-events', suggestedName:name,
+        types:[{description:'Мероприятие Régie', accept:{'application/json':['.json']}}]});
+      const w = await handle.createWritable();
+      await w.write(text); await w.close();
+      if(note) note.innerHTML = 'Файл сохранён <b>· '+escapeHtml(handle.name)+'</b>';
+      return;
+    }catch(e){
+      if(e && e.name==='AbortError') return; // the planner closed the dialog
+    }
+  }
+  const url = URL.createObjectURL(new Blob([text], {type:'application/json'}));
   const a = document.createElement('a');
-  a.href = url; a.download = 'regie-'+nameSlug+'.json';
+  a.href = url; a.download = name;
   document.body.appendChild(a); a.click(); a.remove();
   URL.revokeObjectURL(url);
+  if(note) note.innerHTML = 'Файл в «Загрузках» <b>· '+escapeHtml(name)+'</b>';
+}
+
+/* Letterhead: the venue's own name on every PDF. Kept per computer, not in
+   the event file — it belongs to whoever prints, not to the client's event. */
+const BRAND_KEY = 'regie_brand_v1';
+function loadBrand(){
+  try{ return JSON.parse(localStorage.getItem(BRAND_KEY)) || {}; }catch(e){ return {}; }
+}
+function onBrandField(key, val){
+  const b = loadBrand();
+  b[key] = val.trim();
+  try{ localStorage.setItem(BRAND_KEY, JSON.stringify(b)); }catch(e){}
+  renderBrandSummary();
+}
+function fillBrandForm(){
+  const b = loadBrand();
+  ['name','address','phone','site'].forEach(k=>{ const el = document.getElementById('brand-'+k); if(el) el.value = b[k]||''; });
+  renderBrandSummary();
+}
+function renderBrandSummary(){
+  const el = document.getElementById('brandSummary');
+  if(el) el.textContent = loadBrand().name || 'не заполнена';
+}
+function brandHeaderHtml(docTitle){
+  const b = loadBrand();
+  const line = [b.address, b.phone, b.site].filter(Boolean).map(escapeHtml).join(' · ');
+  const made = new Date().toLocaleString('ru-RU', {day:'numeric', month:'long', year:'numeric', hour:'2-digit', minute:'2-digit'});
+  return `<div class="pb-row">
+      <div class="pb-left">
+        ${b.name ? `<div class="pb-name">${escapeHtml(b.name)}</div>` : ''}
+        ${line ? `<div class="pb-line">${line}</div>` : ''}
+        ${docTitle ? `<div class="pb-doc">${escapeHtml(docTitle)}</div>` : ''}
+      </div>
+      <div class="pb-right"><div class="pb-regie">RÉGIE</div><div class="pb-made">сформировано ${made}</div></div>
+    </div>`;
+}
+function renderPrintBrand(){
+  const el = document.getElementById('printBrand');
+  if(!el) return;
+  el.innerHTML = loadBrand().name ? brandHeaderHtml('') : '';
+}
+window.addEventListener('beforeprint', renderPrintBrand);
+
+/* «Заказ на кухню»: one sheet for the kitchen and the floor — guests and
+   tables, what is served when, every position with its quantity and price,
+   the totals, and special requests by table. No guest names: the kitchen
+   needs numbers and times, not people. */
+function kitchenOrderHtml(){
+  const b = state.brief||{}, v = state.venue||{};
+  const seats = venueSeatsForCalc(), tables = tablesCount(), perTable = seatsPerTableEff();
+  const calc = venueCalc();
+  const menu = (v.menu||[]).filter(it=>(it.name||'').trim());
+  const qtyStr = it => computedItemQty(it) + (it.unit ? ' '+escapeHtml(it.unit) : '');
+  const basis = it => {
+    const norm = parseFloat(it.norm)||0;
+    if((it.qtyMode||'guest')==='fixed') return 'фикс.';
+    if(it.qtyMode==='table') return norm+' × '+tables+' '+pluralize(tables,'стол','стола','столов');
+    return norm+' × '+seats+' '+pluralize(seats,'гость','гостя','гостей');
+  };
+
+  const meta = [
+    ['Мероприятие', b.title || b.type || '—'],
+    ['Дата', fmtDate(b.date)],
+    ['Зал', v.hallName || '—'],
+    ['Гостей', seats ? seats+'' : '—'],
+    ['Столов', tables ? tables+' по '+perTable+' мест' : '—']
+  ].map(([k,val])=>`<div class="kd-meta-cell"><span>${k}</span><b>${escapeHtml(val)}</b></div>`).join('');
+
+  const served = servedDishes().slice().sort((a,c)=>clockTimeToMinutes(a.serveTime)-clockTimeToMinutes(c.serveTime));
+  const serveHtml = served.length ? `<h3>Подача по времени</h3>
+    <table class="kd-table"><thead><tr><th>Время</th><th>Блюдо</th><th class="num">Количество</th></tr></thead><tbody>
+    ${served.map(it=>`<tr><td class="mono">${escapeHtml(it.serveTime)}</td><td>${escapeHtml(it.name)}</td><td class="num">${qtyStr(it)}</td></tr>`).join('')}
+    </tbody></table>` : '';
+
+  const catsHtml = MENU_CATEGORIES.map(cat=>{
+    const items = menu.filter(it=>it.category===cat.key);
+    if(!items.length) return '';
+    return `<tr class="kd-cat"><td colspan="5">${escapeHtml(cat.label)}</td></tr>` + items.map(it=>`<tr>
+        <td>${escapeHtml(it.name)}${it.serveTime ? ` <span class="kd-serve">подача ${escapeHtml(it.serveTime)}</span>` : ''}</td>
+        <td class="kd-basis">${basis(it)}</td>
+        <td class="num">${qtyStr(it)}</td>
+        <td class="num">${it.price ? fmtMoney(it.price) : '—'}</td>
+        <td class="num">${fmtMoney(itemCost(it))}</td>
+      </tr>`).join('') + `<tr class="kd-sub"><td colspan="4">Итого · ${escapeHtml(cat.label.toLowerCase())}</td><td class="num">${fmtMoney(categoryTotalCost(cat.key))}</td></tr>`;
+  }).join('');
+  const menuHtml = catsHtml ? `<h3>Меню и оборудование</h3>
+    <table class="kd-table"><thead><tr><th>Позиция</th><th>Расчёт</th><th class="num">Кол-во</th><th class="num">Цена</th><th class="num">Сумма</th></tr></thead><tbody>${catsHtml}</tbody></table>
+    <div class="kd-totals">
+      <div><span>Подытог</span><b>${fmtMoney(calc.subtotal)}</b></div>
+      ${calc.service ? `<div><span>Обслуживание ${calc.servicePct}%</span><b>+ ${fmtMoney(calc.service)}</b></div>` : ''}
+      ${calc.discount ? `<div><span>Скидка ${calc.discountPct}%</span><b>− ${fmtMoney(calc.discount)}</b></div>` : ''}
+      <div class="kd-grand"><span>Итого к оплате</span><b>${fmtMoney(calc.total)}</b></div>
+      ${seats ? `<div class="kd-per"><span>На гостя</span><b>${fmtMoney(Math.round(calc.total/seats))}</b></div>` : ''}
+    </div>` : '<p class="kd-empty">Меню ещё не составлено.</p>';
+
+  // special requests by table — the request travels, the name stays behind
+  const byTable = {};
+  (state.guests||[]).forEach(g=>{
+    const note = (g.comment||'').trim();
+    if(!note) return;
+    const t = (g.table||'').toString().trim() || 'без стола';
+    (byTable[t] = byTable[t] || []).push(note);
+  });
+  const tableKeys = Object.keys(byTable).sort((a,c)=>(parseInt(a,10)||1e9)-(parseInt(c,10)||1e9));
+  const notesHtml = tableKeys.length ? `<h3>Особые пожелания по столам</h3>
+    <ul class="kd-notes">${tableKeys.map(t=>`<li><b>${/^\d+$/.test(t) ? 'Стол '+escapeHtml(t) : escapeHtml(t)}</b> — ${byTable[t].map(escapeHtml).join('; ')}</li>`).join('')}</ul>` : '';
+
+  const vendors = (state.budget||[]).filter(r=>budgetGroup(r)==='vendors' && (r.service||'').trim());
+  const vendorsHtml = vendors.length ? `<h3>Подрядчики на площадке</h3>
+    <ul class="kd-notes">${vendors.map(r=>`<li><b>${escapeHtml(r.service)}</b>${r.vendor ? ' — '+escapeHtml(r.vendor) : ''}</li>`).join('')}</ul>` : '';
+
+  return `<div class="kd-head">${brandHeaderHtml('Заказ на кухню и зал')}</div>
+    <div class="kd-meta">${meta}</div>
+    ${serveHtml}${menuHtml}${notesHtml}${vendorsHtml}
+    <div class="kd-sign">
+      <div><span></span>Заказ принял (заведение)</div>
+      <div><span></span>Заказчик</div>
+    </div>`;
+}
+function printKitchenOrder(){
+  const doc = document.getElementById('kitchenDoc');
+  if(!doc) return;
+  doc.innerHTML = kitchenOrderHtml();
+  document.body.classList.add('print-kitchen');
+  const done = ()=>{ document.body.classList.remove('print-kitchen'); window.removeEventListener('afterprint', done); };
+  window.addEventListener('afterprint', done);
+  window.print();
 }
 
 function importJSON(evt){
@@ -4700,7 +4919,7 @@ function importJSON(evt){
 }
 
 function newEvent(){
-  if(!confirm('Очистить текущие данные и начать новое мероприятие с чистого листа? Экспортируйте JSON заранее, если хотите сохранить текущие данные.')) return;
+  if(!confirm('Очистить текущие данные и начать новое мероприятие с чистого листа? Сначала нажмите «Сохранить мероприятие» внизу страницы, если текущее ещё понадобится.')) return;
   state = {
     brief:{tariff:'basic', filledBy:'organizer', title:'', date:'', type:'Свадьба', guests:'', budget:'', venue:'', style:'', contact:'', status:'Новый запрос', notes:''},
     timeline:[], timelineUnified:true, checklist:{
@@ -5056,6 +5275,7 @@ applyTheme(savedTheme);
 buildClockFace();
 tickClock();
 setInterval(tickClock, 1000);
+fillBrandForm();
 state = loadState();
 renderAll();
 let initialMode = 'admin';
