@@ -518,17 +518,32 @@
   .tariff-switch-wrap{align-items:flex-end;}
   .header-controls > .header-btn{margin-bottom:5px;}
 
-  /* «New event» coin: round, coin-sized, the label runs around the rim */
-  .new-event-coin{width:46px;height:46px;flex:0 0 46px;padding:0;border:none;background:none;border-radius:50%;cursor:pointer;transition:transform .35s ease;}
-  .new-event-coin svg{display:block;width:100%;height:100%;overflow:visible;}
-  .new-event-coin .coin-edge{fill:var(--surface);stroke:var(--border);stroke-width:1;transition:stroke .2s,fill .2s;}
-  .new-event-coin .coin-inner{fill:none;stroke:var(--border);stroke-width:.8;}
-  .new-event-coin .coin-ring-text{font:600 6.2px/1 'Karla',system-ui,sans-serif;fill:var(--muted);transition:fill .2s;}
-  .new-event-coin .coin-plus{stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;fill:none;}
-  .new-event-coin:hover{transform:rotate(-40deg);}
-  .new-event-coin:hover .coin-edge{stroke:var(--accent);fill:var(--accent-soft);}
-  .new-event-coin:hover .coin-ring-text{fill:var(--text);}
-  .new-event-coin:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  /* coins («NEW EVENT», ₸ budget): round, coin-sized, the label runs around the rim */
+  .coin-btn{width:46px;height:46px;flex:0 0 46px;padding:0;border:none;background:none;border-radius:50%;cursor:pointer;transition:transform .35s ease;}
+  .coin-btn svg{display:block;width:100%;height:100%;overflow:visible;}
+  .coin-btn .coin-edge{fill:var(--surface);stroke:var(--border);stroke-width:1;transition:stroke .2s,fill .2s;}
+  .coin-btn .coin-inner{fill:none;stroke:var(--border);stroke-width:.8;transition:stroke .2s;}
+  .coin-btn .coin-ring-text{font:600 6.2px/1 'Karla',system-ui,sans-serif;fill:var(--muted);transition:fill .2s;}
+  .coin-btn .coin-plus{stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;fill:none;}
+  .coin-btn .coin-sign{font:600 14px/1 system-ui,'Segoe UI',Roboto,sans-serif;fill:var(--accent);transition:fill .2s;}
+  .coin-btn:hover{transform:rotate(-40deg);}
+  .coin-btn:hover .coin-edge{stroke:var(--accent);fill:var(--accent-soft);}
+  .coin-btn:hover .coin-ring-text{fill:var(--text);}
+  .coin-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+  /* the budget tab as a coin: the selected one is struck in the accent colour */
+  .category-tab.coin-btn{padding:0;border:none;background:none;border-radius:50%;}
+  .category-tab.coin-btn:hover{background:none;}
+  .category-tab.coin-btn.active .coin-edge{fill:var(--accent-fill);stroke:var(--accent-fill);}
+  .category-tab.coin-btn.active .coin-inner{stroke:rgba(251,250,246,.35);}
+  .category-tab.coin-btn.active .coin-ring-text,.category-tab.coin-btn.active .coin-sign{fill:#fbfaf6;}
+  /* the timing coin is a tiny live clock */
+  .coin-btn .coin-clock-ticks{stroke:var(--muted);stroke-width:1;stroke-linecap:round;}
+  .coin-btn .coin-clock-hand{stroke:var(--accent);stroke-width:1.9;stroke-linecap:round;}
+  .coin-btn .coin-clock-hand.min{stroke-width:1.3;}
+  .coin-btn .coin-clock-pin{fill:var(--accent);}
+  .category-tab.coin-btn.active .coin-clock-ticks{stroke:rgba(251,250,246,.6);}
+  .category-tab.coin-btn.active .coin-clock-hand{stroke:#fbfaf6;}
+  .category-tab.coin-btn.active .coin-clock-pin{fill:#fbfaf6;}
 
   /* sentence-case labels instead of tracked all-caps monospace */
   .tariff-badge,.tariff-tag,.tariff-group-label,.check-group-head,.mock-table th,.menu-cat h4,.venue-pv-cat h4{
@@ -1202,7 +1217,7 @@
         <button class="mode-btn" id="btnPreview" onclick="setMode('preview')">Превью</button>
       </div>
 
-      <button type="button" class="new-event-coin" onclick="newEvent()" title="Новое мероприятие" aria-label="Новое мероприятие">
+      <button type="button" class="coin-btn new-event-coin" onclick="newEvent()" title="Новое мероприятие" aria-label="Новое мероприятие">
         <svg viewBox="0 0 48 48" aria-hidden="true">
           <defs><path id="coinRing" d="M24 24 m-16 0 a16 16 0 1 1 32 0 a16 16 0 1 1 -32 0"/></defs>
           <circle class="coin-edge" cx="24" cy="24" r="22.5"/>
@@ -1225,12 +1240,33 @@
       <div class="cat-main">
         <button class="category-tab" data-cat="brief" onclick="setCategory('brief')">Бриф</button>
         <button class="category-tab" data-cat="guests" data-max-tier="standard" onclick="setCategory('guests')">Список</button>
-        <button class="category-tab" data-cat="timing" onclick="setCategory('timing')">Тайминг</button>
+        <button class="category-tab coin-btn" data-cat="timing" onclick="setCategory('timing')" title="Тайминг" aria-label="Тайминг">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <defs><path id="coinRingTiming" d="M24 24 m-16 0 a16 16 0 1 1 32 0 a16 16 0 1 1 -32 0"/></defs>
+            <circle class="coin-edge" cx="24" cy="24" r="22.5"/>
+            <circle class="coin-inner" cx="24" cy="24" r="10.5"/>
+            <text class="coin-ring-text"><textPath href="#coinRingTiming" textLength="98" lengthAdjust="spacing">TIMING · TIMING · TIMING ·</textPath></text>
+            <g class="coin-clock">
+              <path class="coin-clock-ticks" d="M24 15.2v1.8M32.8 24h-1.8M24 32.8v-1.8M15.2 24h1.8"/>
+              <line class="coin-clock-hand" id="coinHourHand" x1="24" y1="24" x2="24" y2="19.2"/>
+              <line class="coin-clock-hand min" id="coinMinuteHand" x1="24" y1="24" x2="24" y2="16.8"/>
+              <circle class="coin-clock-pin" cx="24" cy="24" r="1.1"/>
+            </g>
+          </svg>
+        </button>
         <button class="category-tab" data-cat="checklist" data-max-tier="standard" onclick="setCategory('checklist')">Чек-лист</button>
         <button class="category-tab" data-cat="venue" data-min-tier="pro" onclick="setCategory('venue')">Меню</button>
       </div>
       <div class="cat-side">
-        <button class="category-tab cat-budget" data-cat="budget" data-min-tier="standard" onclick="setCategory('budget')">Бюджет</button>
+        <button class="category-tab cat-budget coin-btn" data-cat="budget" data-min-tier="standard" onclick="setCategory('budget')" title="Бюджет" aria-label="Бюджет">
+          <svg viewBox="0 0 48 48" aria-hidden="true">
+            <defs><path id="coinRingBudget" d="M24 24 m-16 0 a16 16 0 1 1 32 0 a16 16 0 1 1 -32 0"/></defs>
+            <circle class="coin-edge" cx="24" cy="24" r="22.5"/>
+            <circle class="coin-inner" cx="24" cy="24" r="10.5"/>
+            <text class="coin-ring-text"><textPath href="#coinRingBudget" textLength="98" lengthAdjust="spacing">BUDGET · KZT · BUDGET · KZT ·</textPath></text>
+            <text class="coin-sign" x="24" y="24.5" text-anchor="middle" dominant-baseline="central">₸</text>
+          </svg>
+        </button>
       </div>
     </div>
   </div>
@@ -2484,6 +2520,10 @@ let clockLastMinute = -1;
 function tickClock(force){
   const now = new Date();
   const h = now.getHours(), m = now.getMinutes(), s = now.getSeconds();
+  // the «Тайминг» coin in the ribbon shows the real time too
+  const coinH = document.getElementById('coinHourHand'), coinM = document.getElementById('coinMinuteHand');
+  if(coinH) coinH.setAttribute('transform', `rotate(${((h%12)*60 + m)/2} 24 24)`);
+  if(coinM) coinM.setAttribute('transform', `rotate(${m*6} 24 24)`);
   const nowMin = h*60 + m + s/60;
   const hourHand = document.getElementById('clockHourHand');
   const minuteHand = document.getElementById('clockMinuteHand');
