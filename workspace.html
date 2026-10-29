@@ -394,10 +394,12 @@
   .mock-table.guests-table input{padding:4px 7px;font-size:12px;min-width:70px;}
 
   /* guests section — list / toasts / seating-viz tabs */
-  .guests-tabs{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
-  .guests-tab{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:8px 16px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;}
-  .guests-tab:hover{background:var(--surface-2);}
-  .guests-tab.active{background:var(--accent-fill);color:#fbfaf6;border-color:var(--accent-fill);}
+  /* Список гостей / Тосты / Визуализация — the switch is the card title itself */
+  .guests-tabs{display:inline-flex;flex-wrap:nowrap;gap:2px;padding:2px;border:1px solid var(--border);border-radius:999px;background:var(--surface);min-width:0;overflow-x:auto;scrollbar-width:none;}
+  .guests-tabs::-webkit-scrollbar{display:none;}
+  .guests-tab{flex-shrink:0;border:none;background:transparent;border-radius:999px;height:28px;padding:0 14px;font-size:12.5px;font-weight:600;color:var(--muted);cursor:pointer;white-space:nowrap;}
+  .guests-tab:hover{background:var(--surface-2);color:var(--text);}
+  .guests-tab.active{background:var(--accent-fill);color:#fbfaf6;}
 
   .toast-list{list-style:none;counter-reset:toast;padding:18px 20px;}
   .toast-list li{counter-increment:toast;display:flex;gap:14px;padding:12px 10px;border-bottom:1px solid var(--border);border-radius:8px;transition:background-color .3s;}
@@ -1710,16 +1712,15 @@
 
     <div class="block-content" id="content-guests">
 
-    <div class="guests-tabs">
-      <button class="guests-tab active" data-view="list" onclick="setGuestsView('list')">Список гостей</button>
-      <button class="guests-tab" data-view="toasts" onclick="setGuestsView('toasts')">Тосты</button>
-      <button class="guests-tab" data-view="viz" onclick="setGuestsView('viz')">Визуализация</button>
-    </div>
 
     <div class="mock" id="guestsPanel-list">
       <div class="mock-head">
         <div class="mock-icon">Р</div>
-        <div class="mock-title">Список гостей</div>
+        <div class="guests-tabs" role="tablist" aria-label="Гости">
+          <button class="guests-tab active" data-view="list" onclick="setGuestsView('list')">Список гостей</button>
+          <button class="guests-tab" data-view="toasts" onclick="setGuestsView('toasts')">Тосты</button>
+          <button class="guests-tab" data-view="viz" onclick="setGuestsView('viz')">Визуализация</button>
+        </div>
         <div class="mock-crumb" id="pv-g-count">—</div>
       </div>
       <div class="mock-body pad-0">
@@ -1743,7 +1744,11 @@
     <div class="mock" id="guestsPanel-toasts" hidden>
       <div class="mock-head">
         <div class="mock-icon">Р</div>
-        <div class="mock-title">Список тостов для тамады</div>
+        <div class="guests-tabs" role="tablist" aria-label="Гости">
+          <button class="guests-tab" data-view="list" onclick="setGuestsView('list')">Список гостей</button>
+          <button class="guests-tab active" data-view="toasts" onclick="setGuestsView('toasts')">Тосты</button>
+          <button class="guests-tab" data-view="viz" onclick="setGuestsView('viz')">Визуализация</button>
+        </div>
         <div class="mock-crumb">по категориям</div>
       </div>
       <div class="mock-body" id="toastsBody"></div>
@@ -1752,7 +1757,11 @@
     <div class="mock" id="guestsPanel-viz" hidden>
       <div class="mock-head">
         <div class="mock-icon">Р</div>
-        <div class="mock-title">Рассадка по столам</div>
+        <div class="guests-tabs" role="tablist" aria-label="Гости">
+          <button class="guests-tab" data-view="list" onclick="setGuestsView('list')">Список гостей</button>
+          <button class="guests-tab" data-view="toasts" onclick="setGuestsView('toasts')">Тосты</button>
+          <button class="guests-tab active" data-view="viz" onclick="setGuestsView('viz')">Визуализация</button>
+        </div>
         <div class="mock-crumb" id="pv-viz-count">—</div>
       </div>
       <div class="mock-body" id="vizBody"></div>
