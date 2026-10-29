@@ -1278,7 +1278,10 @@
   @media(max-width:760px){ .next-step-btn{width:100%;justify-content:center;} }
 
   /* language coin under the wordmark: three flags, one per third */
-  .lang-coin-wrap{display:flex;align-items:center;gap:8px;margin-top:8px;}
+  .lang-coin-wrap{display:flex;align-items:center;gap:8px;}
+  /* in the ribbon: the left cell, before Бриф */
+  .cat-lang{justify-self:start;padding-left:4px;}
+  @media(max-width:760px){ .cat-lang{flex-shrink:0;padding:0 8px 0 0;margin-right:4px;border-right:1px solid var(--border);} .cat-lang .lang-name{display:none;} }
   .lang-coin{width:40px;height:40px;display:block;overflow:visible;filter:drop-shadow(0 2px 4px rgba(32,36,31,.18));}
   .lang-sector{cursor:pointer;opacity:.42;transition:opacity .2s;outline:none;}
   .lang-sector:hover,.lang-sector:focus-visible,.lang-sector.active{opacity:1;}
@@ -1295,42 +1298,6 @@
     <div class="brand-block">
       <div class="brand-name">RÉGIE</div>
       <div class="brand-sub">Рабочий стол мероприятия · только в этом браузере</div>
-      <div class="lang-coin-wrap">
-        <svg class="lang-coin" viewBox="0 0 48 48" role="group" aria-label="Язык интерфейса">
-          <defs>
-            <clipPath id="langRu"><path d="M24 24 L24 2 A22 22 0 0 1 43.05 35 Z"/></clipPath>
-            <clipPath id="langKz"><path d="M24 24 L43.05 35 A22 22 0 0 1 4.95 35 Z"/></clipPath>
-            <clipPath id="langEn"><path d="M24 24 L4.95 35 A22 22 0 0 1 24 2 Z"/></clipPath>
-          </defs>
-          <!-- Русский: белый, синий, красный -->
-          <g class="lang-sector" data-lang="ru" clip-path="url(#langRu)" tabindex="0" role="button" aria-label="Русский" onclick="setLang('ru')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('ru')}">
-            <title>Русский</title>
-            <rect x="0" y="0" width="48" height="13" fill="#ffffff"/>
-            <rect x="0" y="13" width="48" height="11" fill="#0039A6"/>
-            <rect x="0" y="24" width="48" height="24" fill="#D52B1E"/>
-          </g>
-          <!-- Қазақша: небесно-голубой, золотое солнце -->
-          <g class="lang-sector" data-lang="kk" clip-path="url(#langKz)" tabindex="0" role="button" aria-label="Қазақша" onclick="setLang('kk')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('kk')}">
-            <title>Қазақша</title>
-            <rect x="0" y="0" width="48" height="48" fill="#00AFCA"/>
-            <circle cx="24" cy="36" r="5.6" fill="none" stroke="#FEC50C" stroke-width="1.6" stroke-dasharray="1.4 1.3"/>
-            <circle cx="24" cy="36" r="3.4" fill="#FEC50C"/>
-            <path d="M7.5 33 v8 M9 33 v8" stroke="#FEC50C" stroke-width=".8"/>
-          </g>
-          <!-- English: Union Jack -->
-          <g class="lang-sector" data-lang="en" clip-path="url(#langEn)" tabindex="0" role="button" aria-label="English" onclick="setLang('en')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('en')}">
-            <title>English</title>
-            <rect x="0" y="0" width="48" height="48" fill="#012169"/>
-            <path d="M0 2 L26 36 M26 2 L0 36" stroke="#ffffff" stroke-width="5"/>
-            <path d="M0 2 L26 36 M26 2 L0 36" stroke="#C8102E" stroke-width="1.7"/>
-            <path d="M13 0 V48 M0 19 H30" stroke="#ffffff" stroke-width="7"/>
-            <path d="M13 0 V48 M0 19 H30" stroke="#C8102E" stroke-width="4"/>
-          </g>
-          <path class="lang-seams" d="M24 24 L24 2 M24 24 L43.05 35 M24 24 L4.95 35" />
-          <circle class="lang-rim" cx="24" cy="24" r="22"/>
-        </svg>
-        <span class="lang-name" id="langName">Русский</span>
-      </div>
     </div>
 
     <div class="header-controls admin-only">
@@ -1417,7 +1384,42 @@
   </div>
   <div class="category-tabs admin-only full-bleed">
     <div class="category-tabs-inner" role="tablist" aria-label="Раздел">
-      <span class="cat-spacer" aria-hidden="true"></span>
+      <div class="lang-coin-wrap cat-lang">
+        <svg class="lang-coin" viewBox="0 0 48 48" role="group" aria-label="Язык интерфейса">
+          <defs>
+            <clipPath id="langRu"><path d="M24 24 L24 2 A22 22 0 0 1 43.05 35 Z"/></clipPath>
+            <clipPath id="langKz"><path d="M24 24 L43.05 35 A22 22 0 0 1 4.95 35 Z"/></clipPath>
+            <clipPath id="langEn"><path d="M24 24 L4.95 35 A22 22 0 0 1 24 2 Z"/></clipPath>
+          </defs>
+          <!-- Русский: белый, синий, красный -->
+          <g class="lang-sector" data-lang="ru" clip-path="url(#langRu)" tabindex="0" role="button" aria-label="Русский" onclick="setLang('ru')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('ru')}">
+            <title>Русский</title>
+            <rect x="0" y="0" width="48" height="13" fill="#ffffff"/>
+            <rect x="0" y="13" width="48" height="11" fill="#0039A6"/>
+            <rect x="0" y="24" width="48" height="24" fill="#D52B1E"/>
+          </g>
+          <!-- Қазақша: небесно-голубой, золотое солнце -->
+          <g class="lang-sector" data-lang="kk" clip-path="url(#langKz)" tabindex="0" role="button" aria-label="Қазақша" onclick="setLang('kk')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('kk')}">
+            <title>Қазақша</title>
+            <rect x="0" y="0" width="48" height="48" fill="#00AFCA"/>
+            <circle cx="24" cy="36" r="5.6" fill="none" stroke="#FEC50C" stroke-width="1.6" stroke-dasharray="1.4 1.3"/>
+            <circle cx="24" cy="36" r="3.4" fill="#FEC50C"/>
+            <path d="M7.5 33 v8 M9 33 v8" stroke="#FEC50C" stroke-width=".8"/>
+          </g>
+          <!-- English: Union Jack -->
+          <g class="lang-sector" data-lang="en" clip-path="url(#langEn)" tabindex="0" role="button" aria-label="English" onclick="setLang('en')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();setLang('en')}">
+            <title>English</title>
+            <rect x="0" y="0" width="48" height="48" fill="#012169"/>
+            <path d="M0 2 L26 36 M26 2 L0 36" stroke="#ffffff" stroke-width="5"/>
+            <path d="M0 2 L26 36 M26 2 L0 36" stroke="#C8102E" stroke-width="1.7"/>
+            <path d="M13 0 V48 M0 19 H30" stroke="#ffffff" stroke-width="7"/>
+            <path d="M13 0 V48 M0 19 H30" stroke="#C8102E" stroke-width="4"/>
+          </g>
+          <path class="lang-seams" d="M24 24 L24 2 M24 24 L43.05 35 M24 24 L4.95 35" />
+          <circle class="lang-rim" cx="24" cy="24" r="22"/>
+        </svg>
+        <span class="lang-name" id="langName">Русский</span>
+      </div>
       <div class="cat-main">
         <button class="category-tab" data-cat="brief" onclick="setCategory('brief')">Бриф</button>
         <button class="category-tab" data-cat="guests" data-max-tier="standard" onclick="setCategory('guests')">Список</button>
