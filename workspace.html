@@ -1275,6 +1275,13 @@
     .kd-table tr,.kd-notes li{break-inside:avoid;}
     h3{break-after:avoid;}
   }
+
+  /* «Дальше» under the brief */
+  .next-step{display:flex;justify-content:flex-end;margin-top:18px;}
+  .next-step-btn{padding:12px 22px;font-size:14px;}
+  .next-step-btn span{display:inline-block;transition:transform .2s;}
+  .next-step-btn:hover span{transform:translateX(3px);}
+  @media(max-width:760px){ .next-step-btn{width:100%;justify-content:center;} }
 </style>
 </head>
 <body data-mode="admin">
@@ -1526,6 +1533,10 @@
           <textarea id="f-notes" rows="2" placeholder="напр. Вегетарианское меню на 15 гостей, живая музыка на церемонии" oninput="onField('notes', this.value)"></textarea>
         </div>
       </div>
+    </div>
+
+    <div class="next-step admin-only">
+      <button type="button" class="icon-btn primary next-step-btn" id="briefNextBtn" onclick="goNextCategory()">Дальше <span aria-hidden="true">→</span></button>
     </div>
 
     <div class="mock preview-only" id="briefPreview">
@@ -2258,6 +2269,27 @@ function applyTariffUI(){
 /* ---------- category tabs ---------- */
 const CATEGORY_SECTIONS = ['brief','guests','timing','checklist','budget','venue'];
 
+/* «Дальше»: the next section of the ribbon the current tariff shows —
+   Список after the brief on Basic/Standard, Меню on Pro. */
+function nextCategoryTab(){
+  const tabs = [...document.querySelectorAll('.category-tab')].filter(b=>b.offsetParent!==null || getComputedStyle(b).display!=='none');
+  const i = tabs.findIndex(b=>b.classList.contains('active'));
+  return i>=0 ? tabs[i+1] || null : null;
+}
+function renderNextStep(){
+  const btn = document.getElementById('briefNextBtn');
+  if(!btn) return;
+  const next = nextCategoryTab();
+  btn.hidden = !next;
+  if(next) btn.innerHTML = 'Дальше: '+escapeHtml(next.getAttribute('aria-label') || next.textContent.trim())+' <span aria-hidden="true">→</span>';
+}
+function goNextCategory(){
+  const next = nextCategoryTab();
+  if(!next) return;
+  setCategory(next.getAttribute('data-cat'));
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
 function setCategory(cat){
   if(!state.ui) state.ui = {};
   state.ui.activeCategory = cat;
@@ -2282,6 +2314,7 @@ function applyCategoryUI(){
   document.querySelectorAll('.category-tab').forEach(btn=>{
     btn.classList.toggle('active', btn.getAttribute('data-cat')===active);
   });
+  renderNextStep();
 }
 
 /* ---------- brief ---------- */

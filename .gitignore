@@ -2,3 +2,6 @@
 old version/
 history.txt
 .claude/
+
+# Черновики — копии рабочей версии перед каждым сохранением
+drafts/
