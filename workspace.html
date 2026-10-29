@@ -1466,7 +1466,7 @@
       </div>
       <div class="cat-main">
         <button class="category-tab" data-cat="brief" onclick="setCategory('brief')">Бриф</button>
-        <button class="category-tab" data-cat="guests" data-max-tier="standard" onclick="setCategory('guests')">Список</button>
+        <button class="category-tab" data-cat="checklist" data-max-tier="standard" onclick="setCategory('checklist')">Чек-лист</button>
         <button class="category-tab coin-btn" data-cat="timing" onclick="setCategory('timing')" title="Тайминг" aria-label="Тайминг">
           <svg viewBox="0 0 48 48" aria-hidden="true">
             <defs><path id="coinRingTiming" d="M24 24 m-16 0 a16 16 0 1 1 32 0 a16 16 0 1 1 -32 0"/></defs>
@@ -1481,10 +1481,8 @@
             </g>
           </svg>
         </button>
-        <button class="category-tab" data-cat="checklist" data-max-tier="standard" onclick="setCategory('checklist')">Чек-лист</button>
+        <button class="category-tab" data-cat="guests" data-max-tier="standard" onclick="setCategory('guests')">Список</button>
         <button class="category-tab" data-cat="venue" data-min-tier="pro" onclick="setCategory('venue')">Меню</button>
-      </div>
-      <div class="cat-side">
         <button class="category-tab cat-budget coin-btn" data-cat="budget" data-min-tier="standard" onclick="setCategory('budget')" title="Бюджет" aria-label="Бюджет">
           <svg viewBox="0 0 48 48" aria-hidden="true">
             <defs><path id="coinRingBudget" d="M24 24 m-16 0 a16 16 0 1 1 32 0 a16 16 0 1 1 -32 0"/></defs>
@@ -1495,6 +1493,7 @@
           </svg>
         </button>
       </div>
+      <span class="cat-spacer" aria-hidden="true"></span>
     </div>
   </div>
 </header>
