@@ -1384,7 +1384,7 @@
   </div>
   <div class="category-tabs admin-only full-bleed">
     <div class="category-tabs-inner" role="tablist" aria-label="Раздел">
-      <div class="lang-coin-wrap cat-lang">
+      <div class="lang-coin-wrap cat-lang" data-i18n-skip>
         <svg class="lang-coin" viewBox="0 0 48 48" role="group" aria-label="Язык интерфейса">
           <defs>
             <clipPath id="langRu"><path d="M24 24 L24 2 A22 22 0 0 1 43.05 35 Z"/></clipPath>
@@ -2035,6 +2035,7 @@
   <div class="theme-panel" id="themePanel" role="menu" aria-label="Цветовая палитра" hidden></div>
 </div>
 
+<script src="workspace-i18n.js"></script>
 <script>
 /* ---------- state ---------- */
 const STORAGE_KEY = 'regie_workspace_v1';
@@ -2320,6 +2321,7 @@ const CATEGORY_SECTIONS = ['brief','guests','timing','checklist','budget','venue
 
 /* «Дальше»: the next section of the ribbon the current tariff shows —
    Список after the brief on Basic/Standard, Меню on Pro. */
+const CATEGORY_LABELS = {brief:'Бриф', guests:'Список', timing:'Тайминг', checklist:'Чек-лист', budget:'Бюджет', venue:'Меню'};
 function nextCategoryTab(){
   const tabs = [...document.querySelectorAll('.category-tab')].filter(b=>b.offsetParent!==null || getComputedStyle(b).display!=='none');
   const i = tabs.findIndex(b=>b.classList.contains('active'));
@@ -2330,7 +2332,8 @@ function renderNextStep(){
   if(!btn) return;
   const next = nextCategoryTab();
   btn.hidden = !next;
-  if(next) btn.innerHTML = 'Дальше: '+escapeHtml(next.getAttribute('aria-label') || next.textContent.trim())+' <span aria-hidden="true">→</span>';
+  // the Russian name, not the tab's on-screen text — the translator works from Russian
+  if(next) btn.innerHTML = 'Дальше: '+escapeHtml(CATEGORY_LABELS[next.getAttribute('data-cat')] || '')+' <span aria-hidden="true">→</span>';
 }
 function goNextCategory(){
   const next = nextCategoryTab();
@@ -2339,9 +2342,9 @@ function goNextCategory(){
   window.scrollTo({top:0, behavior:'smooth'});
 }
 
-/* Язык интерфейса: русский, қазақша, english — the choice is remembered on
-   this device and marks the page language; the texts themselves are still
-   Russian until the translations are written. */
+/* Язык интерфейса: русский, қазақша, english — remembered on this device.
+   The page is written in Russian; workspace-i18n.js swaps the interface
+   texts for the chosen language (event data stays as typed). */
 const LANGS = {ru:'Русский', kk:'Қазақша', en:'English'};
 function currentLang(){
   let l = 'ru';
@@ -2363,6 +2366,7 @@ function applyLang(){
   });
   const name = document.getElementById('langName');
   if(name) name.textContent = LANGS[l];
+  if(window.RegieI18n) RegieI18n.apply(l);
 }
 
 function setCategory(cat){
