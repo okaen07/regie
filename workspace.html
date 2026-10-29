@@ -1145,14 +1145,8 @@
   }
 
   /* ---- save / open, letterhead ---- */
-  .brand-box{max-width:640px;margin:16px auto 0;border:1px solid var(--border);border-radius:12px;background:var(--surface);padding:0 16px;}
-  .brand-box summary{cursor:pointer;padding:12px 0;font-size:13px;color:var(--muted);list-style-position:inside;}
-  .brand-box summary b{color:var(--text);font-weight:600;}
-  .brand-fields{display:grid;grid-template-columns:1fr 1fr;gap:10px 14px;padding:4px 0 6px;}
-  .brand-fields label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--muted);}
-  .brand-box .io-note{margin:6px 0 14px;text-align:left;}
-  @media(max-width:760px){ .brand-fields{grid-template-columns:1fr;} }
 
+  .bf-group-head{grid-column:1 / -1;margin-top:8px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;font-weight:600;letter-spacing:.04em;color:var(--text);}
   .print-brand,.kitchen-doc{display:none;}
   .pb-row{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;border-bottom:1.5px solid #20241f;padding-bottom:10px;margin-bottom:18px;}
   .pb-name{font-family:'Bodoni Moda',Georgia,serif;font-size:24px;line-height:1.15;color:#20241f;}
@@ -1532,6 +1526,24 @@
           <label for="f-notes">Особые пожелания</label>
           <textarea id="f-notes" rows="2" placeholder="напр. Вегетарианское меню на 15 гостей, живая музыка на церемонии" oninput="onField('notes', this.value)"></textarea>
         </div>
+
+        <div class="bf-group-head">Заведение или организатор <span class="bf-note">· печатается вверху каждого PDF</span></div>
+        <div class="bf span-3">
+          <label for="f-orgName">Название</label>
+          <input id="f-orgName" type="text" maxlength="60" placeholder="Ресторан Paradise Hall" oninput="onField('orgName', this.value)">
+        </div>
+        <div class="bf span-3">
+          <label for="f-orgAddress">Адрес</label>
+          <input id="f-orgAddress" type="text" maxlength="90" placeholder="Алматы, пр. Абая, 10" oninput="onField('orgAddress', this.value)">
+        </div>
+        <div class="bf span-3">
+          <label for="f-orgPhone">Телефон</label>
+          <input id="f-orgPhone" type="text" maxlength="40" placeholder="+7 700 000 00 00" oninput="onField('orgPhone', this.value)">
+        </div>
+        <div class="bf span-3">
+          <label for="f-orgSite">Сайт или Instagram</label>
+          <input id="f-orgSite" type="text" maxlength="60" placeholder="@paradisehall" oninput="onField('orgSite', this.value)">
+        </div>
       </div>
     </div>
 
@@ -1831,17 +1843,6 @@
     <input type="file" id="importFile" accept="application/json,.json" style="display:none" onchange="importJSON(event)">
   </div>
   <p class="io-note admin-only">«Сохранить мероприятие» создаёт файл вида <b>2026-06-14 Свадьба….json</b>. Сохраняйте его в папку Google Диска на компьютере — копия сама уйдёт в облако, а открыть её можно с любого устройства через «Открыть мероприятие».</p>
-
-  <details class="brand-box" id="brandBox">
-    <summary>Шапка документов (PDF): <b id="brandSummary">не заполнена</b></summary>
-    <div class="brand-fields">
-      <label>Название заведения или компании<input type="text" id="brand-name" maxlength="60" placeholder="Ресторан Paradise Hall" oninput="onBrandField('name', this.value)"></label>
-      <label>Адрес<input type="text" id="brand-address" maxlength="90" placeholder="Алматы, пр. Абая, 10" oninput="onBrandField('address', this.value)"></label>
-      <label>Телефон<input type="text" id="brand-phone" maxlength="40" placeholder="+7 700 000 00 00" oninput="onBrandField('phone', this.value)"></label>
-      <label>Сайт или Instagram<input type="text" id="brand-site" maxlength="60" placeholder="@paradisehall" oninput="onBrandField('site', this.value)"></label>
-    </div>
-    <p class="io-note">Хранится на этом компьютере и не попадает в файл мероприятия. Печатается вверху каждого PDF — и превью, и заказа на кухню.</p>
-  </details>
 </section>
 
 <div class="kitchen-doc" id="kitchenDoc" aria-hidden="true"></div>
@@ -2347,6 +2348,7 @@ function fillBriefForm(){
   document.getElementById('f-status').value = b.status||'Новый запрос';
   document.getElementById('f-filledby').value = b.filledBy||'organizer';
   document.getElementById('f-notes').value = b.notes||'';
+  ['orgName','orgAddress','orgPhone','orgSite'].forEach(k=>{ const el = document.getElementById('f-'+k); if(el) el.value = b[k]||''; });
 }
 
 const FILLER_NAMES = {organizer:'Организатор', client:'Клиент'};
@@ -4970,26 +4972,25 @@ async function saveEventFile(){
   if(note) note.innerHTML = 'Файл в «Загрузках» <b>· '+escapeHtml(name)+'</b>';
 }
 
-/* Letterhead: the venue's own name on every PDF. Kept per computer, not in
-   the event file — it belongs to whoever prints, not to the client's event. */
-const BRAND_KEY = 'regie_brand_v1';
+/* Letterhead: the venue's (or organizer's) name on every PDF, filled in the
+   brief. A new event inherits it, so a restaurant types it once. */
+const ORG_FIELDS = ['orgName','orgAddress','orgPhone','orgSite'];
 function loadBrand(){
-  try{ return JSON.parse(localStorage.getItem(BRAND_KEY)) || {}; }catch(e){ return {}; }
+  const b = (state && state.brief) || {};
+  const t = k => (b[k]||'').trim();
+  return {name:t('orgName'), address:t('orgAddress'), phone:t('orgPhone'), site:t('orgSite')};
 }
-function onBrandField(key, val){
-  const b = loadBrand();
-  b[key] = val.trim();
-  try{ localStorage.setItem(BRAND_KEY, JSON.stringify(b)); }catch(e){}
-  renderBrandSummary();
-}
-function fillBrandForm(){
-  const b = loadBrand();
-  ['name','address','phone','site'].forEach(k=>{ const el = document.getElementById('brand-'+k); if(el) el.value = b[k]||''; });
-  renderBrandSummary();
-}
-function renderBrandSummary(){
-  const el = document.getElementById('brandSummary');
-  if(el) el.textContent = loadBrand().name || 'не заполнена';
+// earlier builds kept the letterhead per computer — move it into the brief once
+function migrateBrand(){
+  const OLD_KEY = 'regie_brand_v1';
+  let old = null;
+  try{ old = JSON.parse(localStorage.getItem(OLD_KEY)); }catch(e){}
+  if(old && !ORG_FIELDS.some(k=>(state.brief[k]||'').trim())){
+    state.brief.orgName = old.name||''; state.brief.orgAddress = old.address||'';
+    state.brief.orgPhone = old.phone||''; state.brief.orgSite = old.site||'';
+    saveState(); fillBriefForm();
+  }
+  try{ localStorage.removeItem(OLD_KEY); }catch(e){}
 }
 function brandHeaderHtml(docTitle){
   const b = loadBrand();
@@ -5438,6 +5439,8 @@ function importJSON(evt){
 
 function newEvent(){
   if(!confirm('Очистить текущие данные и начать новое мероприятие с чистого листа? Сначала нажмите «Сохранить мероприятие» внизу страницы, если текущее ещё понадобится.')) return;
+  const org = {};
+  ORG_FIELDS.forEach(k=>{ org[k] = (state.brief && state.brief[k]) || ''; });
   state = {
     brief:{tariff:'basic', filledBy:'organizer', title:'', date:'', type:'Свадьба', guests:'', budget:'', venue:'', style:'', contact:'', status:'Новый запрос', notes:''},
     timeline:[], timelineUnified:true, checklist:{
@@ -5447,6 +5450,7 @@ function newEvent(){
     venue:{hallName:'', seats:'', seatsAuto:true, seatsPerTable:'', menu:[]},
     ui:{expanded:{brief:true, guests:false, timing:false, checklist:false, venue:false}}
   };
+  Object.assign(state.brief, org);
   saveState();
   renderAll();
 }
@@ -5792,7 +5796,7 @@ applyTheme(savedTheme);
 buildClockFace();
 tickClock();
 setInterval(tickClock, 1000);
-fillBrandForm();
+migrateBrand();
 loadCatalog();
 state = loadState();
 renderAll();
