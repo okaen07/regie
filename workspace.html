@@ -264,7 +264,7 @@
   .clock-tooltip b{display:block;font-weight:600;}
   .clock-hand{stroke-linecap:round;transform-origin:160px 160px;}
   .clock-hand.hour{stroke:var(--text);stroke-width:5;}
-  .clock-hand.minute{stroke:var(--text);stroke-width:3.5;}
+  .clock-hand.minute{stroke:var(--text);stroke-width:2.5;opacity:.85;}
   .clock-hand.second{stroke:var(--bad);stroke-width:1.5;}
   .clock-pivot-ring{fill:var(--surface);stroke:var(--accent);stroke-width:2;}
   .clock-pivot{fill:var(--accent);}
@@ -518,6 +518,18 @@
   .tariff-switch-wrap{align-items:flex-end;}
   .header-controls > .header-btn{margin-bottom:5px;}
 
+  /* «New event» coin: round, coin-sized, the label runs around the rim */
+  .new-event-coin{width:46px;height:46px;flex:0 0 46px;padding:0;border:none;background:none;border-radius:50%;cursor:pointer;transition:transform .35s ease;}
+  .new-event-coin svg{display:block;width:100%;height:100%;overflow:visible;}
+  .new-event-coin .coin-edge{fill:var(--surface);stroke:var(--border);stroke-width:1;transition:stroke .2s,fill .2s;}
+  .new-event-coin .coin-inner{fill:none;stroke:var(--border);stroke-width:.8;}
+  .new-event-coin .coin-ring-text{font:600 6.2px/1 'Karla',system-ui,sans-serif;fill:var(--muted);transition:fill .2s;}
+  .new-event-coin .coin-plus{stroke:var(--accent);stroke-width:1.8;stroke-linecap:round;fill:none;}
+  .new-event-coin:hover{transform:rotate(-40deg);}
+  .new-event-coin:hover .coin-edge{stroke:var(--accent);fill:var(--accent-soft);}
+  .new-event-coin:hover .coin-ring-text{fill:var(--text);}
+  .new-event-coin:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
   /* sentence-case labels instead of tracked all-caps monospace */
   .tariff-badge,.tariff-tag,.tariff-group-label,.check-group-head,.mock-table th,.menu-cat h4,.venue-pv-cat h4{
     text-transform:none;letter-spacing:.01em;font-family:'Karla',system-ui,sans-serif;font-weight:600;
@@ -564,6 +576,10 @@
     .header-controls::-webkit-scrollbar,.category-tabs-inner::-webkit-scrollbar{display:none;}
     .header-controls > *{flex-shrink:0;}
     .tariff-switch-wrap{flex-wrap:nowrap;gap:10px;}
+    /* the coin leaves the swipeable row and sits in the corner beside the wordmark */
+    .brand-row{position:relative;}
+    .brand-block{padding-right:56px;}
+    .new-event-coin{position:absolute;top:0;right:0;}
     .tariff-group-label,.tariff-popover{display:none;}
     .category-tabs-inner{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:12px 16px;scrollbar-width:none;}
     .category-tab{padding:8px 16px;}
@@ -909,11 +925,16 @@
   footer.base .footer-author b{font-weight:600;color:var(--text);}
   footer.base a{color:var(--accent);font-weight:600;text-decoration:none;}
 
+  /* 24 ч / 12 ч */
+  .cel-off{font-size:10.5px;color:var(--muted);border:1px dashed var(--border);border-radius:999px;padding:0 6px;white-space:nowrap;}
+  .clock-event-list-item.off-dial .cel-num{opacity:.55;}
+  .clock-number.zoom{font-size:11px;}
+
   /* bigger dial with 5-minute marks; shift guides only show on hover */
   .clock-card-body{grid-template-columns:minmax(220px,300px) minmax(380px,600px) minmax(240px,300px);}
   .timing-clock-svg{width:min(600px,100%);}
   .clock-tick.half{stroke:var(--muted);stroke-width:1px;opacity:.7;}
-  .clock-tick.micro{stroke:var(--border);stroke-width:.6px;opacity:.9;}
+  .clock-tick.micro{stroke:var(--muted);stroke-width:.6px;opacity:.45;}
   .clock-shift-guide{opacity:0;transition:opacity .15s;}
   .clock-shift.highlight .clock-shift-guide,.clock-shift.dragging .clock-shift-guide{opacity:.85;}
   .clock-shift.is-outer .clock-shift-track{display:none;}
@@ -1058,6 +1079,54 @@
   body.clock-focus .cn-title{font-size:20px;}
   body.clock-focus .cn-block.next .cn-title{font-size:17px;}
   @media(max-width:1100px){ body.clock-focus .clock-card-body{grid-template-columns:1fr;justify-items:center;} body.clock-focus .clock-side,body.clock-focus .clock-left{width:100%;max-width:560px;} body.clock-focus .timing-clock-svg{width:min(88vw,70vh);} }
+
+  /* ---- Превью on a phone: the demo ---- */
+  [data-mode="preview"] header{position:static;}
+  .pv-nav{position:sticky;top:0;z-index:30;background:color-mix(in srgb, var(--surface) 92%, transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
+  .pv-nav-inner{display:flex;gap:6px;justify-content:center;padding:10px 16px;overflow-x:auto;scrollbar-width:none;}
+  .pv-nav-inner::-webkit-scrollbar{display:none;}
+  .pv-nav a{flex-shrink:0;padding:7px 14px;border-radius:999px;font:600 13px/1 'Karla',system-ui,sans-serif;color:var(--muted);text-decoration:none;border:1px solid transparent;transition:background .2s,color .2s;}
+  .pv-nav a:hover{color:var(--text);}
+  .pv-nav a.active{background:var(--accent);color:var(--on-accent);}
+  .pv-nav a[hidden]{display:none;}
+  [data-mode="preview"] section.block{scroll-margin-top:58px;}
+  [data-mode="preview"] .clock-card-body{grid-template-columns:minmax(300px,460px) minmax(240px,320px);}
+  [data-mode="preview"] .clock-side{grid-column:auto;}
+  [data-mode="preview"] .timing-clock-svg{touch-action:manipulation;}
+  @media(max-width:760px){
+    .pv-nav-inner{justify-content:flex-start;}
+    [data-mode="preview"] .clock-card-body{grid-template-columns:1fr;gap:16px;padding:16px 12px;}
+    [data-mode="preview"] .timing-clock-svg{width:100%;max-width:420px;justify-self:center;}
+    [data-mode="preview"] .clock-mock .mock-head{flex-wrap:wrap;row-gap:8px;}
+
+    /* guest and budget tables turn into cards — nothing to swipe sideways */
+    [data-mode="preview"] .mock-table.budget-table,[data-mode="preview"] .mock-table.guests-table{min-width:0;width:100%;}
+    [data-mode="preview"] .budget-table thead,[data-mode="preview"] .guests-table thead,[data-mode="preview"] .scroll-hint{display:none !important;}
+    [data-mode="preview"] .budget-table tbody tr[data-id],[data-mode="preview"] .budget-table tbody tr.auto-row,
+    [data-mode="preview"] .guests-table tbody tr{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:3px 12px;padding:11px 14px;border-bottom:1px solid var(--border);}
+    [data-mode="preview"] .mock-table.budget-table tbody tr[data-id] > td,[data-mode="preview"] .mock-table.budget-table tbody tr.auto-row > td,
+    [data-mode="preview"] .mock-table.guests-table tbody tr > td{display:block;padding:0;border:none;min-width:0;background:none;}
+    [data-mode="preview"] .mock-table.guests-table tbody tr > td[data-l]:has(.muted-cell){display:none;}
+    [data-mode="preview"] :is(.budget-table,.guests-table) td.admin-only{display:none !important;}
+    [data-mode="preview"] .mock-table:is(.budget-table,.guests-table) tbody tr > td[data-l]{grid-column:1 / -1;display:flex;justify-content:space-between;gap:12px;font-size:13px;}
+    [data-mode="preview"] :is(.budget-table,.guests-table) td[data-l]::before{content:attr(data-l);color:var(--muted);font:400 12.5px/1.4 'Karla',system-ui,sans-serif;}
+    /* service + status on the first line, vendor under it, then the sums */
+    [data-mode="preview"] .budget-table tr.auto-row > td:nth-child(1),[data-mode="preview"] .budget-table tr[data-id] > td:nth-child(2){grid-column:1;grid-row:1;font-weight:600;}
+    [data-mode="preview"] .budget-table tr.auto-row > td:nth-child(2),[data-mode="preview"] .budget-table tr[data-id] > td:nth-child(4){grid-column:1 / -1;color:var(--muted);font-size:13px;margin-bottom:4px;}
+    [data-mode="preview"] .budget-table tbody tr > td:has(.status-pill){grid-column:2;grid-row:1;align-self:start;}
+    [data-mode="preview"] .budget-table .src-tag{display:block;font-weight:400;}
+    [data-mode="preview"] .guests-table td.guest-num{grid-column:2;grid-row:1;color:var(--muted);}
+    [data-mode="preview"] .guests-table td.guest-num + td + td{grid-column:1;grid-row:1;font-weight:600;}
+    [data-mode="preview"] .budget-table tr.budget-group-total,[data-mode="preview"] .budget-table tr.total{display:flex;flex-wrap:wrap;gap:4px 14px;padding:10px 14px;}
+    [data-mode="preview"] .budget-table tr.budget-group-total,[data-mode="preview"] .budget-table tr.total{background:var(--surface-2);border-bottom:1px solid var(--border);}
+    [data-mode="preview"] .mock-table.budget-table tr.budget-group-total > td,[data-mode="preview"] .mock-table.budget-table tr.total > td{display:block;padding:0;border:none;background:none;}
+    [data-mode="preview"] .budget-table tr.budget-group-total > td:first-child,[data-mode="preview"] .budget-table tr.total > td:first-child{flex-basis:100%;font-weight:600;}
+    [data-mode="preview"] .mock-table.budget-table tr.budget-group-total > td[data-l]{flex-basis:100%;display:flex;justify-content:space-between;font-weight:500;}
+    [data-mode="preview"] .budget-table tr.budget-group-total > td[data-l]::before{content:attr(data-l);color:var(--muted);font:400 12.5px/1.4 'Karla',system-ui,sans-serif;}
+    [data-mode="preview"] .budget-table tr.budget-group-total > td.bg-note{display:none;}
+    [data-mode="preview"] .budget-table tr.budget-group-head,[data-mode="preview"] .budget-table tr.budget-group-empty{display:block;}
+    [data-mode="preview"] .budget-table tr.budget-group-head > td,[data-mode="preview"] .budget-table tr.budget-group-empty > td{display:block;}
+  }
 </style>
 </head>
 <body data-mode="admin">
@@ -1133,6 +1202,16 @@
         <button class="mode-btn" id="btnPreview" onclick="setMode('preview')">Превью</button>
       </div>
 
+      <button type="button" class="new-event-coin" onclick="newEvent()" title="Новое мероприятие" aria-label="Новое мероприятие">
+        <svg viewBox="0 0 48 48" aria-hidden="true">
+          <defs><path id="coinRing" d="M24 24 m-16 0 a16 16 0 1 1 32 0 a16 16 0 1 1 -32 0"/></defs>
+          <circle class="coin-edge" cx="24" cy="24" r="22.5"/>
+          <circle class="coin-inner" cx="24" cy="24" r="10.5"/>
+          <text class="coin-ring-text"><textPath href="#coinRing" textLength="98" lengthAdjust="spacing">NEW EVENT · NEW EVENT ·</textPath></text>
+          <path class="coin-plus" d="M24 19.5v9M19.5 24h9"/>
+        </svg>
+      </button>
+
     </div>
 
     <div class="tool-row preview-only">
@@ -1156,6 +1235,17 @@
     </div>
   </div>
 </header>
+
+<nav class="pv-nav preview-only print-hide" id="pvNav" aria-label="Разделы">
+  <div class="pv-nav-inner">
+    <a href="#brief" data-sec="brief">Бриф</a>
+    <a href="#guests" data-sec="guests">Гости</a>
+    <a href="#timing" data-sec="timing">Тайминг</a>
+    <a href="#checklist" data-sec="checklist">Чек-лист</a>
+    <a href="#budget" data-sec="budget">Бюджет</a>
+    <a href="#venue" data-sec="venue">Меню</a>
+  </div>
+</nav>
 
 <div class="issues-bar admin-only" id="issuesBar" role="status" aria-live="polite" hidden></div>
 
@@ -1347,14 +1437,18 @@
 <section class="block" id="timing">
   <div class="full-bleed">
     <p class="section-caption">Тайминг дня (run-of-show) — один план на всех подрядчиков, вместо рассылки в мессенджере</p>
-    <div class="mock admin-only clock-mock" id="clockMock">
+    <div class="mock clock-mock" id="clockMock">
       <div class="mock-head">
         <div class="mock-icon">Р</div>
         <div class="mock-title">Часы мероприятия</div>
+        <div class="clock-zoom" id="clockHoursBtns" role="group" aria-label="Циферблат">
+          <button type="button" data-hours="24" onclick="setClockHours(24)" title="Весь день на одном круге">24 ч</button>
+          <button type="button" data-hours="12" onclick="setClockHours(12)" title="12 часов вокруг программы — вдвое крупнее">12 ч</button>
+        </div>
         <div class="mock-crumb mono" id="clockNow">—</div>
       </div>
       <div class="mock-body clock-card-body">
-        <div class="clock-left">
+        <div class="clock-left admin-only">
           <div class="clock-event-list" id="clockEventList"></div>
           <p class="clock-hint">Протяните по краю циферблата — новое событие. Номера и кольца можно перетаскивать по кругу, клик — детали.</p>
         </div>
@@ -1545,7 +1639,6 @@
     <button class="icon-btn" onclick="exportJSON()">Экспорт JSON</button>
     <button class="icon-btn" onclick="document.getElementById('importFile').click()">Импорт JSON</button>
     <input type="file" id="importFile" accept="application/json" style="display:none" onchange="importJSON(event)">
-    <button class="icon-btn danger" onclick="newEvent()">Новое мероприятие</button>
   </div>
   <p class="io-note admin-only">Данные хранятся только в этом браузере. Чтобы открыть мероприятие на другом устройстве, сделайте «Экспорт JSON» здесь и «Импорт JSON» там.</p>
 </section>
@@ -2201,6 +2294,7 @@ let clockView = {start:0, span:1440, a0:-90, sweep:360, zoom:false, key:'full'};
 
 function computeClockView(){
   const full = {start:0, span:1440, a0:-90, sweep:360, zoom:false, key:'full'};
+  if(state && state.ui && state.ui.clockHours===12) return computeClock12View();
   if(!CLOCK_ZOOM_ENABLED) return full; // classic 24h face
   if(!state || (state.ui && state.ui.clockZoom===false)) return full;
   const bins = new Array(288).fill(false);
@@ -2230,6 +2324,29 @@ function computeClockView(){
   if(span >= 1200) return full;
   start = ((start%1440)+1440)%1440;
   return {start, span, a0:-90+CLOCK_ZOOM_GAP/2, sweep:360-CLOCK_ZOOM_GAP, zoom:true, key:start+'|'+span};
+}
+/* «12 ч»: one turn = 12 hours, twice the detail of the 24h face. The window
+   starts on the hour that keeps the most program moments and shifts on the
+   face; ties go to the window holding the current time, then to 12:00. */
+function computeClock12View(){
+  const items = timingItems().map(r=>({s:clockTimeToMinutes(r.time), e:r.endTime ? clockTimeToMinutes(r.endTime) : null})).filter(x=>x.s!=null);
+  const n = new Date(), cur = n.getHours()*60 + n.getMinutes();
+  const inWin = (st, m) => ((m - st)%1440 + 1440)%1440 < 720;
+  let best = 720, bestScore = -1;
+  for(let hh=0; hh<24; hh++){
+    const st = hh*60;
+    let score = 0;
+    items.forEach(x=>{ if(inWin(st, x.s)) score += 10; if(x.e!=null && inWin(st, x.e)) score += 3; });
+    if(inWin(st, cur)) score += 1;
+    if(score > bestScore || (score===bestScore && Math.abs(st-720) < Math.abs(best-720))){ best = st; bestScore = score; }
+  }
+  return {start:best, span:720, a0:-90, sweep:360, zoom:true, h12:true, key:'h12|'+best};
+}
+function setClockHours(hrs){
+  if(!state.ui) state.ui = {};
+  state.ui.clockHours = hrs===12 ? 12 : 24;
+  scheduleSave();
+  renderClockEvents();
 }
 function clockOffset(min){ return ((min - clockView.start)%1440 + 1440)%1440; }
 function clockInView(min){ return clockOffset(min) <= clockView.span; }
@@ -2298,21 +2415,21 @@ function buildClockFace(){
       }
     }
   } else {
-    const step = V.span <= 480 ? 10 : 15;
-    for(let off=0; off<=V.span; off+=step){
+    const step = V.h12 ? 5 : (V.span <= 480 ? 10 : 15);
+    for(let off=0; off<(V.h12 ? V.span : V.span+1); off+=step){
       const abs = (V.start + off) % 1440;
       const angle = V.a0 + off/V.span*V.sweep;
-      const hour = abs%60===0, half = abs%30===0;
+      const hour = abs%60===0, half = abs%30===0, quarter = abs%15===0;
       const outer = clockPolarPoint(CLOCK_R_TICK_OUT, angle);
-      const inner = clockPolarPoint(hour?CLOCK_R_TICK_MAJOR_IN:(half?CLOCK_R_TICK_MINOR_IN:CLOCK_R_TICK_QUARTER_IN), angle);
-      ticks += `<line class="clock-tick${hour?' major':(half?'':' minor')}" x1="${outer.x}" y1="${outer.y}" x2="${inner.x}" y2="${inner.y}"/>`;
+      const inner = clockPolarPoint(hour?CLOCK_R_TICK_MAJOR_IN:(half?CLOCK_R_TICK_MINOR_IN:(quarter?CLOCK_R_TICK_QUARTER_IN:CLOCK_R_TICK_OUT-3.5)), angle);
+      ticks += `<line class="clock-tick${hour?' major':(half?' half':(quarter?' minor':' micro'))}" x1="${outer.x}" y1="${outer.y}" x2="${inner.x}" y2="${inner.y}"/>`;
       if(hour){
         const np = clockPolarPoint(CLOCK_R_NUM, angle);
         ticks += `<text class="clock-number zoom" x="${np.x}" y="${np.y}">${String(Math.floor(abs/60)).padStart(2,'0')}</text>`;
       }
     }
     // the gap at the top — where the visible day ends and starts again
-    ticks += `<path class="clock-gap" d="${clockArcPath(CLOCK_R_TICK_OUT-4, V.a0+V.sweep+2, V.a0+360-2)}"/>`;
+    if(V.sweep < 360) ticks += `<path class="clock-gap" d="${clockArcPath(CLOCK_R_TICK_OUT-4, V.a0+V.sweep+2, V.a0+360-2)}"/>`;
   }
   const night = clockDescribeArc((CLOCK_R_TICK_OUT+CLOCK_R_TICK_MAJOR_IN)/2, 22*60, 6*60);
   svg.innerHTML = `
@@ -2322,6 +2439,7 @@ function buildClockFace(){
     <path id="clockElapsed" class="clock-elapsed"></path>
     <g id="clockTicks">${ticks}</g>
     <line id="clockHourHand" class="clock-hand hour" x1="${CLOCK_CX}" y1="${CLOCK_CY-CLOCK_R_CAP-2}" x2="${CLOCK_CX}" y2="${CLOCK_CY-80}"/>
+    <line id="clockMinuteHand" class="clock-hand minute" x1="${CLOCK_CX}" y1="${CLOCK_CY-CLOCK_R_CAP-2}" x2="${CLOCK_CX}" y2="${CLOCK_CY-100}"/>
     <g class="clock-wordmark" id="clockWordmark" aria-label="Régie by Yorin">
       <text class="cw-side" id="cwLeft" x="${CLOCK_CX}" y="${CLOCK_CY}" text-anchor="end">RÉ</text>
       <text class="cw-g" id="cwG" x="${CLOCK_CX}" y="${CLOCK_CY}" text-anchor="middle">G</text>
@@ -2335,7 +2453,8 @@ function buildClockFace(){
     <path id="clockDragPreview" class="clock-drag-preview"></path>
   `;
   layoutClockWordmark();
-  svg.classList.toggle('zoomed', V.zoom);
+  svg.classList.toggle('zoomed', V.zoom && !V.h12);
+  document.querySelectorAll('#clockHoursBtns button').forEach(b=>b.classList.toggle('active', +b.dataset.hours===(V.h12 ? 12 : 24)));
   wireClockDrag(document.getElementById('clockDragRing'));
   const zb = document.getElementById('clockZoomBtns');
   if(zb) zb.querySelectorAll('button').forEach(b=>b.classList.toggle('active', (b.dataset.zoom==='1')===(!state || !state.ui || state.ui.clockZoom!==false)));
@@ -2375,8 +2494,8 @@ function tickClock(force){
     hourHand.style.display = vis ? '' : 'none';
     if(vis) hourHand.style.transform = `rotate(${clockMinutesToAngle(nowMin)+90}deg)`;
   }
-  // minute/second hands only make sense on the plain 24h face
-  if(minuteHand){ minuteHand.style.display = clockView.zoom ? 'none' : ''; minuteHand.style.transform = `rotate(${(m+s/60)/60*360}deg)`; }
+  // the minute hand goes once round per hour on both faces; it stops short of the program band
+  if(minuteHand){ minuteHand.style.display = (clockView.zoom && !clockView.h12) ? 'none' : ''; minuteHand.style.transform = `rotate(${(m+s/60)/60*360}deg)`; }
   if(secondHand){ secondHand.style.display = clockView.zoom ? 'none' : ''; secondHand.style.transform = `rotate(${s/60*360}deg)`; }
   const now2 = document.getElementById('clockNow');
   if(now2) now2.textContent = String(h).padStart(2,'0')+':'+String(m).padStart(2,'0')+':'+String(s).padStart(2,'0');
@@ -2497,6 +2616,7 @@ function renderClockEvents(){
   // ring stretches first, badges on top; badges too close to the previous one drop to an inner row
   let segs = '', badges = '', lastA = null, lastInner = false;
   points.forEach((x,i)=>{
+    if(!clockInView(x.s)) return; // outside the 12-hour window — the list still has it
     const c = colorById[x.r.id];
     const endM = points[i+1] ? points[i+1].s : x.s + 30;
     const dur = rangeDuration(x.s, endM);
@@ -2514,7 +2634,7 @@ function renderClockEvents(){
   g.innerHTML = segs + badges;
 
   if(rg){
-    rg.innerHTML = ranges.map(({r, rad})=>{
+    rg.innerHTML = ranges.filter(x=>clockDescribeArc(x.rad, x.s, x.e)).map(({r, rad})=>{
       const c = colorById[r.id];
       return `<g class="clock-shift${rad > CLOCK_R_NUM ? ' is-outer' : ''}" data-id="${r.id}" data-r="${rad}">
         <circle class="clock-shift-track" cx="${CLOCK_CX}" cy="${CLOCK_CY}" r="${rad}"/>
@@ -2540,22 +2660,25 @@ function renderClockEvents(){
   if(list){
     // The day's program in order, then whoever works across a stretch of it.
     // No inner scroll: the list grows with the program.
+    const offDial = r => { const s = clockTimeToMinutes(r.time); if(s==null || !clockView.h12) return false; const e = r.endTime ? clockTimeToMinutes(r.endTime) : null; return !clockInView(s) && !(e!=null && clockInView(e)); };
     const row = (r, mark) => {
       const color = colorById[r.id] || 'var(--border)';
+      const off = offDial(r) ? ` <span class="cel-off" title="Вне 12-часового окна — переключите на «24 ч», чтобы увидеть на часах">вне часов</span>` : '';
       const time = r.time ? r.time + (r.endTime ? '–'+r.endTime : '') : '—';
       if(r.serve) return `
       <div class="clock-event-list-item is-serve" data-id="${r.id}" style="--sw:${color}">
         <button type="button" class="cel-num" onclick="gotoServeDish('${r.id}')" title="Открыть в меню">${mark}</button>
         <button type="button" class="cel-when mono" onclick="gotoServeDish('${r.id}')" title="Время подачи меняется в меню или перетаскиванием на часах">${time}</button>
-        <button type="button" class="cel-serve-title" onclick="gotoServeDish('${r.id}')" title="Открыть в меню">${escapeHtml(r.title)}</button>
+        <button type="button" class="cel-serve-title" onclick="gotoServeDish('${r.id}')" title="Открыть в меню">${escapeHtml(r.title)}${off}</button>
         <span class="cel-serve-tag" title="Из меню">меню</span>
       </div>`;
       return `
-      <div class="clock-event-list-item${r.endTime?' is-range':''}" data-id="${r.id}" style="--sw:${color}">
+      <div class="clock-event-list-item${r.endTime?' is-range':''}${off?' off-dial':''}" data-id="${r.id}" style="--sw:${color}">
         <button type="button" class="cel-num" onclick="openClockEditForm('${r.id}')" title="Время и детали">${mark}</button>
         <button type="button" class="cel-when mono" onclick="openClockEditForm('${r.id}')" title="Изменить время">${time}</button>
         <input type="text" class="cel-title" data-id="${r.id}" data-key="title" placeholder="Событие или подрядчик" value="${escAttr(r.title)}">
         <button class="cel-del" data-id="${r.id}" title="Удалить">×</button>
+        ${off ? `<div class="cel-sub">${off}</div>` : ''}
         ${r.sub ? `<div class="cel-sub">${escapeHtml(r.sub)}</div>` : ''}
         <div class="cel-menu" data-menu-for="${r.id}">${menuLineHtml(r.title, r.time)}</div>
       </div>`;
@@ -2695,6 +2818,8 @@ function applyRangeGeom(grp, r){
   [['ts',G.ts,r.time],['te',G.te,r.endTime]].forEach(([p,pt,txt])=>{ const el = q(p); if(el){ el.setAttribute('x',pt.x); el.setAttribute('y',pt.y); el.textContent = txt; } });
   [['gs',G.gs],['ge',G.ge]].forEach(([p,pts])=>{ const el = q(p); if(el){ el.setAttribute('x1',pts[0].x); el.setAttribute('y1',pts[0].y); el.setAttribute('x2',pts[1].x); el.setAttribute('y2',pts[1].y); } });
   const hit = q('hit'); if(hit) hit.setAttribute('data-label', eventLabel(r));
+  const sIn = clockInView(clockTimeToMinutes(r.time)), eIn = clockInView(clockTimeToMinutes(r.endTime));
+  [['cs',sIn],['hs',sIn],['gs',sIn],['ts',sIn],['ce',eIn],['he',eIn],['ge',eIn],['te',eIn]].forEach(([p,on])=>{ const el = q(p); if(el) el.style.visibility = on ? '' : 'hidden'; });
   // short ranges: the two time labels would sit on top of each other — the tooltip has them
   const short = rangeDuration(clockTimeToMinutes(r.time), clockTimeToMinutes(r.endTime)) < 75 || +grp.dataset.r > CLOCK_R_NUM;
   ['ts','te'].forEach(p=>{ const el = q(p); if(el) el.style.display = short ? 'none' : ''; });
@@ -2938,7 +3063,12 @@ function showClockTooltip(evt, rid){
   if(tip.classList.contains('below')) tip.style.top = (evt.clientY+18)+'px';
   tip.classList.add('show');
 }
-function hideClockTooltip(){
+// a card opened by a tap in Превью stays until the next tap or scroll —
+// touch sends pointerleave right after the finger lifts
+let clockTipPinned = false;
+function hideClockTooltip(force){
+  if(clockTipPinned && !force) return;
+  clockTipPinned = false;
   const tip = document.getElementById('clockTooltip');
   if(tip) tip.classList.remove('show');
 }
@@ -2947,6 +3077,47 @@ function hideClockTooltip(){
    aside — for running the day from a laptop or a tablet on the venue floor.
    A fixed overlay rather than the browser's Fullscreen API, so the event
    editor (a page-level modal) still opens on top of it. */
+/* Превью is the demo: the dial reads but does not edit. A tap on a number or
+   a band shows its card (phones have no hover), a tap elsewhere hides it. */
+(function wirePreviewClock(){
+  const svg = document.getElementById('timingClockSvg');
+  if(!svg) return;
+  svg.addEventListener('pointerdown', e=>{
+    if(document.body.getAttribute('data-mode')!=='preview') return;
+    e.stopPropagation(); e.preventDefault();
+    const hit = e.target.closest('[data-id]');
+    if(hit){ showClockTooltip(e, hit.getAttribute('data-id')); clockTipPinned = true; }
+    else hideClockTooltip(true);
+  }, true);
+  document.addEventListener('pointerdown', e=>{ if(clockTipPinned && !svg.contains(e.target)) hideClockTooltip(true); });
+  window.addEventListener('scroll', ()=>{ if(clockTipPinned) hideClockTooltip(true); }, {passive:true});
+})();
+
+/* Section chips for Превью: only sections the page actually shows, and the
+   chip of the section on screen is lit while the client scrolls. */
+let pvNavObserver = null;
+function renderPreviewNav(){
+  const nav = document.getElementById('pvNav');
+  if(!nav) return;
+  const links = [...nav.querySelectorAll('a[data-sec]')];
+  links.forEach(a=>{
+    const sec = document.getElementById(a.dataset.sec);
+    a.hidden = !sec || getComputedStyle(sec).display==='none' || !sec.querySelector('.preview-only, .clock-mock');
+  });
+  if(pvNavObserver || !('IntersectionObserver' in window)) return;
+  pvNavObserver = new IntersectionObserver(entries=>{
+    entries.forEach(en=>{
+      if(!en.isIntersecting) return;
+      links.forEach(a=>{
+        const on = a.dataset.sec===en.target.id;
+        a.classList.toggle('active', on);
+        if(on && a.scrollIntoView && nav.scrollWidth > nav.clientWidth) a.scrollIntoView({block:'nearest', inline:'center'});
+      });
+    });
+  }, {rootMargin:'-45% 0px -50% 0px'});
+  links.forEach(a=>{ const sec = document.getElementById(a.dataset.sec); if(sec) pvNavObserver.observe(sec); });
+}
+
 function toggleClockFocus(on){
   const want = on===undefined ? !document.body.classList.contains('clock-focus') : !!on;
   document.body.classList.toggle('clock-focus', want);
@@ -2954,7 +3125,7 @@ function toggleClockFocus(on){
   if(btn) btn.setAttribute('aria-pressed', want ? 'true' : 'false');
   const label = document.getElementById('clockFocusLabel');
   if(label) label.textContent = want ? 'Свернуть' : 'Увеличить';
-  hideClockTooltip();
+  hideClockTooltip(true);
   if(!want){ const sec = document.getElementById('timing'); if(sec) sec.scrollIntoView({block:'start'}); }
 }
 document.addEventListener('keydown', e=>{
@@ -3526,9 +3697,9 @@ function renderBudget(){
     <tr class="auto-row${r.done?' auto-row-done':''}" data-item-id="${r.itemId}">
       <td colspan="1">${escapeHtml(r.service)}<span class="src-tag">чек-лист · ${escapeHtml(r.groupLabel)}</span></td>
       <td>${escapeHtml(r.vendor)||'<span class="muted-cell">—</span>'}</td>
-      <td class="mono">${fmtMoney(r.amount)}</td>
-      <td class="mono">${r.prepaid?fmtMoney(r.prepaid):'<span class="muted-cell">—</span>'}</td>
-      <td class="mono">${fmtMoney(Math.max((parseInt(r.amount,10)||0)-(parseInt(r.prepaid,10)||0),0))}</td>
+      <td class="mono" data-l="Сумма">${fmtMoney(r.amount)}</td>
+      <td class="mono" data-l="Предоплата">${r.prepaid?fmtMoney(r.prepaid):'<span class="muted-cell">—</span>'}</td>
+      <td class="mono" data-l="Остаток">${fmtMoney(Math.max((parseInt(r.amount,10)||0)-(parseInt(r.prepaid,10)||0),0))}</td>
       <td>${r.done?'<span class="status-pill good">Учтено</span>':'<span class="status-pill idle">План</span>'}</td>
       <td class="del-cell admin-only"><button class="row-del row-goto" onclick="gotoChecklistItem('${r.groupKey}','${r.itemId}')" title="Открыть в чек-листе">↷</button></td>
     </tr>
@@ -3541,10 +3712,10 @@ function renderBudget(){
       <td class="admin-only"><input type="text" maxlength="35" value="${escAttr(r.vendor)}" oninput="updateBudgetField('${r.id}','vendor',this.value)"></td>
       <td class="preview-only">${escapeHtml(r.vendor)}</td>
       <td class="admin-only amount-cell"><input type="text" inputmode="numeric" value="${groupDigits(r.amount)}" oninput="updateBudgetField('${r.id}','amount',maskAmountInput(this)); recalcBudgetTotals(); renderBudgetRowRemaining('${r.id}');"></td>
-      <td class="preview-only mono">${fmtMoney(r.amount)}</td>
+      <td class="preview-only mono" data-l="Сумма">${fmtMoney(r.amount)}</td>
       <td class="admin-only amount-cell"><input type="text" inputmode="numeric" value="${groupDigits(r.prepaid)}" oninput="updateBudgetField('${r.id}','prepaid',maskAmountInput(this)); recalcBudgetTotals(); renderBudgetRowRemaining('${r.id}');"></td>
-      <td class="preview-only mono">${fmtMoney(r.prepaid)}</td>
-      <td class="mono" id="bf-rest-${r.id}">${fmtMoney(budgetRowOwed(r))}</td>
+      <td class="preview-only mono" data-l="Предоплата">${fmtMoney(r.prepaid)}</td>
+      <td class="mono" data-l="Остаток" id="bf-rest-${r.id}">${fmtMoney(budgetRowOwed(r))}</td>
       <td class="admin-only">
         <select onchange="updateBudgetField('${r.id}','status',this.value); renderBudgetRowRemaining('${r.id}');">
           <option value="good"${r.status==='good'?' selected':''}>Оплачено</option>
@@ -3575,9 +3746,9 @@ function renderBudget(){
     <tr class="budget-group-add admin-only"${proOnly}><td colspan="7"><button class="add-row-btn" onclick="applyBudgetRow(null,'${g.key}')">${g.add}</button></td></tr>
     <tr class="budget-group-total"${proOnly}>
       <td colspan="2">Итого · ${escapeHtml(g.label.split(' · ')[0].toLowerCase())}</td>
-      <td class="mono" id="bg-amount-${g.key}">${fmtMoney(t.amount)}</td>
-      <td class="mono" id="bg-paid-${g.key}">${fmtMoney(t.paid)}</td>
-      <td class="mono" id="bg-owed-${g.key}">${fmtMoney(t.owed)}</td>
+      <td class="mono" data-l="Сумма" id="bg-amount-${g.key}">${fmtMoney(t.amount)}</td>
+      <td class="mono" data-l="Оплачено" id="bg-paid-${g.key}">${fmtMoney(t.paid)}</td>
+      <td class="mono" data-l="К оплате" id="bg-owed-${g.key}">${fmtMoney(t.owed)}</td>
       <td colspan="2" class="bg-note">оплачено · к оплате</td>
     </tr>`;
   };
@@ -3765,13 +3936,13 @@ function renderGuests(){
       <td class="admin-only"><input type="text" maxlength="40" value="${escAttr(g.name)}" oninput="updateGuestField('${g.id}','name',this.value)"></td>
       <td class="preview-only">${escapeHtml(g.name)||'<span class="muted-cell">—</span>'}</td>
       <td class="admin-only"><input type="text" maxlength="40" value="${escAttr(g.partner)}" oninput="updateGuestField('${g.id}','partner',this.value)"></td>
-      <td class="preview-only">${escapeHtml(g.partner)||'<span class="muted-cell">—</span>'}</td>
+      <td class="preview-only" data-l="Пара">${escapeHtml(g.partner)||'<span class="muted-cell">—</span>'}</td>
       <td class="admin-only"><input type="text" maxlength="30" value="${escAttr(g.category)}" oninput="updateGuestField('${g.id}','category',this.value)"></td>
-      <td class="preview-only">${escapeHtml(g.category)||'<span class="muted-cell">—</span>'}</td>
+      <td class="preview-only" data-l="Категория">${escapeHtml(g.category)||'<span class="muted-cell">—</span>'}</td>
       <td class="admin-only table-num-cell"><input type="text" inputmode="numeric" maxlength="4" value="${escAttr(g.table)}" oninput="updateGuestField('${g.id}','table',this.value)"></td>
-      <td class="preview-only mono">${escapeHtml(g.table)||'<span class="muted-cell">—</span>'}</td>
+      <td class="preview-only mono" data-l="Стол">${escapeHtml(g.table)||'<span class="muted-cell">—</span>'}</td>
       <td class="admin-only"><input type="text" value="${escAttr(g.comment)}" oninput="updateGuestField('${g.id}','comment',this.value)"></td>
-      <td class="preview-only">${escapeHtml(g.comment)||'<span class="muted-cell">—</span>'}</td>
+      <td class="preview-only" data-l="Комментарий">${escapeHtml(g.comment)||'<span class="muted-cell">—</span>'}</td>
       <td class="del-cell admin-only"><button class="row-del" onclick="removeGuestRow('${g.id}')" title="Удалить">×</button></td>
     </tr>
   `).join('');
@@ -4519,6 +4690,7 @@ function pluralize(n, one, few, many){
 
 /* ---------- render orchestration ---------- */
 function renderPreview(){
+  renderPreviewNav();
   renderBriefPreview();
   renderTimelinePreview();
   renderChecklist();
