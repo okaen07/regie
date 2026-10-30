@@ -1423,6 +1423,21 @@
   @media(min-width:1560px){
     .brand-row{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);}
   }
+
+  /* Тосты: full page width, one line per category — number · category · who
+     raises the toast · time; nothing wraps, so the list stays short */
+  #guests.toasts-wide .wrap{max-width:none;}
+  .toast-list{padding:8px 16px;}
+  .toast-list li{display:grid;grid-template-columns:26px minmax(160px,max-content) minmax(0,1fr) auto auto;align-items:center;column-gap:16px;padding:7px 10px;}
+  .toast-list .toast-cat{font-family:'Bodoni Moda',serif;font-size:15px;font-weight:500;white-space:nowrap;}
+  .toast-list .toast-names{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px;color:var(--muted);}
+  .toast-list .toast-now-badge[hidden]{display:none;}
+  .toast-list .toast-time-input{margin-left:0;}
+  @media(max-width:760px){
+    .toast-list li{grid-template-columns:26px minmax(0,1fr) auto;row-gap:2px;}
+    .toast-list .toast-names{grid-column:2 / -1;white-space:normal;}
+    .toast-list .toast-now-badge{grid-column:3;grid-row:1;}
+  }
 </style>
 </head>
 <body data-mode="admin">
@@ -4795,14 +4810,10 @@ function renderToasts(){
     const time = state.toastTimes[cat]||'';
     return `
       <li class="${isNow?'toast-now':''}" data-cat="${escAttr(cat)}">
-        <div class="toast-body">
-          <div class="toast-head">
-            <strong>${escapeHtml(cat)}</strong>
-            <span class="toast-now-badge"${isNow?'':' hidden'}>Сейчас</span>
-            <input type="time" class="toast-time-input admin-only" list="toast-time-list" data-cat="${escAttr(cat)}" value="${escAttr(time)}" title="Привязать время из тайминга">
-          </div>
-          <span class="toast-names">${names.join(', ')}</span>
-        </div>
+        <strong class="toast-cat">${escapeHtml(cat)}</strong>
+        <span class="toast-names" title="${escAttr(names.join(', '))}">${names.join(', ')}</span>
+        <span class="toast-now-badge"${isNow?'':' hidden'}>Сейчас</span>
+        <input type="time" class="toast-time-input admin-only" list="toast-time-list" data-cat="${escAttr(cat)}" value="${escAttr(time)}" title="Привязать время из тайминга">
       </li>`;
   }).join('') + '</ol>';
   body.querySelectorAll('.toast-time-input').forEach(inp=>{
@@ -4903,6 +4914,9 @@ function setGuestsView(view){
   document.querySelectorAll('.guests-tab').forEach(btn=>{
     btn.classList.toggle('active', btn.getAttribute('data-view')===view);
   });
+  // the toast list spreads to the page edges so every category fits on one line
+  const sec = document.getElementById('guests');
+  if(sec) sec.classList.toggle('toasts-wide', view==='toasts');
 }
 
 /* ---------- venue / меню и оборудование (Pro) ---------- */
