@@ -1524,6 +1524,44 @@
   .mock-table.guests-table .row-del{border-color:transparent;background:transparent;opacity:0;transition:opacity .15s;}
   .mock-table.guests-table tbody tr:hover .row-del,.mock-table.guests-table .row-del:focus{opacity:1;border-color:var(--border);}
   @media(hover:none){ .mock-table.guests-table .row-del{opacity:.6;} }
+
+  /* Список гостей, dense: columns sized to their content, rows 28 px, a hairline
+     between tables; the overview of tables sits to the right */
+  .guests-layout{display:grid;grid-template-columns:minmax(0,860px) minmax(220px,1fr);align-items:start;}
+  .guests-main{border-right:1px solid var(--border);}
+  .mock-table.guests-table{table-layout:fixed;min-width:600px;}
+  .mock-table.guests-table th:nth-child(1){width:52px;}
+  .mock-table.guests-table th:nth-child(2),.mock-table.guests-table th:nth-child(3){width:26%;}
+  .mock-table.guests-table th:nth-child(5){width:64px;}
+  .mock-table.guests-table th:nth-child(6){width:34px;}
+  .mock-table.guests-table th{padding:7px 6px 5px;font-size:11px;}
+  .mock-table.guests-table td{padding:0 4px;}
+  .mock-table.guests-table tbody tr:first-child td{padding-top:4px;}
+  .mock-table.guests-table input{height:26px;font-size:13px;min-width:0;width:100%;}
+  .mock-table.guests-table td.table-num-cell input{min-width:0;max-width:none;text-align:center;}
+  .mock-table.guests-table tr.table-break td{padding-top:3px;border-top:1px solid var(--border);}
+  .mock-table.guests-table .guest-num{font-size:11.5px;}
+  .mock-table.guests-table .row-del{width:24px;height:24px;}
+  .mock-table.guests-table tr.flash td{background:var(--accent-soft);transition:background .3s;}
+  .guests-side{position:sticky;top:12px;padding:12px 16px 14px;font-size:12.5px;}
+  .gs-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px;}
+  .gs-stat{background:var(--surface-2);border-radius:8px;padding:6px 8px;text-align:center;}
+  .gs-stat b{display:block;font-family:'Bodoni Moda',serif;font-size:20px;font-weight:500;line-height:1.1;}
+  .gs-stat span{font-size:10.5px;color:var(--muted);}
+  .gs-tables{list-style:none;margin:0;padding:0;}
+  .gs-tables button{display:grid;grid-template-columns:auto auto minmax(0,1fr);align-items:baseline;gap:8px;width:100%;padding:4px 6px;border:none;background:none;border-radius:6px;text-align:left;cursor:pointer;color:var(--text);font:inherit;}
+  .gs-tables button:hover{background:var(--surface-2);}
+  .gs-t{font-weight:600;white-space:nowrap;}
+  .gs-n{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);}
+  .gs-n.over{color:var(--bad,#b3412f);font-weight:700;}
+  .gs-c{color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .gs-empty,.gs-warn{margin:8px 0 0;color:var(--muted);}
+  .gs-warn{color:var(--warn,#a86b1e);}
+  @media(max-width:1000px){
+    .guests-layout{grid-template-columns:1fr;}
+    .guests-main{border-right:none;}
+    .guests-side{position:static;border-top:1px solid var(--border);}
+  }
 </style>
 </head>
 <body data-mode="admin">
@@ -1876,8 +1914,8 @@
         </div>
         <div class="mock-crumb" id="pv-g-count">—</div>
       </div>
-      <div class="mock-body pad-0">
-        <div class="mock-table-wrap">
+      <div class="mock-body pad-0 guests-layout">
+        <div class="mock-table-wrap guests-main">
           <table class="mock-table guests-table">
             <thead>
               <tr>
@@ -1887,6 +1925,7 @@
             <tbody id="guestRows"></tbody>
           </table>
         </div>
+        <aside class="guests-side" id="guestsSide" aria-label="Столы"></aside>
         <div class="scroll-hint">← смахните таблицу, чтобы увидеть всё →</div>
       </div>
       <div class="mock-body guests-add" style="padding-top:0;">
@@ -4833,6 +4872,45 @@ function renderGuests(){
 
 /* Rows are read table by table: a gap opens where the table number changes,
    and a category or table repeated from the row above fades back. */
+function renderGuestsSide(){
+  const box = document.getElementById('guestsSide');
+  if(!box) return;
+  const cap = parseInt(state.venue && state.venue.seatsPerTable,10)||0;
+  const tables = {}, order = [];
+  let people = 0, pairs = 0, noTable = 0;
+  state.guests.forEach(g=>{
+    const n = guestPeople(g);
+    if(!n) return;
+    people += n;
+    if(n===2) pairs++;
+    const t = (g.table||'').toString().trim();
+    if(!t){ noTable += n; return; }
+    if(!tables[t]){ tables[t] = {n:0, cats:[]}; order.push(t); }
+    tables[t].n += n;
+    const c = (g.category||'').trim();
+    if(c && !tables[t].cats.includes(c)) tables[t].cats.push(c);
+  });
+  order.sort((a,b)=>(parseInt(a,10)||1e9)-(parseInt(b,10)||1e9));
+  const stat = (v,l)=>`<div class="gs-stat"><b>${v}</b><span>${l}</span></div>`;
+  box.innerHTML = `<div class="gs-stats">${stat(people, pluralize(people,'гость','гостя','гостей'))}${stat(order.length, pluralize(order.length,'стол','стола','столов'))}${stat(pairs, pluralize(pairs,'пара','пары','пар'))}</div>`
+    + (order.length ? `<ul class="gs-tables">${order.map(t=>{
+        const x = tables[t], over = cap && x.n>cap;
+        return `<li><button type="button" onclick="jumpToTable('${escAttr(t)}')"><span class="gs-t">Стол ${escapeHtml(t)}</span><span class="gs-n${over?' over':''}">${x.n}${cap?'/'+cap:''}</span><span class="gs-c">${x.cats.map(escapeHtml).join(' · ')}</span></button></li>`;
+      }).join('')}</ul>` : '<p class="gs-empty">Номера столов ещё не проставлены.</p>')
+    + (noTable ? `<p class="gs-warn">Без стола: ${noTable} ${pluralize(noTable,'человек','человека','человек')}</p>` : '');
+}
+function jumpToTable(t){
+  const g = state.guests.find(x=>(x.table||'').toString().trim()===t);
+  const tr = g && document.querySelector(`#guestRows tr[data-id="${g.id}"]`);
+  if(!tr) return;
+  tr.scrollIntoView({block:'center', behavior:'smooth'});
+  document.querySelectorAll('#guestRows tr.flash').forEach(r=>r.classList.remove('flash'));
+  state.guests.filter(x=>(x.table||'').toString().trim()===t).forEach(x=>{
+    const r = document.querySelector(`#guestRows tr[data-id="${x.id}"]`);
+    if(r){ r.classList.add('flash'); setTimeout(()=>r.classList.remove('flash'), 1600); }
+  });
+}
+
 function markGuestGroups(){
   let prev = null;
   state.guests.forEach(g=>{
@@ -4845,6 +4923,7 @@ function markGuestGroups(){
     tr.classList.toggle('same-cat', same && !!c && c===prev.c);
     prev = {t, c};
   });
+  renderGuestsSide();
 }
 
 /* Running head-count left of each name: a guest with a partner takes two
@@ -4871,7 +4950,7 @@ function updateGuestField(gid, key, val){
   const g = state.guests.find(x=>x.id===gid);
   if(!g) return;
   g[key] = val;
-  if(key==='name' || key==='partner') updateGuestNumbers();
+  if(key==='name' || key==='partner'){ updateGuestNumbers(); renderGuestsSide(); }
   if(key==='table' || key==='category') markGuestGroups();
   scheduleSave();
   renderToasts();
