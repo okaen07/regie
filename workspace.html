@@ -1372,15 +1372,23 @@
   }
   /* «Лист мероприятий» at the foot of the checklist card, centred */
   .catalog-open-row{display:flex;justify-content:center;padding:14px 16px 16px;border-top:1px solid var(--border);}
+
+  /* big wordmark; «Рабочий стол мероприятия» lies faintly behind the letters */
+  .brand-block{position:relative;max-width:none;display:grid;place-items:center start;}
+  .brand-block > *{grid-area:1 / 1;}
+  .brand-name{position:relative;z-index:1;font-size:clamp(34px,5.4vw,56px);line-height:1;font-weight:500;letter-spacing:.12em;}
+  .brand-sub{z-index:0;width:100%;text-align:center;font-family:'Bodoni Moda',serif;font-style:italic;font-size:clamp(12px,1.75vw,18px);line-height:1;letter-spacing:.04em;color:var(--accent);opacity:.32;white-space:nowrap;pointer-events:none;transform:translateY(-4%);}
+  @media(min-width:761px){ .brand-row{align-items:center;} }
+  @media(max-width:760px){ .brand-block{padding-right:0;} }
 </style>
 </head>
 <body data-mode="admin">
 
 <header>
   <div class="full-bleed brand-row">
-    <div class="brand-block">
+    <div class="brand-block" title="Данные хранятся только в этом браузере">
+      <div class="brand-sub" aria-hidden="true">Рабочий стол мероприятия</div>
       <div class="brand-name">RÉGIE</div>
-      <div class="brand-sub">Рабочий стол мероприятия · только в этом браузере</div>
     </div>
 
     <div class="category-tabs admin-only">
