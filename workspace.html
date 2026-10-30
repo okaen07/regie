@@ -1424,9 +1424,9 @@
     .brand-row{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);}
   }
 
-  /* Тосты: full page width, one line per category — number · category · who
+  /* Тосты: one line per category — number · category · who
      raises the toast · time; nothing wraps, so the list stays short */
-  #guests.toasts-wide .wrap{max-width:none;}
+  #guests .wrap{max-width:none;} /* list, toasts and seating all use the full page width */
   .toast-list{padding:8px 16px;}
   .toast-list li{display:grid;grid-template-columns:26px minmax(160px,max-content) minmax(0,1fr) auto auto;align-items:center;column-gap:16px;padding:7px 10px;}
   .toast-list .toast-cat{font-family:'Bodoni Moda',serif;font-size:15px;font-weight:500;white-space:nowrap;}
@@ -4914,9 +4914,6 @@ function setGuestsView(view){
   document.querySelectorAll('.guests-tab').forEach(btn=>{
     btn.classList.toggle('active', btn.getAttribute('data-view')===view);
   });
-  // the toast list spreads to the page edges so every category fits on one line
-  const sec = document.getElementById('guests');
-  if(sec) sec.classList.toggle('toasts-wide', view==='toasts');
 }
 
 /* ---------- venue / меню и оборудование (Pro) ---------- */
