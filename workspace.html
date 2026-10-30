@@ -1378,8 +1378,22 @@
   .brand-block > *{grid-area:1 / 1;}
   .brand-name{position:relative;z-index:1;font-size:clamp(34px,5.4vw,56px);line-height:1;font-weight:500;letter-spacing:.12em;}
   .brand-sub{z-index:0;width:100%;text-align:center;font-family:'Bodoni Moda',serif;font-style:italic;font-size:clamp(12px,1.75vw,18px);line-height:1;letter-spacing:.04em;color:var(--accent);opacity:.32;white-space:nowrap;pointer-events:none;transform:translateY(-4%);}
-  @media(min-width:761px){ .brand-row{align-items:center;} }
+  @media(min-width:761px){
+    .brand-row{align-items:center;}
+    /* the wordmark stands in the middle between the page edge and the language coin */
+    .brand-block{flex:1 1 auto;place-items:center;}
+    .brand-row .category-tabs{flex:0 0 auto;}
+    .brand-sub{width:auto;}
+    .brand-name{padding-left:.12em;} /* balances the spacing after the last letter */
+  }
   @media(max-width:760px){ .brand-block{padding-right:0;} }
+  /* every so often the letters turn over one by one and sink back, the
+     caption comes forward; a few seconds later everything turns back */
+  .brand-name .bl{display:inline-block;transition:transform .7s cubic-bezier(.5,0,.3,1),opacity .7s ease,color .7s ease;transition-delay:calc(var(--i) * 110ms);}
+  .brand-sub{transition:transform .8s cubic-bezier(.3,0,.2,1),opacity .8s ease,color .8s ease;transition-delay:.35s;}
+  .brand-block.swap .brand-name .bl{transform:rotateY(180deg) scale(.92);opacity:.13;color:var(--accent);}
+  .brand-block.swap .brand-sub{z-index:2;opacity:1;color:var(--text);transform:scale(1.45);}
+  @media(prefers-reduced-motion:reduce){ .brand-name .bl,.brand-sub{transition:none;} }
 </style>
 </head>
 <body data-mode="admin">
@@ -1388,7 +1402,7 @@
   <div class="full-bleed brand-row">
     <div class="brand-block" title="Данные хранятся только в этом браузере">
       <div class="brand-sub" aria-hidden="true">Рабочий стол мероприятия</div>
-      <div class="brand-name">RÉGIE</div>
+      <div class="brand-name" aria-label="Régie">RÉGIE</div>
     </div>
 
     <div class="category-tabs admin-only">
@@ -2552,6 +2566,24 @@ function knownVenueNames(){
    «Paradise Hall» in the field no other venue showed up until it was wiped.
    This list shows every venue when opened (▾ or a click in an unchanged
    field) and narrows down only while the planner types. */
+/* Wordmark: the letters are split into spans so they can turn one by one.
+   Every 14 s the caption swaps places with RÉGIE for 4 s. */
+function animateWordmark(){
+  const name = document.querySelector('.brand-name');
+  const block = name && name.closest('.brand-block');
+  if(!block || name.dataset.split) return;
+  name.dataset.split = '1';
+  name.innerHTML = [...name.textContent.trim()].map((ch,i)=>`<span class="bl" aria-hidden="true" style="--i:${i}">${escapeHtml(ch)}</span>`).join('');
+  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const cycle = ()=>{
+    if(document.hidden) return;
+    block.classList.add('swap');
+    setTimeout(()=>block.classList.remove('swap'), 4000);
+  };
+  setTimeout(cycle, 3000);
+  setInterval(cycle, 14000);
+}
+
 function enhanceCombo(input){
   const dl = input.list;
   if(!dl || input.dataset.combo) return;
@@ -6219,6 +6251,7 @@ migrateBrand();
 loadCatalog();
 applyClockStyle();
 enhanceCombo(document.getElementById('f-venue'));
+animateWordmark();
 applyLang();
 state = loadState();
 renderAll();
