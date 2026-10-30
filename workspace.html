@@ -1509,6 +1509,21 @@
     .td-toasts > li,.td-table{break-inside:avoid;}
     .td-seat-title{break-before:auto;}
   }
+
+  /* Список гостей: fields read as plain text — the outline shows on hover and
+     while typing; a gap and a hairline separate one table from the next */
+  .mock-table.guests-table input{border-color:transparent;background:transparent;box-shadow:none;}
+  .mock-table.guests-table tbody tr:hover input{border-color:var(--border);}
+  .mock-table.guests-table input:focus{border-color:var(--accent);background:var(--surface);}
+  .mock-table.guests-table tr.table-break td{padding-top:14px;border-top:1px solid var(--border);}
+  .mock-table.guests-table tr.same-cat td:nth-child(6) input,
+  .mock-table.guests-table tr.same-table td.table-num-cell input{color:transparent;}
+  .mock-table.guests-table tr.same-cat:hover td:nth-child(6) input,
+  .mock-table.guests-table tr.same-table:hover td.table-num-cell input,
+  .mock-table.guests-table tr input:focus{color:var(--text);}
+  .mock-table.guests-table .row-del{border-color:transparent;background:transparent;opacity:0;transition:opacity .15s;}
+  .mock-table.guests-table tbody tr:hover .row-del,.mock-table.guests-table .row-del:focus{opacity:1;border-color:var(--border);}
+  @media(hover:none){ .mock-table.guests-table .row-del{opacity:.6;} }
 </style>
 </head>
 <body data-mode="admin">
@@ -4811,8 +4826,25 @@ function renderGuests(){
     </tr>
   `).join('');
   updateGuestNumbers();
+  markGuestGroups();
   renderToasts();
   renderSeating();
+}
+
+/* Rows are read table by table: a gap opens where the table number changes,
+   and a category or table repeated from the row above fades back. */
+function markGuestGroups(){
+  let prev = null;
+  state.guests.forEach(g=>{
+    const tr = document.querySelector(`#guestRows tr[data-id="${g.id}"]`);
+    if(!tr) return;
+    const t = (g.table||'').toString().trim(), c = (g.category||'').trim();
+    tr.classList.toggle('table-break', !!prev && t!==prev.t);
+    const same = !!prev && t===prev.t;
+    tr.classList.toggle('same-table', same && !!t);
+    tr.classList.toggle('same-cat', same && !!c && c===prev.c);
+    prev = {t, c};
+  });
 }
 
 /* Running head-count left of each name: a guest with a partner takes two
@@ -4840,6 +4872,7 @@ function updateGuestField(gid, key, val){
   if(!g) return;
   g[key] = val;
   if(key==='name' || key==='partner') updateGuestNumbers();
+  if(key==='table' || key==='category') markGuestGroups();
   scheduleSave();
   renderToasts();
   renderSeating();
