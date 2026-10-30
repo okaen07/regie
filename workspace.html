@@ -1636,6 +1636,49 @@
   .tf-box{width:min(440px,100%);}
   .tf-grid{grid-template-columns:90px 1fr;}
   @media(max-width:760px){ .tf-grid{grid-template-columns:90px 1fr;} }
+
+  /* Тосты — the tab looks like the sheet the toastmaster gets */
+  .toast-paper{max-width:860px;margin:14px auto 18px;background:#fff;color:#20241f;border:1px solid var(--border);border-radius:6px;box-shadow:0 18px 40px -28px rgba(32,36,31,.45);padding:26px 34px 22px;}
+  .tp-title{display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;border-bottom:1.5px solid #20241f;padding-bottom:8px;margin-bottom:6px;}
+  .tp-title h4{margin:0;font-family:'Bodoni Moda',Georgia,serif;font-weight:500;font-size:26px;}
+  .tp-title span{font-size:12px;color:#666;}
+  .toast-list.tp{padding:0;margin:0;}
+  .toast-list.tp li{display:block;padding:9px 0 8px;border-bottom:1px solid #ebe8e0;border-radius:0;}
+  .toast-list.tp li:last-child{border-bottom:none;}
+  .toast-list.tp li::before{display:none;}
+  .toast-list.tp li.toast-now{background:#eef5ef;margin:0 -12px;padding-left:12px;padding-right:12px;border-radius:6px;}
+  .tp-head{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap;}
+  .tp-num{font-family:'Bodoni Moda',Georgia,serif;font-size:16px;min-width:22px;}
+  .toast-list.tp .toast-cat{font-family:'Karla',system-ui,sans-serif;font-size:15px;font-weight:700;white-space:normal;}
+  .toast-list.tp .toast-tables{font-size:11.5px;color:#2f4a3c;}
+  .tp-time{font-family:'IBM Plex Mono',monospace;font-size:11.5px;background:#eef2ee;padding:1px 7px;border-radius:999px;}
+  .tp-ctrl{margin-left:auto;display:inline-flex;align-items:center;gap:6px;opacity:.35;transition:opacity .15s;}
+  .toast-list.tp li:hover .tp-ctrl,.tp-ctrl:focus-within{opacity:1;}
+  @media(hover:none){ .tp-ctrl{opacity:.8;} }
+  .toast-list.tp .toast-names{display:block;white-space:normal;overflow:visible;margin:3px 0 0 32px;font-size:13.5px;line-height:1.55;color:#3a3f38;}
+  .toast-list.tp li.toast-extra .toast-cat{font-style:italic;font-weight:600;}
+  @media(max-width:760px){
+    .toast-paper{margin:10px 0 14px;padding:16px 14px;}
+    .toast-list.tp .toast-names{margin-left:0;}
+    .tp-ctrl{margin-left:0;width:100%;}
+  }
+
+  /* Визуализация: full names on an oval, couples joined by a dashed arc */
+  .table-grid{gap:18px 26px;}
+  .table-wrap .pair-links{position:absolute;inset:0;pointer-events:none;overflow:visible;}
+  .pair-links path{fill:none;stroke:var(--accent);stroke-width:1.4;stroke-dasharray:4 3;opacity:.8;}
+  .seat-chip{width:auto;max-width:none;margin:0;transform:translate(-50%,-50%);overflow:visible;text-overflow:clip;font-size:11px;padding:4px 9px;z-index:1;}
+  .seat-chip.in-pair{border-color:var(--accent);}
+  .table-circle{width:104px;height:104px;margin:-52px 0 0 -52px;flex-direction:column;gap:3px;padding:8px;}
+  .table-circle b{font-weight:600;font-size:15px;}
+  .table-circle span{font-family:'Karla',system-ui,sans-serif;font-size:9.5px;line-height:1.2;color:var(--accent);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+  .viz-legend{display:flex;align-items:center;gap:8px;}
+  .viz-pair-sample{display:inline-block;width:28px;border-top:1.6px dashed var(--accent);}
+  @media(max-width:760px){
+    .table-grid{padding:14px 0;}
+    .table-wrap{zoom:.68;}
+    .seat-chip{font-size:12.5px;}
+  }
 </style>
 </head>
 <body data-mode="admin">
@@ -2003,7 +2046,6 @@
           <button class="guests-tab" data-view="viz" onclick="setGuestsView('viz')">Визуализация</button>
         </div>
         <div class="mock-crumb">по категориям</div>
-        <button type="button" class="tamada-btn ghost" onclick="openTamadaSheet()" title="Посмотреть лист перед печатью">Просмотр</button>
         <button type="button" class="tamada-btn" onclick="printTamadaSheet()" title="Сразу открыть печать — выберите «Сохранить как PDF» и отправьте тамаде">PDF для тамады</button>
       </div>
       <div class="mock-body" id="toastsBody"></div>
@@ -5224,9 +5266,13 @@ function renderToasts(){
   }
   const current = currentToastCategory();
   const timeOptions = state.timeline.filter(t=>t.time).map(t=>`<option value="${escAttr(t.time)}">${escapeHtml(t.title||t.time)}</option>`).join('');
+  const b = state.brief||{};
+  const sub = [b.title || b.type, fmtDate(b.date), b.venue].filter(x=>x && x!=='—').map(escapeHtml).join(' · ');
   body.innerHTML = tools + `
     <datalist id="toast-time-list">${timeOptions}</datalist>
-    <ol class="toast-list">` + cats.map((cat,i)=>{
+    <div class="toast-paper">
+    <div class="tp-title"><h4>Тосты</h4>${sub ? `<span>${sub}</span>` : ''}</div>
+    <ol class="toast-list tp">` + cats.map((cat,i)=>{
     const list = groups[cat]||[];
     const names = list.map(g=>guestDisplayName(g));
     const tables = toastTablesOf(list);
@@ -5234,18 +5280,24 @@ function renderToasts(){
     const time = state.toastTimes[cat]||'';
     return `
       <li class="${isNow?'toast-now':''}${list.length?'':' toast-extra'}" data-cat="${escAttr(cat)}">
-        <strong class="toast-cat">${escapeHtml(cat)}</strong>
-        <span class="toast-names" title="${escAttr(names.join(', '))}">${names.join(', ')}</span>
-        <span class="toast-tables">${tables.length ? (tables.length>1?'столы ':'стол ')+tables.map(escapeHtml).join(', ') : ''}</span>
-        <span class="toast-now-badge"${isNow?'':' hidden'}>Сейчас</span>
-        <input type="time" class="toast-time-input admin-only" list="toast-time-list" data-cat="${escAttr(cat)}" value="${escAttr(time)}" title="Привязать время из тайминга">
-        <span class="toast-move admin-only">
-          <button type="button" title="Выше" ${i===0?'disabled':''} onclick="moveToast(this.closest('li').dataset.cat,-1)">▲</button>
-          <button type="button" title="Ниже" ${i===cats.length-1?'disabled':''} onclick="moveToast(this.closest('li').dataset.cat,1)">▼</button>
-          ${list.length ? '' : '<button type="button" title="Убрать пункт" onclick="removeToastExtra(this.closest(\'li\').dataset.cat)">×</button>'}
-        </span>
+        <div class="tp-head">
+          <span class="tp-num">${i+1}.</span>
+          <strong class="toast-cat">${escapeHtml(cat)}</strong>
+          <span class="toast-tables">${tables.length ? (tables.length>1?'столы ':'стол ')+tables.map(escapeHtml).join(', ') : ''}</span>
+          ${time ? `<span class="tp-time preview-only">${escapeHtml(time)}</span>` : ''}
+          <span class="toast-now-badge"${isNow?'':' hidden'}>Сейчас</span>
+          <span class="tp-ctrl admin-only">
+            <input type="time" class="toast-time-input" list="toast-time-list" data-cat="${escAttr(cat)}" value="${escAttr(time)}" title="Привязать время из тайминга">
+            <span class="toast-move">
+              <button type="button" title="Выше" ${i===0?'disabled':''} onclick="moveToast(this.closest('li').dataset.cat,-1)">▲</button>
+              <button type="button" title="Ниже" ${i===cats.length-1?'disabled':''} onclick="moveToast(this.closest('li').dataset.cat,1)">▼</button>
+              ${list.length ? '' : '<button type="button" title="Убрать пункт" onclick="removeToastExtra(this.closest(\'li\').dataset.cat)">×</button>'}
+            </span>
+          </span>
+        </div>
+        ${names.length ? `<div class="toast-names">${names.join(', ')}</div>` : ''}
       </li>`;
-  }).join('') + '</ol>';
+  }).join('') + '</ol></div>';
   body.querySelectorAll('.toast-time-input').forEach(inp=>{
     inp.addEventListener('change', ()=>updateToastTime(inp.dataset.cat, inp.value));
   });
@@ -5480,8 +5532,9 @@ function renderSeating(){
   const noTable = [];
   state.guests.forEach(g=>{
     const seats = [];
-    if(g.name) seats.push(g.name);
-    if(g.partner) seats.push(g.partner);
+    const both = !!(g.name && g.partner);
+    if(g.name) seats.push({name:g.name, pair: both ? 'a' : ''});
+    if(g.partner) seats.push({name:g.partner, pair: both ? 'b' : ''});
     if(!seats.length) return;
     const t = (g.table||'').trim();
     if(!t){ noTable.push(...seats); return; }
@@ -5500,24 +5553,37 @@ function renderSeating(){
   const cap = parseInt(state.venue && state.venue.seatsPerTable,10)||0;
   body.innerHTML = '<div class="table-grid">' + tables.map(t=>{
     const seats = byTable[t];
-    const over = cap>0 && seats.length>cap;
-    const radius = seats.length<=6 ? 86 : (seats.length<=10 ? 100 : 116);
-    const size = radius*2+70;
-    const chips = seats.map((name,i)=>{
-      const angle = (360/seats.length)*i;
-      return `<div class="seat-chip" style="transform:rotate(${angle}deg) translate(0,-${radius}px) rotate(${-angle}deg);" title="${escAttr(name)}">${escapeHtml(name)}</div>`;
+    const n = seats.length;
+    const over = cap>0 && n>cap;
+    // names sit on an oval around the table, wide enough for full names
+    const rx = n<=4 ? 96 : n<=6 ? 118 : n<=8 ? 138 : n<=10 ? 156 : 176;
+    const ry = Math.round(rx*0.68);
+    const W = rx*2 + 150, H = ry*2 + 70, cx = W/2, cy = H/2;
+    const at = (i, dx=0, dy=0)=>{ const a = 2*Math.PI*i/n; return [cx + (rx+dx)*Math.sin(a), cy - (ry+dy)*Math.cos(a)]; };
+    const chips = seats.map((s,i)=>{
+      const [x,y] = at(i);
+      return `<div class="seat-chip${s.pair?' in-pair':''}" style="left:${x.toFixed(1)}px;top:${y.toFixed(1)}px">${escapeHtml(s.name)}</div>`;
     }).join('');
+    // a dashed arc just outside the two chips of a couple
+    const links = seats.map((s,i)=>{
+      if(s.pair!=='a' || n<2) return '';
+      const [x1,y1] = at(i, 22, 18), [x2,y2] = at((i+1)%n, 22, 18);
+      return `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} A${rx+22} ${ry+18} 0 0 1 ${x2.toFixed(1)} ${y2.toFixed(1)}"/>`;
+    }).join('');
+    const title = tableTitle(t, (state.guests||[]).filter(g=>(g.table||'').toString().trim()===t));
     return `
       <div class="table-card${over?' over':''}">
-        <div class="table-wrap" style="width:${size}px;height:${size}px;">
-          <div class="table-circle">Стол ${escapeHtml(t)}</div>
+        <div class="table-wrap" style="width:${W}px;height:${H}px;">
+          <svg class="pair-links" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" aria-hidden="true">${links}</svg>
+          <div class="table-circle"><b>Стол ${escapeHtml(t)}</b>${title ? `<span>${escapeHtml(title)}</span>` : ''}</div>
           ${chips}
         </div>
-        <div class="table-count">${cap ? `<b>${seats.length}</b> из ${cap} мест` : seats.length+' '+pluralize(seats.length,'гость','гостя','гостей')}${over ? ` · <span class="table-over">+${seats.length-cap} сверх мест</span>` : (cap && seats.length<cap ? ` · свободно ${cap-seats.length}` : '')}</div>
+        <div class="table-count">${cap ? `<b>${n}</b> из ${cap} мест` : n+' '+pluralize(n,'гость','гостя','гостей')}${over ? ` · <span class="table-over">+${n-cap} сверх мест</span>` : (cap && n<cap ? ` · свободно ${cap-n}` : '')}</div>
       </div>
     `;
   }).join('') + '</div>'
-  + (noTable.length ? `<p class="viz-note">Без стола: ${noTable.map(n=>escapeHtml(n)).join(', ')}</p>` : '');
+  + (noTable.length ? `<p class="viz-note">Без стола: ${noTable.map(s=>escapeHtml(s.name)).join(', ')}</p>` : '')
+  + '<p class="viz-note viz-legend"><span class="viz-pair-sample"></span> пунктир — пара</p>';
 }
 
 function setGuestsView(view){
