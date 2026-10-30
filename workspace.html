@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Régie — рабочий стол мероприятия</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#2f4a3c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Régie">
 <meta name="description" content="Внутренний инструмент Régie: заполните бриф клиента и получите готовую к показу демонстрацию.">
 <script>try{var __t=localStorage.getItem('regie_theme')||'editorial'; if(__t==='auto'){__t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dusk':'editorial';} if(__t!=='editorial') document.documentElement.setAttribute('data-theme', __t);}catch(e){}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -7001,6 +7007,10 @@ renderAll();
 let initialMode = 'admin';
 try{ initialMode = sessionStorage.getItem('regie_mode') || 'admin'; }catch(e){}
 setMode(initialMode);
+// installable on a phone and usable without signal (works on https and localhost only)
+if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){
+  window.addEventListener('load', ()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+}
 
 document.addEventListener('keydown', function(e){
   if(e.key==='Escape'){

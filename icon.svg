@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- app icon: full-bleed green square so phones can round or mask it; brass ring and cream R as in favicon.svg -->
+  <rect width="512" height="512" fill="#2f4a3c"/>
+  <circle cx="256" cy="256" r="176" fill="none" stroke="#c9a464" stroke-width="10"/>
+  <text x="256" y="345" text-anchor="middle" font-family="'Bodoni Moda','Didot','Bodoni MT',Georgia,'Times New Roman',serif" font-size="250" font-weight="600" fill="#f7f3ec">R</text>
+</svg>
