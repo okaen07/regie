@@ -2790,6 +2790,7 @@ function renderNextStep(){
 function goNextCategory(){
   const next = nextCategoryTab();
   if(!next) return;
+  refreshFromBrief();
   setCategory(next.getAttribute('data-cat'));
   window.scrollTo({top:0, behavior:'smooth'});
 }
@@ -2985,6 +2986,7 @@ function enhanceCombo(input){
 }
 
 function setCategory(cat){
+  if(briefRefreshTimer) refreshFromBrief(); // switching sections never shows stale brief data
   if(!state.ui) state.ui = {};
   state.ui.activeCategory = cat;
   scheduleSave();
@@ -3028,6 +3030,25 @@ function onField(key, val){
   if(key==='budget'){
     recalcVenueSummary(); // keeps the Pro Бюджет/Остаток ticker in sync too
   }
+  scheduleBriefRefresh();
+}
+
+/* Everything built from the brief — headers of the sheets, guest count,
+   tables, budget, menu, previews, warnings — follows it on its own: a short
+   pause after typing, and at once on «Дальше». The brief form itself is not
+   redrawn, so the cursor stays where it is. */
+let briefRefreshTimer = null;
+function scheduleBriefRefresh(){
+  clearTimeout(briefRefreshTimer);
+  briefRefreshTimer = setTimeout(refreshFromBrief, 300);
+}
+function refreshFromBrief(){
+  clearTimeout(briefRefreshTimer);
+  briefRefreshTimer = null;
+  const safe = fn=>{ try{ fn(); }catch(e){ console.warn(e); } };
+  [syncHero, renderClockEvents, renderChecklist, renderBudget, renderGuests,
+   renderBriefPreview, renderTimelinePreview, renderVenueAdmin, renderVenuePreview,
+   recalcVenueSummary, renderIssues].forEach(safe);
 }
 
 function fillBriefForm(){
