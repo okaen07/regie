@@ -1687,7 +1687,7 @@
   }
 </style>
 </head>
-<body data-mode="admin">
+<body data-mode="preview">
 
 <header>
   <div class="full-bleed brand-row">
@@ -2674,10 +2674,14 @@ function scheduleSave(){
 }
 
 /* ---------- mode ---------- */
-/* Password gate is OFF during content editing — flip to true (and set
-   initialMode below back to 'preview') before publishing this file. */
-const REQUIRE_ADMIN_PIN = false;
-const ADMIN_PIN_HASH = '6a5f0908428f55319748e2659cabdd0d2d9c38b4703258e749710bef44633dd2';
+/* «Админ» is behind a PIN on the published site. Only its SHA-256 is kept
+   here. Once entered on a device it is remembered there (localStorage), so
+   the planner's own phone opens straight into editing; a visitor gets
+   «Превью». */
+const REQUIRE_ADMIN_PIN = true;
+const ADMIN_PIN_HASH = 'f36b0ca332a4590ef392f960fa5363eeb3cfe0bae8c174f6859a23445471fdc7';
+function storeGet(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } }
+function storeSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
 async function sha256Hex(str){
   const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
   return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
@@ -2709,19 +2713,17 @@ async function submitPin(){
 }
 async function setMode(m){
   if(m==='admin' && REQUIRE_ADMIN_PIN){
-    let ok = false;
-    try{ ok = sessionStorage.getItem('regie_admin_ok')==='1'; }catch(e){}
-    if(!ok){
+    if(storeGet('regie_admin_ok')!==ADMIN_PIN_HASH.slice(0,12)){
       const authed = await openPinModal();
       if(!authed) return;
-      try{ sessionStorage.setItem('regie_admin_ok','1'); }catch(e){}
+      storeSet('regie_admin_ok', ADMIN_PIN_HASH.slice(0,12)); // a new PIN asks again
     }
   }
   document.body.setAttribute('data-mode', m);
   document.getElementById('btnAdmin').classList.toggle('active', m==='admin');
   document.getElementById('btnPreview').classList.toggle('active', m==='preview');
   if(m==='preview'){ renderPreview(); renderGuests(); }
-  try{ sessionStorage.setItem('regie_mode', m); }catch(e){}
+  storeSet('regie_mode', m);
   positionAllSegSliders();
 }
 
@@ -7005,7 +7007,8 @@ applyLang();
 state = loadState();
 renderAll();
 let initialMode = 'admin';
-try{ initialMode = sessionStorage.getItem('regie_mode') || 'admin'; }catch(e){}
+initialMode = storeGet('regie_mode') || 'preview';
+if(initialMode==='admin' && REQUIRE_ADMIN_PIN && storeGet('regie_admin_ok')!==ADMIN_PIN_HASH.slice(0,12)) initialMode = 'preview';
 setMode(initialMode);
 // installable on a phone and usable without signal (works on https and localhost only)
 if('serviceWorker' in navigator && (location.protocol==='https:' || location.hostname==='localhost' || location.hostname==='127.0.0.1')){
