@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Régie: a coin like the header buttons — green field, brass rim, cream serif R -->
+  <circle cx="32" cy="32" r="31" fill="#2f4a3c"/>
+  <circle cx="32" cy="32" r="27.5" fill="none" stroke="#c9a464" stroke-width="2"/>
+  <text x="32" y="45.5" text-anchor="middle" font-family="'Bodoni Moda','Didot','Bodoni MT',Georgia,'Times New Roman',serif" font-size="40" font-weight="600" fill="#f7f3ec">R</text>
+</svg>
