@@ -1438,6 +1438,77 @@
     .toast-list .toast-names{grid-column:2 / -1;white-space:normal;}
     .toast-list .toast-now-badge{grid-column:3;grid-row:1;}
   }
+
+  /* Тосты: order buttons, tables, tools */
+  .toast-list li{grid-template-columns:26px minmax(160px,max-content) minmax(0,1fr) auto auto auto auto;}
+  .toast-list .toast-tables{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--accent);white-space:nowrap;}
+  .toast-list li.toast-extra .toast-cat{font-style:italic;}
+  .toast-move{display:inline-flex;gap:2px;}
+  .toast-move button{width:24px;height:24px;border:1px solid var(--border);background:var(--surface);border-radius:6px;font-size:9px;color:var(--muted);cursor:pointer;padding:0;}
+  .toast-move button:hover:not(:disabled){color:var(--text);border-color:var(--text);}
+  .toast-move button:disabled{opacity:.3;cursor:default;}
+  .toast-tools{display:flex;gap:8px;flex-wrap:wrap;padding:12px 26px 0;}
+  .tamada-btn{margin-left:10px;height:28px;padding:0 14px;border-radius:999px;border:1px solid var(--accent-fill);background:var(--accent-fill);color:#fbfaf6;font:600 12px/1 'Karla',system-ui,sans-serif;cursor:pointer;white-space:nowrap;}
+  .tamada-btn.ghost{background:transparent;color:var(--accent);}
+  .tamada-btn:hover{filter:brightness(1.08);}
+  @media(max-width:760px){
+    .toast-list li{grid-template-columns:26px minmax(0,1fr) auto;}
+    .toast-list .toast-tables{grid-column:2 / -1;}
+    .toast-move{grid-column:2 / -1;}
+    .tamada-btn{margin-left:0;}
+  }
+
+  /* «Вставить список тостов» */
+  .ti-overlay{position:fixed;inset:0;z-index:300;background:rgba(20,22,18,.45);display:flex;align-items:flex-start;justify-content:center;padding:6vh 16px;overflow-y:auto;}
+  .ti-overlay[hidden]{display:none;}
+  .ti-box{width:min(720px,100%);background:var(--surface);color:var(--text);border-radius:14px;padding:18px 20px;box-shadow:0 30px 70px -30px rgba(0,0,0,.5);display:flex;flex-direction:column;gap:10px;}
+  .ti-head{display:flex;justify-content:space-between;align-items:center;font-size:16px;}
+  .ti-x{border:none;background:none;font-size:22px;color:var(--muted);cursor:pointer;}
+  .ti-hint{font-size:12.5px;color:var(--muted);margin:0;}
+  .ti-box textarea{width:100%;font:13px/1.45 'Karla',system-ui,sans-serif;padding:10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);resize:vertical;}
+  .ti-preview{font-size:12.5px;max-height:200px;overflow-y:auto;background:var(--surface-2);border-radius:8px;padding:8px 12px;}
+  .ti-preview ol{margin:6px 0 0;padding-left:20px;}
+  .ti-preview li{margin:2px 0;}
+  .ti-check{font-size:13px;display:flex;gap:8px;align-items:center;}
+  .ti-actions{display:flex;justify-content:flex-end;gap:8px;}
+
+  /* «Лист тамады»: on screen a full-page sheet that reads on a phone */
+  .tamada-doc{display:none;}
+  body.show-tamada .tamada-doc{display:block;position:fixed;inset:0;z-index:290;overflow-y:auto;background:#fff;color:#20241f;font-family:'Karla',system-ui,sans-serif;}
+  body.show-tamada{overflow:hidden;}
+  .td-bar{position:sticky;top:0;display:flex;justify-content:flex-end;gap:8px;padding:10px 16px;background:rgba(255,255,255,.94);border-bottom:1px solid #e3e0d8;z-index:1;}
+  .td-page{max-width:900px;margin:0 auto;padding:22px 20px 40px;font-size:13px;}
+  .td-page h3{font-family:'Bodoni Moda',Georgia,serif;font-weight:500;font-size:18px;margin:22px 0 8px;}
+  .td-toasts{margin:0;padding-left:26px;}
+  .td-toasts > li{padding:7px 0;border-bottom:1px solid #e8e5dd;}
+  .td-t-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;}
+  .td-t-head b{font-size:14.5px;}
+  .td-time{font-family:'IBM Plex Mono',monospace;font-size:12px;background:#eef2ee;padding:1px 7px;border-radius:999px;}
+  .td-tbl{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:#2f4a3c;}
+  .td-names{margin-top:3px;line-height:1.5;color:#3a3f38;}
+  .td-tables{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;}
+  .td-table{border:1px solid #d9d5cb;border-radius:10px;padding:10px 12px;break-inside:avoid;}
+  .td-table-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid #e8e5dd;padding-bottom:5px;margin-bottom:5px;}
+  .td-table-head b{font-family:'Bodoni Moda',Georgia,serif;font-size:16px;font-weight:600;}
+  .td-table-head span{font-size:11px;color:#777;}
+  .td-table-cat{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;color:#2f4a3c;margin-bottom:4px;}
+  .td-table ul{list-style:none;margin:0;padding:0;}
+  .td-table li{padding:2px 0;line-height:1.35;}
+  @media(max-width:600px){
+    .td-meta{grid-template-columns:1fr 1fr;}
+    .td-meta .kd-meta-cell{border-right:none;border-bottom:1px solid #ddd;}
+    .td-page{padding:16px 14px 32px;}
+    .td-tables{grid-template-columns:1fr 1fr;gap:8px;}
+  }
+  @media print{
+    body.print-tamada > *:not(#tamadaDoc){display:none !important;}
+    body.print-tamada .tamada-doc{display:block !important;position:static;overflow:visible;}
+    body.print-tamada .td-bar{display:none !important;}
+    body.print-tamada .td-page{max-width:none;padding:0;font-size:11.5px;}
+    body.print-tamada .td-tables{grid-template-columns:repeat(3,1fr);}
+    .td-toasts > li,.td-table{break-inside:avoid;}
+    .td-seat-title{break-before:auto;}
+  }
 </style>
 </head>
 <body data-mode="admin">
@@ -1817,6 +1888,7 @@
           <button class="guests-tab" data-view="viz" onclick="setGuestsView('viz')">Визуализация</button>
         </div>
         <div class="mock-crumb">по категориям</div>
+        <button type="button" class="tamada-btn" onclick="openTamadaSheet()" title="Тосты и рассадка одним листом — на телефон или в печать">Лист тамады</button>
       </div>
       <div class="mock-body" id="toastsBody"></div>
     </div>
@@ -1830,6 +1902,8 @@
           <button class="guests-tab active" data-view="viz" onclick="setGuestsView('viz')">Визуализация</button>
         </div>
         <div class="mock-crumb" id="pv-viz-count">—</div>
+        <button type="button" class="tamada-btn ghost admin-only" onclick="autoSeatGuests()" title="Рассадить по порядку тостов: пары вместе, группы за одним столом">Рассадить по списку</button>
+        <button type="button" class="tamada-btn" onclick="openTamadaSheet()" title="Тосты и рассадка одним листом — на телефон или в печать">Лист тамады</button>
       </div>
       <div class="mock-body" id="vizBody"></div>
     </div>
@@ -2066,6 +2140,21 @@
 </section>
 
 <div class="kitchen-doc" id="kitchenDoc" aria-hidden="true"></div>
+<div class="tamada-doc" id="tamadaDoc" role="dialog" aria-label="Лист тамады"></div>
+<div class="ti-overlay" id="toastImport" hidden>
+  <div class="ti-box" role="dialog" aria-label="Вставить список тостов">
+    <div class="ti-head"><b>Вставить список тостов</b><button type="button" class="ti-x" onclick="closeToastImport()" aria-label="Закрыть">×</button></div>
+    <p class="ti-hint">Скопируйте список из письма, Word или PDF и вставьте сюда. Каждый пункт — с номера: «1. Хозяева вечера Куаныш – Сауле», «2. Құдалар: Қанат – Ғалия, Светлана». Тире соединяет пару, запятая разделяет гостей.</p>
+    <textarea id="tiText" rows="9" oninput="previewToastImport()" placeholder="1. Хозяева вечера Куаныш – Сауле&#10;2. Құдалар: Қанат – Ғалия, Светлана, Гульзада"></textarea>
+    <div class="ti-preview" id="tiPreview"></div>
+    <label class="ti-check"><input type="checkbox" id="tiReplace"> Заменить текущий список гостей</label>
+    <label class="ti-check"><input type="checkbox" id="tiSeat" checked> Сразу рассадить по столам (по <span id="tiCap"></span> мест)</label>
+    <div class="ti-actions">
+      <button type="button" class="icon-btn" onclick="closeToastImport()">Отмена</button>
+      <button type="button" class="icon-btn primary" id="tiApply" onclick="applyToastImport()">Добавить</button>
+    </div>
+  </div>
+</div>
 
 <!-- Меню ресторана: витрина для клиента и редактор каталога блюд -->
 <div class="showcase print-hide" id="showcase" hidden role="dialog" aria-modal="true" aria-label="Меню ресторана">
@@ -2207,7 +2296,7 @@
   <div class="theme-panel" id="themePanel" role="menu" aria-label="Цветовая палитра" hidden></div>
 </div>
 
-<script src="workspace-i18n.js"></script>
+<script src="workspace-i18n.js?v=20261030"></script>
 <script>
 /* ---------- state ---------- */
 const STORAGE_KEY = 'regie_workspace_v1';
@@ -4776,49 +4865,281 @@ const GUEST_CATEGORY_ORDER = ['Семья','VIP','Друзья','Коллеги'
 
 function guestDisplayName(g){
   const nm = escapeHtml(g.name||'—');
-  const pt = g.partner ? ' и '+escapeHtml(g.partner) : '';
+  const pt = g.partner ? ' – '+escapeHtml(g.partner) : '';
   return nm+pt;
+}
+
+/* Toast groups in the order the toastmaster will call them. The planner can
+   move items up and down (state.toastOrder) and keep items with no guests,
+   e.g. «Слова благодарности от хозяев вечера» (state.toastExtras). Anything
+   not placed by hand follows by GUEST_CATEGORY_ORDER. */
+function toastGroups(){
+  const groups = {};
+  (state.guests||[]).forEach(g=>{
+    if(!g.name && !g.partner) return;
+    const cat = (g.category||'').trim() || 'Без категории';
+    (groups[cat] = groups[cat]||[]).push(g);
+  });
+  const extras = (state.toastExtras||[]).filter(x=>!groups[x]);
+  const order = state.toastOrder||[];
+  const rank = c=>{
+    const i = order.indexOf(c);
+    if(i>=0) return i;
+    const j = GUEST_CATEGORY_ORDER.indexOf(c);
+    return order.length + (j===-1 ? GUEST_CATEGORY_ORDER.length : j);
+  };
+  const cats = Object.keys(groups).concat(extras).sort((a,b)=>{
+    const ra = rank(a), rb = rank(b);
+    return ra!==rb ? ra-rb : a.localeCompare(b,'ru');
+  });
+  return {groups, cats};
+}
+/* tables a category sits at: «1» or «3, 4» */
+function toastTablesOf(list){
+  const t = [...new Set((list||[]).map(g=>(g.table||'').toString().trim()).filter(Boolean))];
+  t.sort((a,b)=>(parseInt(a,10)||1e9)-(parseInt(b,10)||1e9));
+  return t;
+}
+function moveToast(cat, dir){
+  const {cats} = toastGroups();
+  const i = cats.indexOf(cat), j = i+dir;
+  if(i<0 || j<0 || j>=cats.length) return;
+  [cats[i], cats[j]] = [cats[j], cats[i]];
+  state.toastOrder = cats;
+  scheduleSave();
+  renderToasts();
+}
+function addToastExtra(){
+  const t = (prompt('Пункт без гостей, например: «Слова благодарности от хозяев вечера»')||'').trim();
+  if(!t) return;
+  state.toastExtras = (state.toastExtras||[]).concat(t);
+  state.toastOrder = toastGroups().cats;
+  scheduleSave();
+  renderToasts();
+}
+function removeToastExtra(cat){
+  state.toastExtras = (state.toastExtras||[]).filter(x=>x!==cat);
+  state.toastOrder = (state.toastOrder||[]).filter(x=>x!==cat);
+  scheduleSave();
+  renderToasts();
 }
 
 function renderToasts(){
   const body = document.getElementById('toastsBody');
   if(!body) return;
   if(!state.toastTimes) state.toastTimes = {};
-  const groups = {};
-  state.guests.forEach(g=>{
-    if(!g.name && !g.partner) return;
-    const cat = (g.category||'').trim() || 'Без категории';
-    (groups[cat] = groups[cat]||[]).push(g);
-  });
-  const cats = Object.keys(groups).sort((a,b)=>{
-    const ia = GUEST_CATEGORY_ORDER.indexOf(a), ib = GUEST_CATEGORY_ORDER.indexOf(b);
-    const ra = ia===-1?GUEST_CATEGORY_ORDER.length:ia, rb = ib===-1?GUEST_CATEGORY_ORDER.length:ib;
-    return ra!==rb ? ra-rb : a.localeCompare(b,'ru');
-  });
+  const {groups, cats} = toastGroups();
+  const tools = `<div class="toast-tools admin-only">
+      <button type="button" class="icon-btn" onclick="openToastImport()">Вставить список тостов</button>
+      <button type="button" class="icon-btn" onclick="addToastExtra()">+ Пункт без гостей</button>
+    </div>`;
   if(!cats.length){
-    body.innerHTML = '<p class="muted-cell" style="padding:18px 20px;">Добавьте гостей с категориями в «Списке гостей», чтобы собрать порядок тостов.</p>';
+    body.innerHTML = tools + '<p class="muted-cell" style="padding:18px 20px;">Добавьте гостей с категориями в «Списке гостей» или вставьте готовый список тостов — порядок соберётся сам.</p>';
     return;
   }
   const current = currentToastCategory();
   const timeOptions = state.timeline.filter(t=>t.time).map(t=>`<option value="${escAttr(t.time)}">${escapeHtml(t.title||t.time)}</option>`).join('');
-  body.innerHTML = `
-    <p class="clock-hint admin-only" style="padding:14px 20px 0;">Привяжите время из тайминга к каждой категории — активная подсветится сама, когда наступит её момент.</p>
+  body.innerHTML = tools + `
     <datalist id="toast-time-list">${timeOptions}</datalist>
-    <ol class="toast-list">` + cats.map(cat=>{
-    const names = groups[cat].map(g=>guestDisplayName(g));
+    <ol class="toast-list">` + cats.map((cat,i)=>{
+    const list = groups[cat]||[];
+    const names = list.map(g=>guestDisplayName(g));
+    const tables = toastTablesOf(list);
     const isNow = cat===current;
     const time = state.toastTimes[cat]||'';
     return `
-      <li class="${isNow?'toast-now':''}" data-cat="${escAttr(cat)}">
+      <li class="${isNow?'toast-now':''}${list.length?'':' toast-extra'}" data-cat="${escAttr(cat)}">
         <strong class="toast-cat">${escapeHtml(cat)}</strong>
         <span class="toast-names" title="${escAttr(names.join(', '))}">${names.join(', ')}</span>
+        <span class="toast-tables">${tables.length ? (tables.length>1?'столы ':'стол ')+tables.map(escapeHtml).join(', ') : ''}</span>
         <span class="toast-now-badge"${isNow?'':' hidden'}>Сейчас</span>
         <input type="time" class="toast-time-input admin-only" list="toast-time-list" data-cat="${escAttr(cat)}" value="${escAttr(time)}" title="Привязать время из тайминга">
+        <span class="toast-move admin-only">
+          <button type="button" title="Выше" ${i===0?'disabled':''} onclick="moveToast(this.closest('li').dataset.cat,-1)">▲</button>
+          <button type="button" title="Ниже" ${i===cats.length-1?'disabled':''} onclick="moveToast(this.closest('li').dataset.cat,1)">▼</button>
+          ${list.length ? '' : '<button type="button" title="Убрать пункт" onclick="removeToastExtra(this.closest(\'li\').dataset.cat)">×</button>'}
+        </span>
       </li>`;
   }).join('') + '</ol>';
   body.querySelectorAll('.toast-time-input').forEach(inp=>{
     inp.addEventListener('change', ()=>updateToastTime(inp.dataset.cat, inp.value));
   });
+}
+
+/* «Вставить список тостов»: the list as the family writes it —
+     1. Хозяева вечера Куаныш – Сауле
+     2. Құдалар: Қанат – Ғалия, Светлана, …
+     8. Слова благодарности от хозяев вечера.
+   Each number starts a toast. «Категория: имена» splits at the colon; with no
+   colon, the word before the first dash starts the names («Хозяева вечера
+   Куаныш – Сауле»); with neither it is an item without guests. A dash joins
+   a couple, a comma separates guests. */
+function parseToastList(text){
+  const src = '\n' + String(text||'').replace(/\r/g,'');
+  const parts = src.split(/\n\s*\d{1,2}\s*[.)]\s+/).slice(1);
+  const DASH = /\s*[–—]\s*|\s+-\s+/;
+  return parts.map(p=>{
+    const t = p.replace(/\s+/g,' ').trim().replace(/[.;]+$/,'');
+    let cat = t, names = '';
+    const colon = t.indexOf(':');
+    if(colon>=0){ cat = t.slice(0,colon).trim(); names = t.slice(colon+1).trim(); }
+    else {
+      const m = t.match(DASH);
+      if(m){
+        const before = t.slice(0, m.index).trim().split(' ');
+        if(before.length>1){ names = before.pop() + t.slice(m.index); cat = before.join(' '); }
+      }
+    }
+    const guests = names ? names.split(',').map(x=>x.trim().replace(/[.;]+$/,'')).filter(Boolean).map(x=>{
+      const pair = x.split(DASH).map(y=>y.trim()).filter(Boolean);
+      return {name:pair[0]||'', partner:pair.slice(1).join(' ')};
+    }) : [];
+    return {cat, guests};
+  }).filter(x=>x.cat);
+}
+function openToastImport(){
+  const ov = document.getElementById('toastImport');
+  if(!ov) return;
+  document.getElementById('tiText').value = '';
+  document.getElementById('tiReplace').checked = !(state.guests||[]).some(g=>(g.name||'').trim());
+  document.getElementById('tiSeat').checked = true;
+  document.getElementById('tiCap').textContent = seatsPerTableEff();
+  previewToastImport();
+  ov.hidden = false;
+  setTimeout(()=>document.getElementById('tiText').focus(), 30);
+}
+function closeToastImport(){ const ov = document.getElementById('toastImport'); if(ov) ov.hidden = true; }
+function previewToastImport(){
+  const items = parseToastList(document.getElementById('tiText').value);
+  const people = items.reduce((s,it)=>s+it.guests.reduce((a,g)=>a+(g.name?1:0)+(g.partner?1:0),0),0);
+  const out = document.getElementById('tiPreview');
+  out.innerHTML = items.length
+    ? `<b>${items.length}</b> ${pluralize(items.length,'пункт','пункта','пунктов')} · <b>${people}</b> ${pluralize(people,'гость','гостя','гостей')}<ol>${items.map(it=>`<li><b>${escapeHtml(it.cat)}</b>${it.guests.length ? ' — '+it.guests.map(g=>escapeHtml(g.name)+(g.partner?' – '+escapeHtml(g.partner):'')).join(', ') : ' <i>(без гостей)</i>'}</li>`).join('')}</ol>`
+    : 'Вставьте текст: каждый пункт начинается с номера — «1.», «2.» …';
+  document.getElementById('tiApply').disabled = !items.length;
+}
+function applyToastImport(){
+  const items = parseToastList(document.getElementById('tiText').value);
+  if(!items.length) return;
+  const replace = document.getElementById('tiReplace').checked;
+  const seat = document.getElementById('tiSeat').checked;
+  const added = [];
+  items.forEach(it=>it.guests.forEach(g=>added.push({id:id(), name:g.name, partner:g.partner, category:it.cat, table:'', comment:''})));
+  state.guests = replace ? added : (state.guests||[]).concat(added);
+  const extras = items.filter(it=>!it.guests.length).map(it=>it.cat);
+  state.toastExtras = replace ? extras : [...new Set((state.toastExtras||[]).concat(extras))];
+  const order = items.map(it=>it.cat);
+  state.toastOrder = replace ? order : [...new Set((state.toastOrder||[]).concat(order))];
+  if(replace) state.toastTimes = {};
+  closeToastImport();
+  if(seat) autoSeatGuests(true);
+  scheduleSave();
+  renderGuests();
+}
+
+/* «Рассадить по списку»: tables are filled in toast order, a couple is
+   never split, a group that fits sits together (on the current table if
+   there is room, else on a fresh one), and a group larger than a table is
+   spread evenly over as few tables as it needs. */
+function autoSeatGuests(silent){
+  const cap = seatsPerTableEff();
+  if(!silent && (state.guests||[]).some(g=>(g.table||'').toString().trim())
+     && !confirm('Пересадить всех гостей по порядку тостов, по '+cap+' мест за столом? Номера столов, проставленные вручную, заменятся.')) return;
+  const {groups, cats} = toastGroups();
+  let table = 0, used = 0;
+  const open = ()=>{ table++; used = 0; };
+  cats.forEach(cat=>{
+    const list = (groups[cat]||[]).filter(g=>guestPeople(g)>0);
+    if(!list.length) return;
+    const size = list.reduce((s,g)=>s+guestPeople(g),0);
+    if(table && size<=cap-used){
+      list.forEach(g=>{ g.table = String(table); used += guestPeople(g); });
+      return;
+    }
+    if(size<=cap){
+      open();
+      list.forEach(g=>{ g.table = String(table); used += guestPeople(g); });
+      return;
+    }
+    const k = Math.ceil(size/cap), target = Math.ceil(size/k);
+    open();
+    list.forEach(g=>{
+      const n = guestPeople(g);
+      if(used>0 && (used+n>target || used+n>cap)) open();
+      g.table = String(table); used += n;
+    });
+  });
+  if(!silent){ scheduleSave(); renderGuests(); }
+}
+
+/* «Лист тамады»: the toast order with names, times and tables, then the
+   seating table by table — on screen it reads on a phone, and «Печать / PDF»
+   gives an A4 sheet to print or send to the toastmaster. */
+function tamadaSheetHtml(){
+  const b = state.brief||{};
+  const {groups, cats} = toastGroups();
+  const people = (state.guests||[]).reduce((s,g)=>s+guestPeople(g),0);
+  const byTable = {};
+  (state.guests||[]).forEach(g=>{
+    if(!guestPeople(g)) return;
+    const t = (g.table||'').toString().trim() || '—';
+    (byTable[t] = byTable[t]||[]).push(g);
+  });
+  const tables = Object.keys(byTable).sort((a,c)=>(parseInt(a,10)||1e9)-(parseInt(c,10)||1e9));
+  const meta = [
+    ['Мероприятие', b.title || b.type || '—'],
+    ['Дата', fmtDate(b.date)],
+    ['Площадка', b.venue || (state.venue&&state.venue.hallName) || '—'],
+    ['Гостей', people ? String(people) : '—'],
+    ['Столов', tables.filter(t=>t!=='—').length ? String(tables.filter(t=>t!=='—').length) : '—']
+  ].map(([k,v])=>`<div class="kd-meta-cell"><span>${k}</span><b>${escapeHtml(v)}</b></div>`).join('');
+  const toasts = cats.map(cat=>{
+    const list = groups[cat]||[];
+    const tbl = toastTablesOf(list);
+    const time = (state.toastTimes||{})[cat];
+    return `<li><div class="td-t-head"><b>${escapeHtml(cat)}</b>${time ? `<span class="td-time">${escapeHtml(time)}</span>` : ''}${tbl.length ? `<span class="td-tbl">${tbl.length>1?'столы':'стол'} ${tbl.map(escapeHtml).join(', ')}</span>` : ''}</div>${list.length ? `<div class="td-names">${list.map(guestDisplayName).join(', ')}</div>` : ''}</li>`;
+  }).join('');
+  const seating = tables.map(t=>{
+    const list = byTable[t];
+    const n = list.reduce((s,g)=>s+guestPeople(g),0);
+    const groupsAt = [...new Set(list.map(g=>(g.category||'').trim()).filter(Boolean))];
+    return `<div class="td-table"><div class="td-table-head"><b>${t==='—' ? 'Без стола' : 'Стол '+escapeHtml(t)}</b><span>${n} ${pluralize(n,'гость','гостя','гостей')}</span></div>${groupsAt.length ? `<div class="td-table-cat">${groupsAt.map(escapeHtml).join(' · ')}</div>` : ''}<ul>${list.map(g=>`<li>${guestDisplayName(g)}</li>`).join('')}</ul></div>`;
+  }).join('');
+  return `<div class="td-bar print-hide">
+      <button type="button" class="icon-btn primary" onclick="printTamadaSheet()">Печать / PDF</button>
+      <button type="button" class="icon-btn" onclick="closeTamadaSheet()">Закрыть</button>
+    </div>
+    <div class="td-page">
+      <div class="kd-head">${brandHeaderHtml('Лист тамады')}</div>
+      <div class="kd-meta td-meta">${meta}</div>
+      <h3>Порядок тостов</h3>
+      ${toasts ? `<ol class="td-toasts">${toasts}</ol>` : '<p class="kd-empty">Список тостов пуст.</p>'}
+      <h3 class="td-seat-title">Рассадка гостей</h3>
+      ${seating ? `<div class="td-tables">${seating}</div>` : '<p class="kd-empty">Гости ещё не рассажены.</p>'}
+    </div>`;
+}
+function openTamadaSheet(){
+  const doc = document.getElementById('tamadaDoc');
+  if(!doc) return;
+  doc.innerHTML = tamadaSheetHtml();
+  document.body.classList.add('show-tamada');
+  doc.scrollTop = 0;
+}
+function closeTamadaSheet(){ document.body.classList.remove('show-tamada'); }
+document.addEventListener('keydown', e=>{
+  if(e.key!=='Escape') return;
+  if(document.body.classList.contains('show-tamada')) closeTamadaSheet();
+  const ti = document.getElementById('toastImport');
+  if(ti && !ti.hidden) closeToastImport();
+});
+function printTamadaSheet(){
+  const doc = document.getElementById('tamadaDoc');
+  if(!doc) return;
+  if(!document.body.classList.contains('show-tamada')) doc.innerHTML = tamadaSheetHtml();
+  document.body.classList.add('print-tamada');
+  const done = ()=>{ document.body.classList.remove('print-tamada'); window.removeEventListener('afterprint', done); };
+  window.addEventListener('afterprint', done);
+  window.print();
 }
 
 function updateToastTime(cat, val){
