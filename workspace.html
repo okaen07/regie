@@ -1396,7 +1396,6 @@
   .brand-block.swap .brand-sub{transition-delay:.9s;}
   .brand-block.swap .brand-name .bl{transform:rotateY(180deg) scale(.92);opacity:.13;color:var(--accent);}
   .brand-block.swap .brand-sub{z-index:2;opacity:1;color:var(--text);transform:scale(1.45);}
-  @media(prefers-reduced-motion:reduce){ .brand-name .bl,.brand-sub{transition:none;} }
 </style>
 </head>
 <body data-mode="admin">
@@ -2577,7 +2576,6 @@ function animateWordmark(){
   if(!block || name.dataset.split) return;
   name.dataset.split = '1';
   name.innerHTML = [...name.textContent.trim()].map((ch,i)=>`<span class="bl" aria-hidden="true" style="--i:${i}">${escapeHtml(ch)}</span>`).join('');
-  if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const cycle = ()=>{
     if(document.hidden) return;
     block.classList.add('swap');
