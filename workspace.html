@@ -2585,6 +2585,9 @@ function animateWordmark(){
   };
   setTimeout(cycle, 1500);
   setInterval(cycle, 10000);
+  // pointing at the wordmark plays it at once
+  let hoverAt = 0;
+  block.addEventListener('mouseenter', ()=>{ if(!block.classList.contains('swap') && Date.now()-hoverAt>5000){ hoverAt = Date.now(); cycle(); } });
 }
 
 function enhanceCombo(input){
