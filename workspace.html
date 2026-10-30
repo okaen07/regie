@@ -1396,6 +1396,30 @@
   .brand-block.swap .brand-sub{transition-delay:.9s;}
   .brand-block.swap .brand-name .bl{transform:rotateY(180deg) scale(.92);opacity:.13;color:var(--accent);}
   .brand-block.swap .brand-sub{z-index:2;opacity:1;color:var(--text);transform:scale(1.45);}
+
+  /* header, larger: language coin, section buttons and coins, tariffs all 32 px */
+  .brand-row .lang-coin{width:36px;height:36px;}
+  .brand-row .category-tab{height:32px;padding:0 16px;font-size:13.5px;}
+  .brand-row .category-tab.coin-btn{width:32px;height:32px;flex:0 0 32px;}
+  .brand-row .cat-main{padding:3px;gap:3px;}
+  .brand-row .category-tabs-inner{gap:10px;}
+  header .tariff-flat-btn,header .mode-btn{height:32px;padding:0 15px;font-size:12.5px;}
+  .new-event-coin{width:38px;height:38px;flex-basis:38px;}
+  /* wide screens: three equal parts — wordmark in the middle of the left part,
+     sections in the middle of the page, switches in the middle of the right part */
+  @media(min-width:1240px){
+    .brand-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:28px;}
+    .brand-row .header-controls{flex-wrap:nowrap;}
+    .brand-block{justify-self:stretch;}
+    .brand-row .category-tabs{grid-column:2;justify-self:center;}
+    .brand-row .header-controls{grid-column:3;justify-self:center;}
+    .brand-row > .tool-row{grid-column:3;justify-self:center;}
+  }
+  @media(min-width:1240px) and (max-width:1399px){ .brand-name{font-size:3.3vw;} }
+  /* room enough for both sides to be equal */
+  @media(min-width:1560px){
+    .brand-row{grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);}
+  }
 </style>
 </head>
 <body data-mode="admin">
