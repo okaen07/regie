@@ -1615,6 +1615,14 @@
     .gf-grid{grid-template-columns:1fr;}
     .gf-box .ti-actions{flex-wrap:wrap;}
   }
+
+  /* «Переименовать стол» */
+  .gb-head{cursor:default;}
+  .gb-rename{border:none;background:none;width:26px;height:26px;border-radius:6px;color:var(--muted);cursor:pointer;font-size:13px;padding:0;flex-shrink:0;}
+  .gb-rename:hover{background:var(--surface);color:var(--text);}
+  .tf-box{width:min(440px,100%);}
+  .tf-grid{grid-template-columns:90px 1fr;}
+  @media(max-width:760px){ .tf-grid{grid-template-columns:90px 1fr;} }
 </style>
 </head>
 <body data-mode="admin">
@@ -2253,6 +2261,20 @@
     </div>
   </form>
 </div>
+<div class="ti-overlay gf-overlay" id="tableForm" hidden>
+  <form class="ti-box gf-box tf-box" role="dialog" aria-label="Стол" onsubmit="event.preventDefault(); saveTableForm();">
+    <div class="ti-head"><b id="tfTitle">Стол</b><button type="button" class="ti-x" onclick="closeTableForm()" aria-label="Закрыть">×</button></div>
+    <div class="gf-grid tf-grid">
+      <label class="gf-f"><span>Номер</span><input id="tfNum" type="text" inputmode="numeric" maxlength="4" autocomplete="off"></label>
+      <label class="gf-f"><span>Название стола</span><input id="tfName" type="text" maxlength="60" autocomplete="off"></label>
+    </div>
+    <p class="gf-hint">Название видно в списке гостей и в «Листе тамады». Пусто — подставятся категории гостей. При смене номера гости пересядут вместе со столом.</p>
+    <div class="ti-actions">
+      <button type="button" class="icon-btn" onclick="closeTableForm()">Отмена</button>
+      <button type="submit" class="icon-btn primary">Сохранить</button>
+    </div>
+  </form>
+</div>
 <div class="tamada-doc" id="tamadaDoc" role="dialog" aria-label="Лист тамады"></div>
 <div class="ti-overlay" id="toastImport" hidden>
   <div class="ti-box" role="dialog" aria-label="Вставить список тостов">
@@ -2409,7 +2431,7 @@
   <div class="theme-panel" id="themePanel" role="menu" aria-label="Цветовая палитра" hidden></div>
 </div>
 
-<script src="workspace-i18n.js?v=20261030b"></script>
+<script src="workspace-i18n.js?v=20261030c"></script>
 <script>
 /* ---------- state ---------- */
 const STORAGE_KEY = 'regie_workspace_v1';
@@ -4956,8 +4978,8 @@ function renderGuests(){
       const over = cap && n>cap;
       const head = t
         ? `<span class="gb-num">Стол ${escapeHtml(t)}</span>
-           <input class="gb-title admin-only" type="text" maxlength="60" value="${escAttr(((state.tableNames||{})[t])||'')}" placeholder="${escAttr(cats.join(' · ')||'Название стола')}" oninput="setTableName('${escAttr(t)}', this.value)" title="Общее название стола">
-           <span class="gb-title-text preview-only">${escapeHtml(tableTitle(t, list))}</span>`
+           <span class="gb-title-text">${escapeHtml(tableTitle(t, list))}</span>
+           <button type="button" class="gb-rename admin-only" title="Переименовать стол" onclick="openTableForm('${escAttr(t)}')">✎</button>`
         : `<span class="gb-num">Без стола</span><span class="gb-title-text">номер стола ещё не указан</span>`;
       return `<section class="gb${t?'':' gb-none'}">
         <header class="gb-head">${head}<span class="gb-count${over?' over':''}">${n}${cap&&t?'/'+cap:''}</span></header>
@@ -4969,6 +4991,41 @@ function renderGuests(){
   renderToasts();
   renderSeating();
 }
+/* «Переименовать стол»: its own name and, if needed, its number — the guests
+   move with it; a number already taken merges the two tables after asking. */
+let tableFormKey = null;
+function openTableForm(t){
+  const ov = document.getElementById('tableForm');
+  if(!ov) return;
+  tableFormKey = t;
+  const {by} = guestTables();
+  document.getElementById('tfTitle').textContent = 'Стол ' + t;
+  document.getElementById('tfNum').value = t;
+  const name = document.getElementById('tfName');
+  name.value = ((state.tableNames||{})[t])||'';
+  name.placeholder = tableCats(by[t]||[]).join(' · ') || 'напр. Почётный стол';
+  ov.hidden = false;
+  setTimeout(()=>{ name.focus(); name.select(); }, 30);
+}
+function closeTableForm(){ const ov = document.getElementById('tableForm'); if(ov) ov.hidden = true; tableFormKey = null; }
+function saveTableForm(){
+  const from = tableFormKey;
+  if(from==null) return;
+  const to = document.getElementById('tfNum').value.trim() || from;
+  const name = document.getElementById('tfName').value.trim();
+  if(!state.tableNames) state.tableNames = {};
+  if(to!==from){
+    const taken = state.guests.some(g=>(g.table||'').toString().trim()===to);
+    if(taken && !confirm('Стол '+to+' уже есть. Пересадить гостей стола '+from+' за стол '+to+' — столы объединятся?')) return;
+    state.guests.forEach(g=>{ if((g.table||'').toString().trim()===from) g.table = to; });
+    delete state.tableNames[from];
+  }
+  if(name) state.tableNames[to] = name; else delete state.tableNames[to];
+  closeTableForm();
+  scheduleSave();
+  renderGuests();
+}
+
 function setTableName(t, val){
   if(!state.tableNames) state.tableNames = {};
   if(val.trim()) state.tableNames[t] = val; else delete state.tableNames[t];
@@ -5348,6 +5405,8 @@ document.addEventListener('keydown', e=>{
   if(ti && !ti.hidden) closeToastImport();
   const gf = document.getElementById('guestForm');
   if(gf && !gf.hidden) closeGuestForm();
+  const tf = document.getElementById('tableForm');
+  if(tf && !tf.hidden) closeTableForm();
 });
 function printTamadaSheet(){
   const doc = document.getElementById('tamadaDoc');
