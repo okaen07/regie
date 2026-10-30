@@ -1562,6 +1562,59 @@
     .guests-main{border-right:none;}
     .guests-side{position:static;border-top:1px solid var(--border);}
   }
+
+  /* Список гостей: a block per table */
+  .guest-blocks-body{padding:16px 18px 18px;}
+  .guest-blocks{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;align-items:start;}
+  .gb{border:1px solid var(--border);border-radius:12px;background:var(--surface);overflow:hidden;}
+  .gb-head{display:flex;align-items:center;gap:10px;padding:9px 12px;background:var(--surface-2);border-bottom:1px solid var(--border);}
+  .gb-num{font-family:'Bodoni Moda',serif;font-size:17px;font-weight:600;white-space:nowrap;}
+  .gb-title{flex:1;min-width:0;border:1px solid transparent;background:transparent;border-radius:6px;padding:3px 6px;font:600 12.5px/1.2 'Karla',system-ui,sans-serif;color:var(--accent);}
+  .gb-title::placeholder{color:var(--accent);opacity:.75;}
+  .gb-title:hover{border-color:var(--border);}
+  .gb-title:focus{border-color:var(--accent);background:var(--surface);outline:none;}
+  .gb-title-text{flex:1;min-width:0;font-size:12.5px;font-weight:600;color:var(--accent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .gb-none .gb-title-text{color:var(--muted);font-weight:400;}
+  .gb-count{font-family:'IBM Plex Mono',monospace;font-size:11.5px;color:var(--muted);white-space:nowrap;}
+  .gb-count.over{color:var(--bad,#b3412f);font-weight:700;}
+  .gb-list{list-style:none;margin:0;padding:4px 0;}
+  .gb-row{display:grid;grid-template-columns:40px minmax(0,1fr) auto auto;align-items:center;gap:8px;padding:3px 12px;font-size:13.5px;line-height:1.35;}
+  .gb-row:hover{background:var(--surface-2);}
+  .gb-no{font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--muted);text-align:right;}
+  .gb-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .gb-dash{color:var(--muted);}
+  .gb-cat{font-size:10.5px;color:var(--muted);white-space:nowrap;max-width:120px;overflow:hidden;text-overflow:ellipsis;}
+  .gb-act{display:inline-flex;gap:2px;opacity:0;transition:opacity .15s;}
+  .gb-row:hover .gb-act,.gb-act:focus-within{opacity:1;}
+  @media(hover:none){ .gb-act{opacity:.55;} }
+  .gb-act button{width:24px;height:24px;border:none;background:none;border-radius:6px;color:var(--muted);cursor:pointer;font-size:13px;padding:0;}
+  .gb-act button:hover{background:var(--surface);color:var(--text);}
+  .gb-add{display:block;width:100%;border:none;border-top:1px dashed var(--border);background:none;padding:7px;font:600 12px/1 'Karla',system-ui,sans-serif;color:var(--muted);cursor:pointer;}
+  .gb-add:hover{color:var(--accent);background:var(--surface-2);}
+  .gb-none{border-style:dashed;}
+  .gb-empty{color:var(--muted);font-size:13.5px;margin:4px 0;}
+  .guest-add-btn{margin-top:14px;}
+  /* guest dialog */
+  .gf-box{width:min(560px,100%);}
+  .gf-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px 12px;}
+  .gf-f{display:flex;flex-direction:column;gap:4px;font-size:12px;font-weight:600;color:var(--muted);}
+  .gf-f i{font-weight:400;font-style:normal;opacity:.8;}
+  .gf-f input{height:36px;padding:0 10px;border:1px solid var(--border);border-radius:8px;background:var(--bg);color:var(--text);font:14px 'Karla',system-ui,sans-serif;}
+  .gf-f input:focus{border-color:var(--accent);outline:none;}
+  .gf-hint{margin:0;font-size:12.5px;color:var(--muted);}
+  .gf-hint.warn{color:var(--warn,#a86b1e);}
+  .gf-spacer{flex:1;}
+  .gf-box .ti-actions{align-items:center;}
+  .gf-del{color:var(--bad,#b3412f);}
+  .gf-del[hidden],#gfMore[hidden]{display:none;}
+  @media(max-width:760px){
+    .guest-blocks-body{padding:12px;}
+    .guest-blocks{grid-template-columns:1fr;}
+    .gb-cat{display:none;}
+    .gb-row{grid-template-columns:40px minmax(0,1fr) auto auto;}
+    .gf-grid{grid-template-columns:1fr;}
+    .gf-box .ti-actions{flex-wrap:wrap;}
+  }
 </style>
 </head>
 <body data-mode="admin">
@@ -1914,22 +1967,9 @@
         </div>
         <div class="mock-crumb" id="pv-g-count">—</div>
       </div>
-      <div class="mock-body pad-0 guests-layout">
-        <div class="mock-table-wrap guests-main">
-          <table class="mock-table guests-table">
-            <thead>
-              <tr>
-                <th class="guest-num-h" title="Нарастающий счёт людей: пара занимает два номера">№</th><th>Имя человека</th><th>Имя пары</th><th>Категория</th><th>№ стола</th><th class="admin-only"></th>
-              </tr>
-            </thead>
-            <tbody id="guestRows"></tbody>
-          </table>
-        </div>
-        <aside class="guests-side" id="guestsSide" aria-label="Столы"></aside>
-        <div class="scroll-hint">← смахните таблицу, чтобы увидеть всё →</div>
-      </div>
-      <div class="mock-body guests-add" style="padding-top:0;">
-        <button class="add-row-btn admin-only" onclick="addGuestRow()">+ Добавить гостя</button>
+      <div class="mock-body guest-blocks-body">
+        <div class="guest-blocks" id="guestBlocks"></div>
+        <button type="button" class="add-row-btn admin-only guest-add-btn" onclick="openGuestForm()">+ Добавить гостя</button>
       </div>
     </div>
 
@@ -2194,6 +2234,25 @@
 </section>
 
 <div class="kitchen-doc" id="kitchenDoc" aria-hidden="true"></div>
+<div class="ti-overlay gf-overlay" id="guestForm" hidden>
+  <form class="ti-box gf-box" role="dialog" aria-label="Гость" onsubmit="event.preventDefault(); saveGuestForm(false);">
+    <div class="ti-head"><b id="gfTitle">Новый гость</b><button type="button" class="ti-x" onclick="closeGuestForm()" aria-label="Закрыть">×</button></div>
+    <div class="gf-grid">
+      <label class="gf-f"><span>Имя</span><input id="gfName" type="text" maxlength="40" autocomplete="off" placeholder="напр. Қанат"></label>
+      <label class="gf-f"><span>Пара <i>(необязательно)</i></span><input id="gfPartner" type="text" maxlength="40" autocomplete="off" placeholder="напр. Ғалия"></label>
+      <label class="gf-f"><span>Категория / тост</span><input id="gfCategory" type="text" maxlength="40" list="gfCatList" autocomplete="off" placeholder="напр. Құдалар"></label>
+      <label class="gf-f gf-table"><span>Стол</span><input id="gfTable" type="text" inputmode="numeric" maxlength="4" list="gfTableList" autocomplete="off" oninput="updateGuestFormHint()"></label>
+    </div>
+    <datalist id="gfCatList"></datalist><datalist id="gfTableList"></datalist>
+    <p class="gf-hint" id="gfHint"></p>
+    <div class="ti-actions">
+      <button type="button" class="icon-btn gf-del" id="gfDelete" onclick="deleteGuestFromForm()">Удалить</button>
+      <span class="gf-spacer"></span>
+      <button type="button" class="icon-btn" id="gfMore" onclick="saveGuestForm(true)">Сохранить и ещё</button>
+      <button type="submit" class="icon-btn primary">Сохранить</button>
+    </div>
+  </form>
+</div>
 <div class="tamada-doc" id="tamadaDoc" role="dialog" aria-label="Лист тамады"></div>
 <div class="ti-overlay" id="toastImport" hidden>
   <div class="ti-box" role="dialog" aria-label="Вставить список тостов">
@@ -2350,7 +2409,7 @@
   <div class="theme-panel" id="themePanel" role="menu" aria-label="Цветовая палитра" hidden></div>
 </div>
 
-<script src="workspace-i18n.js?v=20261030"></script>
+<script src="workspace-i18n.js?v=20261030b"></script>
 <script>
 /* ---------- state ---------- */
 const STORAGE_KEY = 'regie_workspace_v1';
@@ -4847,101 +4906,81 @@ function removeBudgetRow(rid){
 }
 
 /* ---------- guests ---------- */
+/* Список гостей — one block per table: «Стол 1 · общее название стола», then
+   the people sitting there, seats numbered so a couple takes two («1–2»).
+   A guest is added or changed in a small dialog; guests with no table yet
+   gather in the last block. */
+function guestTables(){
+  const by = {}, order = [];
+  state.guests.forEach(g=>{
+    if(!guestPeople(g) && g.id!==guestFormId) return;
+    const t = (g.table||'').toString().trim();
+    if(!by[t]){ by[t] = []; order.push(t); }
+    by[t].push(g);
+  });
+  order.sort((a,b)=>{
+    if(!a) return 1; if(!b) return -1;
+    const na = parseInt(a,10), nb = parseInt(b,10);
+    return (!isNaN(na) && !isNaN(nb)) ? na-nb : a.localeCompare(b,'ru');
+  });
+  return {by, order};
+}
+function tableCats(list){ return [...new Set(list.map(g=>(g.category||'').trim()).filter(Boolean))]; }
+function tableTitle(t, list){
+  const own = ((state.tableNames||{})[t]||'').trim();
+  return own || tableCats(list||[]).join(' · ');
+}
 function renderGuests(){
-  const tbody = document.getElementById('guestRows');
-  if(!tbody) return;
-  tbody.innerHTML = state.guests.map(g=>`
-    <tr data-id="${g.id}">
-      <td class="guest-num mono"></td>
-      <td class="admin-only"><input type="text" maxlength="40" value="${escAttr(g.name)}" oninput="updateGuestField('${g.id}','name',this.value)"></td>
-      <td class="preview-only">${escapeHtml(g.name)||'<span class="muted-cell">—</span>'}</td>
-      <td class="admin-only"><input type="text" maxlength="40" value="${escAttr(g.partner)}" oninput="updateGuestField('${g.id}','partner',this.value)"></td>
-      <td class="preview-only" data-l="Пара">${escapeHtml(g.partner)||'<span class="muted-cell">—</span>'}</td>
-      <td class="admin-only"><input type="text" maxlength="30" value="${escAttr(g.category)}" oninput="updateGuestField('${g.id}','category',this.value)"></td>
-      <td class="preview-only" data-l="Категория">${escapeHtml(g.category)||'<span class="muted-cell">—</span>'}</td>
-      <td class="admin-only table-num-cell"><input type="text" inputmode="numeric" maxlength="4" value="${escAttr(g.table)}" oninput="updateGuestField('${g.id}','table',this.value)"></td>
-      <td class="preview-only mono" data-l="Стол">${escapeHtml(g.table)||'<span class="muted-cell">—</span>'}</td>
-      <td class="del-cell admin-only"><button class="row-del" onclick="removeGuestRow('${g.id}')" title="Удалить">×</button></td>
-    </tr>
-  `).join('');
+  const box = document.getElementById('guestBlocks');
   updateGuestNumbers();
-  markGuestGroups();
+  if(box){
+    const cap = parseInt(state.venue && state.venue.seatsPerTable,10)||0;
+    const {by, order} = guestTables();
+    box.innerHTML = order.length ? order.map(t=>{
+      const list = by[t];
+      const n = list.reduce((s,g)=>s+guestPeople(g),0);
+      const cats = tableCats(list);
+      const many = cats.length>1;
+      let seat = 0;
+      const rows = list.map(g=>{
+        const k = guestPeople(g);
+        const no = k===2 ? (seat+1)+'–'+(seat+2) : (k ? String(seat+1) : '—');
+        seat += k;
+        return `<li class="gb-row" data-id="${g.id}">
+          <span class="gb-no">${no}</span>
+          <span class="gb-name">${escapeHtml(g.name||'—')}${g.partner ? `<span class="gb-dash"> – </span>${escapeHtml(g.partner)}` : ''}</span>
+          ${many && g.category ? `<span class="gb-cat">${escapeHtml(g.category)}</span>` : '<span></span>'}
+          <span class="gb-act admin-only"><button type="button" title="Изменить" onclick="openGuestForm('${g.id}')">✎</button><button type="button" title="Удалить" onclick="removeGuestRow('${g.id}')">×</button></span>
+        </li>`;
+      }).join('');
+      const over = cap && n>cap;
+      const head = t
+        ? `<span class="gb-num">Стол ${escapeHtml(t)}</span>
+           <input class="gb-title admin-only" type="text" maxlength="60" value="${escAttr(((state.tableNames||{})[t])||'')}" placeholder="${escAttr(cats.join(' · ')||'Название стола')}" oninput="setTableName('${escAttr(t)}', this.value)" title="Общее название стола">
+           <span class="gb-title-text preview-only">${escapeHtml(tableTitle(t, list))}</span>`
+        : `<span class="gb-num">Без стола</span><span class="gb-title-text">номер стола ещё не указан</span>`;
+      return `<section class="gb${t?'':' gb-none'}">
+        <header class="gb-head">${head}<span class="gb-count${over?' over':''}">${n}${cap&&t?'/'+cap:''}</span></header>
+        <ol class="gb-list">${rows}</ol>
+        ${t ? `<button type="button" class="gb-add admin-only" onclick="openGuestForm(null,'${escAttr(t)}')">+ гость за этот стол</button>` : ''}
+      </section>`;
+    }).join('') : '<p class="gb-empty">Гостей пока нет. Нажмите «+ Добавить гостя» — или вставьте готовый список на вкладке «Тосты».</p>';
+  }
   renderToasts();
   renderSeating();
 }
-
-/* Rows are read table by table: a gap opens where the table number changes,
-   and a category or table repeated from the row above fades back. */
-function renderGuestsSide(){
-  const box = document.getElementById('guestsSide');
-  if(!box) return;
-  const cap = parseInt(state.venue && state.venue.seatsPerTable,10)||0;
-  const tables = {}, order = [];
-  let people = 0, pairs = 0, noTable = 0;
-  state.guests.forEach(g=>{
-    const n = guestPeople(g);
-    if(!n) return;
-    people += n;
-    if(n===2) pairs++;
-    const t = (g.table||'').toString().trim();
-    if(!t){ noTable += n; return; }
-    if(!tables[t]){ tables[t] = {n:0, cats:[]}; order.push(t); }
-    tables[t].n += n;
-    const c = (g.category||'').trim();
-    if(c && !tables[t].cats.includes(c)) tables[t].cats.push(c);
-  });
-  order.sort((a,b)=>(parseInt(a,10)||1e9)-(parseInt(b,10)||1e9));
-  const stat = (v,l)=>`<div class="gs-stat"><b>${v}</b><span>${l}</span></div>`;
-  box.innerHTML = `<div class="gs-stats">${stat(people, pluralize(people,'гость','гостя','гостей'))}${stat(order.length, pluralize(order.length,'стол','стола','столов'))}${stat(pairs, pluralize(pairs,'пара','пары','пар'))}</div>`
-    + (order.length ? `<ul class="gs-tables">${order.map(t=>{
-        const x = tables[t], over = cap && x.n>cap;
-        return `<li><button type="button" onclick="jumpToTable('${escAttr(t)}')"><span class="gs-t">Стол ${escapeHtml(t)}</span><span class="gs-n${over?' over':''}">${x.n}${cap?'/'+cap:''}</span><span class="gs-c">${x.cats.map(escapeHtml).join(' · ')}</span></button></li>`;
-      }).join('')}</ul>` : '<p class="gs-empty">Номера столов ещё не проставлены.</p>')
-    + (noTable ? `<p class="gs-warn">Без стола: ${noTable} ${pluralize(noTable,'человек','человека','человек')}</p>` : '');
-}
-function jumpToTable(t){
-  const g = state.guests.find(x=>(x.table||'').toString().trim()===t);
-  const tr = g && document.querySelector(`#guestRows tr[data-id="${g.id}"]`);
-  if(!tr) return;
-  tr.scrollIntoView({block:'center', behavior:'smooth'});
-  document.querySelectorAll('#guestRows tr.flash').forEach(r=>r.classList.remove('flash'));
-  state.guests.filter(x=>(x.table||'').toString().trim()===t).forEach(x=>{
-    const r = document.querySelector(`#guestRows tr[data-id="${x.id}"]`);
-    if(r){ r.classList.add('flash'); setTimeout(()=>r.classList.remove('flash'), 1600); }
-  });
+function setTableName(t, val){
+  if(!state.tableNames) state.tableNames = {};
+  if(val.trim()) state.tableNames[t] = val; else delete state.tableNames[t];
+  scheduleSave();
 }
 
-function markGuestGroups(){
-  let prev = null;
-  state.guests.forEach(g=>{
-    const tr = document.querySelector(`#guestRows tr[data-id="${g.id}"]`);
-    if(!tr) return;
-    const t = (g.table||'').toString().trim(), c = (g.category||'').trim();
-    tr.classList.toggle('table-break', !!prev && t!==prev.t);
-    const same = !!prev && t===prev.t;
-    tr.classList.toggle('same-table', same && !!t);
-    tr.classList.toggle('same-cat', same && !!c && c===prev.c);
-    prev = {t, c};
-  });
-  renderGuestsSide();
-}
-
-/* Running head-count left of each name: a guest with a partner takes two
-   numbers («3–4»), so the last number is always the total people so far. */
+/* head-count shown in the card header: everybody, a couple counts as two */
 function guestPeople(g){
   return ((g.name||'').trim() ? 1 : 0) + ((g.partner||'').trim() ? 1 : 0);
 }
 function updateGuestNumbers(){
-  let total = 0;
-  state.guests.forEach(g=>{
-    const n = guestPeople(g);
-    const cell = document.querySelector(`#guestRows tr[data-id="${g.id}"] .guest-num`);
-    let label = '—';
-    if(n===1) label = String(total+1);
-    else if(n===2) label = (total+1)+'–'+(total+2);
-    total += n;
-    if(cell) cell.textContent = label;
-  });
+  const total = state.guests.reduce((s,g)=>s+guestPeople(g),0);
   const crumb = document.getElementById('pv-g-count');
   if(crumb) crumb.textContent = total ? (total+' '+pluralize(total,'человек','человека','человек')) : '—';
 }
@@ -4950,20 +4989,85 @@ function updateGuestField(gid, key, val){
   const g = state.guests.find(x=>x.id===gid);
   if(!g) return;
   g[key] = val;
-  if(key==='name' || key==='partner'){ updateGuestNumbers(); renderGuestsSide(); }
-  if(key==='table' || key==='category') markGuestGroups();
-  scheduleSave();
-  renderToasts();
-  renderSeating();
-}
-
-function addGuestRow(){
-  state.guests.push({id:id(), name:'', partner:'', category:'', table:'', comment:''});
   scheduleSave();
   renderGuests();
 }
 
+/* the dialog: new guest (optionally for a given table) or an existing one */
+let guestFormId = null;
+function openGuestForm(gid, table){
+  const ov = document.getElementById('guestForm');
+  if(!ov) return;
+  guestFormId = gid || null;
+  const g = gid ? state.guests.find(x=>x.id===gid) : null;
+  const {by, order} = guestTables();
+  const cap = seatsPerTableEff();
+  // a new guest goes to the given table, else the last table while it has room
+  let t = g ? (g.table||'') : (table||'');
+  if(!g && !t){
+    const nums = order.filter(Boolean);
+    const last = nums[nums.length-1];
+    const used = last ? by[last].reduce((s,x)=>s+guestPeople(x),0) : cap;
+    t = last && used<cap ? last : String((parseInt(last,10)||0)+1);
+  }
+  const lastCat = !g && by[t] && by[t].length ? (by[t][by[t].length-1].category||'') : '';
+  document.getElementById('gfTitle').textContent = g ? 'Гость' : 'Новый гость';
+  document.getElementById('gfName').value = g ? g.name||'' : '';
+  document.getElementById('gfPartner').value = g ? g.partner||'' : '';
+  document.getElementById('gfCategory').value = g ? g.category||'' : lastCat;
+  document.getElementById('gfTable').value = t;
+  document.getElementById('gfDelete').hidden = !g;
+  document.getElementById('gfMore').hidden = !!g;
+  document.getElementById('gfCatList').innerHTML = [...new Set(state.guests.map(x=>(x.category||'').trim()).filter(Boolean))].map(c=>`<option value="${escAttr(c)}">`).join('');
+  document.getElementById('gfTableList').innerHTML = order.filter(Boolean).map(x=>`<option value="${escAttr(x)}">${escapeHtml(tableTitle(x, by[x]))}</option>`).join('');
+  updateGuestFormHint();
+  ov.hidden = false;
+  setTimeout(()=>document.getElementById('gfName').focus(), 30);
+}
+function updateGuestFormHint(){
+  const t = document.getElementById('gfTable').value.trim();
+  const cap = seatsPerTableEff();
+  const used = state.guests.filter(x=>x.id!==guestFormId && (x.table||'').toString().trim()===t).reduce((s,x)=>s+guestPeople(x),0);
+  const el = document.getElementById('gfHint');
+  el.classList.toggle('warn', !!t && used>=cap);
+  el.textContent = !t ? 'Без номера стола гость попадёт в блок «Без стола».'
+    : used ? `За столом ${t} уже ${used} из ${cap}${used>=cap ? ' — стол заполнен' : ', свободно '+(cap-used)}.`
+    : `Стол ${t} — новый, ${cap} мест.`;
+}
+function closeGuestForm(){
+  const ov = document.getElementById('guestForm');
+  if(ov) ov.hidden = true;
+  guestFormId = null;
+}
+function saveGuestForm(more){
+  const v = id=>document.getElementById(id).value.trim();
+  const data = {name:v('gfName'), partner:v('gfPartner'), category:v('gfCategory'), table:v('gfTable')};
+  if(!data.name && !data.partner){ document.getElementById('gfName').focus(); return; }
+  if(guestFormId){
+    const g = state.guests.find(x=>x.id===guestFormId);
+    if(g) Object.assign(g, data);
+  } else {
+    state.guests.push(Object.assign({id:id(), comment:''}, data));
+  }
+  scheduleSave();
+  renderGuests();
+  if(more){
+    // next guest: same table and category, fresh names
+    openGuestForm(null, data.table);
+    document.getElementById('gfCategory').value = data.category;
+  } else closeGuestForm();
+}
+function deleteGuestFromForm(){
+  if(!guestFormId) return;
+  const gid = guestFormId;
+  closeGuestForm();
+  removeGuestRow(gid);
+}
+function addGuestRow(){ openGuestForm(); }
+
 function removeGuestRow(gid){
+  const g = state.guests.find(x=>x.id===gid);
+  if(g && guestPeople(g) && !confirm('Удалить «'+[g.name,g.partner].filter(Boolean).join(' – ')+'» из списка?')) return;
   state.guests = state.guests.filter(x=>x.id!==gid);
   scheduleSave();
   renderGuests();
@@ -5212,7 +5316,8 @@ function tamadaSheetHtml(){
   const seating = tables.map(t=>{
     const list = byTable[t];
     const n = list.reduce((s,g)=>s+guestPeople(g),0);
-    const groupsAt = [...new Set(list.map(g=>(g.category||'').trim()).filter(Boolean))];
+    const own = ((state.tableNames||{})[t]||'').trim();
+    const groupsAt = own ? [own] : [...new Set(list.map(g=>(g.category||'').trim()).filter(Boolean))];
     return `<div class="td-table"><div class="td-table-head"><b>${t==='—' ? 'Без стола' : 'Стол '+escapeHtml(t)}</b><span>${n} ${pluralize(n,'гость','гостя','гостей')}</span></div>${groupsAt.length ? `<div class="td-table-cat">${groupsAt.map(escapeHtml).join(' · ')}</div>` : ''}<ul>${list.map(g=>`<li>${guestDisplayName(g)}</li>`).join('')}</ul></div>`;
   }).join('');
   return `<div class="td-bar print-hide">
@@ -5241,6 +5346,8 @@ document.addEventListener('keydown', e=>{
   if(document.body.classList.contains('show-tamada')) closeTamadaSheet();
   const ti = document.getElementById('toastImport');
   if(ti && !ti.hidden) closeToastImport();
+  const gf = document.getElementById('guestForm');
+  if(gf && !gf.hidden) closeGuestForm();
 });
 function printTamadaSheet(){
   const doc = document.getElementById('tamadaDoc');
