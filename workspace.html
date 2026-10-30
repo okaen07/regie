@@ -1389,8 +1389,11 @@
   @media(max-width:760px){ .brand-block{padding-right:0;} }
   /* every so often the letters turn over one by one and sink back, the
      caption comes forward; a few seconds later everything turns back */
-  .brand-name .bl{display:inline-block;transition:transform .7s cubic-bezier(.5,0,.3,1),opacity .7s ease,color .7s ease;transition-delay:calc(var(--i) * 110ms);}
-  .brand-sub{transition:transform .8s cubic-bezier(.3,0,.2,1),opacity .8s ease,color .8s ease;transition-delay:.35s;}
+  .brand-name .bl{display:inline-block;transition:transform .8s cubic-bezier(.45,0,.25,1) calc(var(--i) * 140ms + 120ms),opacity .4s ease calc(var(--i) * 140ms),color .4s ease calc(var(--i) * 140ms);}
+  /* going away: the letter turns over while still solid, then fades */
+  .brand-block.swap .brand-name .bl{transition:transform .8s cubic-bezier(.45,0,.25,1) calc(var(--i) * 140ms),opacity .5s ease calc(var(--i) * 140ms + 600ms),color .5s ease calc(var(--i) * 140ms + 600ms);}
+  .brand-sub{transition:transform .8s cubic-bezier(.3,0,.2,1),opacity .8s ease,color .8s ease;}
+  .brand-block.swap .brand-sub{transition-delay:.9s;}
   .brand-block.swap .brand-name .bl{transform:rotateY(180deg) scale(.92);opacity:.13;color:var(--accent);}
   .brand-block.swap .brand-sub{z-index:2;opacity:1;color:var(--text);transform:scale(1.45);}
   @media(prefers-reduced-motion:reduce){ .brand-name .bl,.brand-sub{transition:none;} }
@@ -2567,7 +2570,7 @@ function knownVenueNames(){
    This list shows every venue when opened (▾ or a click in an unchanged
    field) and narrows down only while the planner types. */
 /* Wordmark: the letters are split into spans so they can turn one by one.
-   Every 14 s the caption swaps places with RÉGIE for 4 s. */
+   Every 10 s the caption swaps places with RÉGIE for 4 s. */
 function animateWordmark(){
   const name = document.querySelector('.brand-name');
   const block = name && name.closest('.brand-block');
@@ -2580,8 +2583,8 @@ function animateWordmark(){
     block.classList.add('swap');
     setTimeout(()=>block.classList.remove('swap'), 4000);
   };
-  setTimeout(cycle, 3000);
-  setInterval(cycle, 14000);
+  setTimeout(cycle, 1500);
+  setInterval(cycle, 10000);
 }
 
 function enhanceCombo(input){
