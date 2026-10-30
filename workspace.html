@@ -1866,7 +1866,7 @@
           <table class="mock-table guests-table">
             <thead>
               <tr>
-                <th class="guest-num-h" title="Нарастающий счёт людей: пара занимает два номера">№</th><th>Имя человека</th><th>Имя пары</th><th>Категория</th><th>№ стола</th><th>Комментарий</th><th class="admin-only"></th>
+                <th class="guest-num-h" title="Нарастающий счёт людей: пара занимает два номера">№</th><th>Имя человека</th><th>Имя пары</th><th>Категория</th><th>№ стола</th><th class="admin-only"></th>
               </tr>
             </thead>
             <tbody id="guestRows"></tbody>
@@ -4807,8 +4807,6 @@ function renderGuests(){
       <td class="preview-only" data-l="Категория">${escapeHtml(g.category)||'<span class="muted-cell">—</span>'}</td>
       <td class="admin-only table-num-cell"><input type="text" inputmode="numeric" maxlength="4" value="${escAttr(g.table)}" oninput="updateGuestField('${g.id}','table',this.value)"></td>
       <td class="preview-only mono" data-l="Стол">${escapeHtml(g.table)||'<span class="muted-cell">—</span>'}</td>
-      <td class="admin-only"><input type="text" value="${escAttr(g.comment)}" oninput="updateGuestField('${g.id}','comment',this.value)"></td>
-      <td class="preview-only" data-l="Комментарий">${escapeHtml(g.comment)||'<span class="muted-cell">—</span>'}</td>
       <td class="del-cell admin-only"><button class="row-del" onclick="removeGuestRow('${g.id}')" title="Удалить">×</button></td>
     </tr>
   `).join('');
